@@ -15,7 +15,7 @@ void ReadData(int sock)
 			return;
 		++times;
 		std::cout << "1k read for " << times << std::endl;
-		sleep(1000);
+		GeneralSleep(1000);
 	}
 }
 

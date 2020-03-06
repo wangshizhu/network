@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <iostream>
+#include <string>
 #if defined( __WIN32__ ) || defined( WIN32 ) || defined( _WIN32 )
 #pragma warning(disable:4996)
 #ifndef WIN32_LEAN_AND_MEAN 
@@ -268,12 +269,12 @@ inline u_int32_t IPToN(int family, const char* ip, void* out)
 
 /** sleep ¿çÆ½Ì¨ */
 #if GENERAL_PLATFORM == PLATFORM_WIN32
-inline void sleep(uint32 ms)
+inline void GeneralSleep(uint32 ms)
 {
 	::Sleep(ms);
 }
 #else
-inline void sleep(uint32 ms)
+inline void GeneralSleep(uint32 ms)
 {
 	struct timeval tval;
 	tval.tv_sec = ms / 1000;
