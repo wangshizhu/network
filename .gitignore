@@ -3,6 +3,7 @@
 /test/test*/ipch
 /test/test*/_objs
 /test/test*/test*/Debug/*
+/test/test*/client/Debug/*
 *.suo
 *.user
 *.ncb
