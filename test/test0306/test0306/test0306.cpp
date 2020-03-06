@@ -1,7 +1,8 @@
-// test0303.cpp : 定义控制台应用程序的入口点。
+// test0306.cpp : 定义控制台应用程序的入口点。
 //
 
-#include "platform.h"
+
+#include "../../../common/platform.h"
 
 void ReadData(int sock)
 {
@@ -11,7 +12,7 @@ void ReadData(int sock)
 	while (true)
 	{
 		std::cout << "block in read" << std::endl;
-		if ((n = ::recv(sock, buf, 1024,0)) == 0)
+		if ((n = ::recv(sock, buf, 1024, 0)) == 0)
 			return;
 		++times;
 		std::cout << "1k read for " << times << std::endl;
@@ -34,7 +35,7 @@ int main()
 		}
 
 		// 绑定到port和ip
-		struct sockaddr_in serverSockAddr,client_sock_addr;
+		struct sockaddr_in serverSockAddr, client_sock_addr;
 
 		memset(&client_sock_addr, 0, sizeof(client_sock_addr));
 		// IPV4
@@ -72,6 +73,5 @@ int main()
 #endif
 		}
 	}
-    return 0;
+	return 0;
 }
-
