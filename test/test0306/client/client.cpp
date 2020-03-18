@@ -54,16 +54,25 @@ int main()
 		int conn_rt = ::connect(sock, (struct sockaddr*)&server_sock_addr, sizeof(server_sock_addr));
 		if (conn_rt < 0)
 		{
+#if GENERAL_PLATFORM == PLATFORM_WIN32
 			std::cout << "Á¬½ÓÊ§°Ü! ´íÎó´úÂë:" << WSAGetLastError() << std::endl;
+#endif
+
 			CLOSE_SOCKET(sock);
+
+#if GENERAL_PLATFORM == PLATFORM_WIN32
 			WSACleanup();
+#endif
 			return 0;
 		}
 
 		SendData(sock);
 
 		CLOSE_SOCKET(sock);
+
+#if GENERAL_PLATFORM == PLATFORM_WIN32
 		WSACleanup();
+#endif
 	}
 
 	return 0;
