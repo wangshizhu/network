@@ -48,7 +48,7 @@ int main()
 		server_sock_addr.sin_family = AF_INET;
 		server_sock_addr.sin_port = htons(5700);
 		struct in_addr dst;
-		const char* ip = "192.168.62.79";
+		const char* ip = "127.0.0.1";
 		int r = IPToN(AF_INET, ip, &server_sock_addr.sin_addr);
 
 		int conn_rt = ::connect(sock, (struct sockaddr*)&server_sock_addr, sizeof(server_sock_addr));
