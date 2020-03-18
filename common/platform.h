@@ -254,18 +254,33 @@ inline int32 getProcessPID()
 #endif
 }
 
-#if GENERAL_PLATFORM == PLATFORM_WIN32
-inline u_int32_t IPToN(int family,const WCHAR* ip, void* out)
+wchar_t* char2wchar(const char* cs, size_t* outlen)
 {
-	return ::InetPton(family, ip, out);
+	int len = (int)((strlen(cs) + 1) * sizeof(wchar_t));
+	wchar_t* ccattr = (wchar_t *)malloc(len);
+	memset(ccattr, 0, len);
 
-}
-#else
+	size_t slen = mbstowcs(ccattr, cs, len);
+
+	if (outlen)
+	{
+		if ((size_t)-1 != slen)
+			*outlen = slen;
+		else
+			*outlen = 0;
+	}
+
+	return ccattr;
+};
+
 inline u_int32_t IPToN(int family, const char* ip, void* out)
 {
+#if GENERAL_PLATFORM == PLATFORM_WIN32
+	return ::InetPton(family, char2wchar(ip,nullptr), out);
+#else
 	return inet_pton(family, ip, out);
-}
 #endif
+}
 
 
 /** sleep ¿çÆ½Ì¨ */

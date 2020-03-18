@@ -3,25 +3,6 @@
 
 #include "../../../common/platform.h"
 
-wchar_t* char2wchar(const char* cs, size_t* outlen)
-{
-	int len = (int)((strlen(cs) + 1) * sizeof(wchar_t));
-	wchar_t* ccattr = (wchar_t *)malloc(len);
-	memset(ccattr, 0, len);
-
-	size_t slen = mbstowcs(ccattr, cs, len);
-
-	if (outlen)
-	{
-		if ((size_t)-1 != slen)
-			*outlen = slen;
-		else
-			*outlen = 0;
-	}
-
-	return ccattr;
-};
-
 void SendData(int sock_fd)
 {
 	int n = 102400;
@@ -68,7 +49,7 @@ int main()
 		server_sock_addr.sin_port = htons(5700);
 		struct in_addr dst;
 		const char* ip = "192.168.62.79";
-		int r = IPToN(AF_INET, char2wchar(ip, nullptr), &server_sock_addr.sin_addr);
+		int r = IPToN(AF_INET, ip, &server_sock_addr.sin_addr);
 
 		int conn_rt = ::connect(sock, (struct sockaddr*)&server_sock_addr, sizeof(server_sock_addr));
 		if (conn_rt < 0)
