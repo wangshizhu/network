@@ -55,7 +55,7 @@ int main()
 		::listen(sock, 1024);
 
 		int conn_fd;
-		int cli_addr_len = sizeof(client_sock_addr);
+		socklen_t cli_addr_len = sizeof(client_sock_addr);
 		while (true)
 		{
 			conn_fd = ::accept(sock, (struct sockaddr *) &client_sock_addr, &cli_addr_len);

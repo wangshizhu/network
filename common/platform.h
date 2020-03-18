@@ -6,6 +6,7 @@
 #include <assert.h>
 #include <iostream>
 #include <string>
+#include <cstring> 
 #if defined( __WIN32__ ) || defined( WIN32 ) || defined( _WIN32 )
 #pragma warning(disable:4996)
 #ifndef WIN32_LEAN_AND_MEAN 
