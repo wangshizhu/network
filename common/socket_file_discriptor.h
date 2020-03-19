@@ -22,6 +22,8 @@ namespace network
 		SocketWrapper& operator=(SocketWrapper&&) = delete;
 
 	public:
+		void CreateSocket(int type);
+		bool IsGood()const;
 		int CreateTcpServerSock(const char* ip,short port);
 		int SetNonBlocking(bool nonblocking);
 		int SetNoDelay(bool nodelay = true);

@@ -13,6 +13,20 @@ network::SocketWrapper::~SocketWrapper()
 {
 }
 
+void network::SocketWrapper::CreateSocket(int type)
+{
+	socket_ = (int)::socket(AF_INET, type, 0);
+}
+
+bool network::SocketWrapper::IsGood()const
+{
+#if GENERAL_PLATFORM == PLATFORM_WIN32
+	return socket_ != INVALID_SOCKET;
+#else
+	return socket_ != -1;
+#endif
+}
+
 int network::SocketWrapper::CreateTcpServerSock(const char* ip, short port)
 {
 
