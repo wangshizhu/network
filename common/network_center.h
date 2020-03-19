@@ -1,0 +1,4 @@
+#ifndef NETWORK_CENTER_H_
+#define NETWORK_CENTER_H_
+
+#endif // !NETWORK_CENTER_H_

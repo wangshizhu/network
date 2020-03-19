@@ -143,10 +143,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\common\socket_file_discriptor.cpp" />
     <ClCompile Include="test0306.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\common\network_center.h" />
     <ClInclude Include="..\..\..\common\platform.h" />
+    <ClInclude Include="..\..\..\common\socket_file_discriptor.h" />
+    <ClInclude Include="..\..\..\common\string_util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

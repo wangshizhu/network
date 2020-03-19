@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <cstring> 
+#include "string_util.h"
 #if defined( __WIN32__ ) || defined( WIN32 ) || defined( _WIN32 )
 #pragma warning(disable:4996)
 #ifndef WIN32_LEAN_AND_MEAN 
@@ -70,6 +71,8 @@ namespace General
 #define PLATFORM_WIN32			0
 #define PLATFORM_UNIX			1
 #define UNIX_FLAVOUR_LINUX		1
+
+#define    LISTENQ        1024
 
 #if defined( __WIN32__ ) || defined( WIN32 ) || defined( _WIN32 )
 #define GENERAL_PLATFORM PLATFORM_WIN32
@@ -253,25 +256,6 @@ inline int32 getProcessPID()
 	return (int32)GetCurrentProcessId();
 #endif
 }
-
-wchar_t* char2wchar(const char* cs, size_t* outlen)
-{
-	int len = (int)((strlen(cs) + 1) * sizeof(wchar_t));
-	wchar_t* ccattr = (wchar_t *)malloc(len);
-	memset(ccattr, 0, len);
-
-	size_t slen = mbstowcs(ccattr, cs, len);
-
-	if (outlen)
-	{
-		if ((size_t)-1 != slen)
-			*outlen = slen;
-		else
-			*outlen = 0;
-	}
-
-	return ccattr;
-};
 
 inline u_int32_t IPToN(int family, const char* ip, void* out)
 {

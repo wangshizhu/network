@@ -2,7 +2,7 @@
 //
 
 
-#include "../../../common/platform.h"
+#include "../../../common/socket_file_discriptor.h"
 
 void ReadData(int sock)
 {
@@ -23,42 +23,20 @@ void ReadData(int sock)
 int main()
 {
 	{
-#if GENERAL_PLATFORM == PLATFORM_WIN32
-		WSAData wsdata;
-		WSAStartup(0x202, &wsdata);
-#endif
-
-		/* 创建字节流类型的IPV4 socket. */
-		int sock = (int)::socket(AF_INET, SOCK_STREAM, 0);
-		if (sock < 0) {
-			return 0;
-		}
-
-		// 绑定到port和ip
-		struct sockaddr_in serverSockAddr, client_sock_addr;
-
-		memset(&client_sock_addr, 0, sizeof(client_sock_addr));
-		// IPV4
-		serverSockAddr.sin_family = AF_INET;
-		// 指定端口
-		serverSockAddr.sin_port = htons(5700);
-		struct in_addr dst;
-		// 通配地址
-		serverSockAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-
-		// 把IPV4地址转换成通用地址格式，同时传递长度
-		if (bind(sock, (struct sockaddr *) &serverSockAddr, sizeof(serverSockAddr)) < 0)
+		network::SocketWrapper s;
+		int ok = s.CreateTcpServerSock("127.0.0.1", 5700);
+		if (ok == 0)
 		{
 			return 0;
 		}
 
-		::listen(sock, 1024);
-
 		int conn_fd;
+		struct sockaddr_in client_sock_addr;
+		memset(&client_sock_addr, 0, sizeof(client_sock_addr));
 		socklen_t cli_addr_len = sizeof(client_sock_addr);
 		while (true)
 		{
-			conn_fd = ::accept(sock, (struct sockaddr *) &client_sock_addr, &cli_addr_len);
+			conn_fd = ::accept(s.GetSocket(), (struct sockaddr *) &client_sock_addr, &cli_addr_len);
 			if (conn_fd == -1)
 			{
 				continue;
