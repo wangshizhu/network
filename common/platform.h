@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <cstring> 
+#include <map>
 #include "string_util.h"
 #if defined( __WIN32__ ) || defined( WIN32 ) || defined( _WIN32 )
 #pragma warning(disable:4996)

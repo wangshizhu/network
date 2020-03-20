@@ -2,7 +2,7 @@
 //
 
 
-#include "../../../common/socket_file_discriptor.h"
+#include "../../../common/network_center.h"
 
 void ReadData(int sock)
 {
@@ -23,9 +23,9 @@ void ReadData(int sock)
 int main()
 {
 	{
-		network::SocketWrapper s;
-		int ok = s.CreateTcpServerSock("127.0.0.1", 5700);
-		if (ok == 0)
+		network::NetWorkCenter net;
+		int sock = net.CreateTcpServerSocket("127.0.0.1", 5700);
+		if (sock == 0)
 		{
 			return 0;
 		}
@@ -36,7 +36,7 @@ int main()
 		socklen_t cli_addr_len = sizeof(client_sock_addr);
 		while (true)
 		{
-			conn_fd = ::accept(s.GetSocket(), (struct sockaddr *) &client_sock_addr, &cli_addr_len);
+			conn_fd = ::accept(sock, (struct sockaddr *) &client_sock_addr, &cli_addr_len);
 			if (conn_fd == -1)
 			{
 				continue;

@@ -143,11 +143,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\common\event_poller.cpp" />
     <ClCompile Include="..\..\..\common\network_center.cpp" />
     <ClCompile Include="..\..\..\common\socket_file_discriptor.cpp" />
     <ClCompile Include="test0306.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\common\event_poller.h" />
     <ClInclude Include="..\..\..\common\network_center.h" />
     <ClInclude Include="..\..\..\common\platform.h" />
     <ClInclude Include="..\..\..\common\socket_file_discriptor.h" />

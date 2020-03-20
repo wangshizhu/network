@@ -18,17 +18,24 @@ namespace network
 		~SocketWrapper();
 		SocketWrapper(const SocketWrapper&) = delete;
 		SocketWrapper& operator=(const SocketWrapper&) = delete;
-		SocketWrapper(SocketWrapper&&) = delete;
+		SocketWrapper(SocketWrapper&&) = default;
 		SocketWrapper& operator=(SocketWrapper&&) = delete;
+
+	public:
+		int bind(const char* ip, short port);
+		int listen();
+		int SetNonBlocking(bool nonblocking);
+		int SetNoDelay(bool nodelay = true);
+		int SetLinger(uint16 onoff, uint16 linger);
+		int close();
 
 	public:
 		void CreateSocket(int type);
 		bool IsGood()const;
-		int CreateTcpServerSock(const char* ip,short port);
-		int SetNonBlocking(bool nonblocking);
-		int SetNoDelay(bool nodelay = true);
-		int SetLinger(uint16 onoff, uint16 linger);
 		int GetSocket();
+
+	private:
+		void InittdNetWork();
 
 	private:
 		GENERALSOCKET socket_;

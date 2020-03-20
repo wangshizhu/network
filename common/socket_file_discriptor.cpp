@@ -1,5 +1,7 @@
 #include "socket_file_discriptor.h"
 
+static bool g_network_initted = false;
+
 network::SocketWrapper::SocketWrapper() :
 #if GENERAL_PLATFORM == PLATFORM_WIN32
 socket_(INVALID_SOCKET)
@@ -11,10 +13,12 @@ socket_(-1)
 
 network::SocketWrapper::~SocketWrapper()
 {
+	close();
 }
 
 void network::SocketWrapper::CreateSocket(int type)
 {
+	InittdNetWork();
 	socket_ = (int)::socket(AF_INET, type, 0);
 }
 
@@ -27,30 +31,23 @@ bool network::SocketWrapper::IsGood()const
 #endif
 }
 
-int network::SocketWrapper::CreateTcpServerSock(const char* ip, short port)
+void network::SocketWrapper::InittdNetWork()
 {
+	if (g_network_initted)
+		return;
+
+	g_network_initted = true;
 
 #if GENERAL_PLATFORM == PLATFORM_WIN32
 	WSAData wsdata;
 	WSAStartup(0x202, &wsdata);
 #endif
+}
 
-	/* 创建字节流类型的IPV4 socket. */
-	socket_ = (int)::socket(AF_INET, SOCK_STREAM, 0);
-	if (socket_ < 0)
-	{
-		return 0;
-	}
-
-	// 设置非阻塞
-	SetNonBlocking(true);
-
-	// 禁用Nagle
-	SetNoDelay();
-
+int network::SocketWrapper::bind(const char* ip, short port)
+{
 	// 绑定到port和ip
-	struct sockaddr_in server_sock_addr, client_sock_addr;
-	memset(&client_sock_addr, 0, sizeof(client_sock_addr));
+	struct sockaddr_in server_sock_addr;
 
 	// IPV4
 	server_sock_addr.sin_family = AF_INET;
@@ -59,19 +56,12 @@ int network::SocketWrapper::CreateTcpServerSock(const char* ip, short port)
 
 	IPToN(AF_INET, ip, &server_sock_addr.sin_addr);
 
-	int bind_ok = bind(socket_, (struct sockaddr *) &server_sock_addr, sizeof(server_sock_addr));
-	if (bind_ok < 0 )
-	{
-		return 0;
-	}
+	return ::bind(socket_, (struct sockaddr *) &server_sock_addr, sizeof(server_sock_addr));
+}
 
-	int listen_ok = ::listen(socket_, LISTENQ);
-	if (listen_ok < 0)
-	{
-		return 0;
-	}
-
-	return socket_;
+int network::SocketWrapper::listen()
+{
+	return ::listen(socket_, LISTENQ);
 }
 
 int network::SocketWrapper::SetNonBlocking(bool nonblocking)
@@ -102,4 +92,28 @@ int network::SocketWrapper::SetLinger(uint16 onoff, uint16 linger)
 int network::SocketWrapper::GetSocket()
 {
 	return socket_;
+}
+
+int network::SocketWrapper::close()
+{
+	if (!IsGood())
+	{
+		return 0;
+	}
+
+	int ret = CLOSE_SOCKET(socket_);
+	if (ret != 0)
+	{
+		return ret;
+	}
+
+#if GENERAL_PLATFORM == PLATFORM_WIN32
+	const GENERALSOCKET invalid_socket = INVALID_SOCKET;
+#else
+	const GENERALSOCKET invalid_socket = -1;
+#endif
+
+	socket_ = invalid_socket;
+
+	return ret;
 }
