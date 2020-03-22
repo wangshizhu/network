@@ -145,6 +145,8 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\common\event_poller.cpp" />
     <ClCompile Include="..\..\..\common\event_processor.cpp" />
+    <ClCompile Include="..\..\..\common\interface.cpp" />
+    <ClCompile Include="..\..\..\common\log.cpp" />
     <ClCompile Include="..\..\..\common\network_center.cpp" />
     <ClCompile Include="..\..\..\common\socket_file_discriptor.cpp" />
     <ClCompile Include="test0306.cpp" />
@@ -153,6 +155,7 @@
     <ClInclude Include="..\..\..\common\event_poller.h" />
     <ClInclude Include="..\..\..\common\event_processor.h" />
     <ClInclude Include="..\..\..\common\interface.h" />
+    <ClInclude Include="..\..\..\common\log.h" />
     <ClInclude Include="..\..\..\common\network_center.h" />
     <ClInclude Include="..\..\..\common\platform.h" />
     <ClInclude Include="..\..\..\common\singleton.h" />
