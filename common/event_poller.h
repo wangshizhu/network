@@ -2,11 +2,16 @@
 #define EVENT_POLLER_H_
 
 #include "network_center.h"
+#include "interface.h"
 
 namespace network
 {
-	using InputMapType = std::map<int, InputHandler*>;
-	using OutputMapType = std::map<int, OutputHandler*>;
+	using SharedInputHandlerType = std::shared_ptr<InputHandler>;
+	using SharedOutputHandlerType = std::shared_ptr<OutputHandler>;
+	using WeakInputHandlerType = std::weak_ptr<InputHandler>;
+	using WeakOutputHandlerType = std::weak_ptr<OutputHandler>;
+	using InputMapType = std::map<int, WeakInputHandlerType>;
+	using OutputMapType = std::map<int, WeakOutputHandlerType>;
 	
 	class EventPoller
 	{
@@ -15,9 +20,9 @@ namespace network
 		virtual ~EventPoller();
 
 	public:
-		virtual bool RegisterRead(int fd,InputHandler* handler) = 0;
+		virtual bool RegisterRead(int fd, SharedInputHandlerType handler) = 0;
 		virtual bool DeregisterRead(int fd) = 0;
-		virtual bool RegisterWrite(int fd, OutputHandler* handler) = 0;
+		virtual bool RegisterWrite(int fd, SharedOutputHandlerType handler) = 0;
 		virtual bool DeregisterWrite(int fd) = 0;
 		virtual int ProcessEvent() = 0;
 
@@ -40,9 +45,9 @@ namespace network
 		~SelectPoller();
 
 	public:
-		virtual bool RegisterRead(int fd, InputHandler* handler);
+		virtual bool RegisterRead(int fd, SharedInputHandlerType handler);
 		virtual bool DeregisterRead(int fd);
-		virtual bool RegisterWrite(int fd, OutputHandler* handler);
+		virtual bool RegisterWrite(int fd, SharedOutputHandlerType handler);
 		virtual bool DeregisterWrite(int fd);
 		virtual int ProcessEvent();
 

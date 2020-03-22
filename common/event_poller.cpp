@@ -10,9 +10,9 @@ network::EventPoller::~EventPoller()
 {
 }
 
-bool network::EventPoller::RegisterRead(int fd, InputHandler* handler)
+bool network::EventPoller::RegisterRead(int fd, SharedInputHandlerType handler)
 {
-	in_map[fd] = handler;
+	in_map[fd] = WeakInputHandlerType(handler);
 	return true;
 }
 
@@ -22,9 +22,9 @@ bool network::EventPoller::DeregisterRead(int fd)
 	return true;
 }
 
-bool network::EventPoller::RegisterWrite(int fd, OutputHandler* handler)
+bool network::EventPoller::RegisterWrite(int fd, SharedOutputHandlerType handler)
 {
-	out_map[fd] = handler;
+	out_map[fd] = WeakOutputHandlerType(handler);
 	return true;
 }
 
@@ -73,7 +73,13 @@ bool network::EventPoller::ProcessRead(int fd)
 		return false;
 	}
 
-	it->second->HandleInput(fd);
+	auto tmp = it->second.lock();
+	if (tmp == nullptr)
+	{
+		return false;
+	}
+
+	tmp->HandleInput(fd);
 
 	return true;
 }
@@ -86,7 +92,13 @@ bool network::EventPoller::ProcessWrite(int fd)
 		return false;
 	}
 
-	it->second->HandleOutput(fd);
+	auto tmp = it->second.lock();
+	if (tmp == nullptr)
+	{
+		return false;
+	}
+
+	tmp->HandleOutput(fd);
 
 	return true;
 }
@@ -112,7 +124,7 @@ network::SelectPoller::~SelectPoller()
 {
 }
 
-bool network::SelectPoller::RegisterRead(int fd, InputHandler* handler)
+bool network::SelectPoller::RegisterRead(int fd, SharedInputHandlerType handler)
 {
 #if GENERAL_PLATFORM != PLATFORM_WIN32
 	if ((fd < 0) || (FD_SETSIZE <= fd))
@@ -167,7 +179,7 @@ bool network::SelectPoller::DeregisterRead(int fd)
 	return true;
 }
 
-bool network::SelectPoller::RegisterWrite(int fd, OutputHandler* handler)
+bool network::SelectPoller::RegisterWrite(int fd, SharedOutputHandlerType handler)
 {
 #if GENERAL_PLATFORM != PLATFORM_WIN32
 	if ((fd < 0) || (FD_SETSIZE <= fd))
@@ -250,10 +262,8 @@ int network::SelectPoller::ProcessEvent()
 	else
 #endif
 	{
-		num = select(fd_largest_ + 1, &read_fds,
-			fd_write_count_ ? &write_fds : nullptr, nullptr,nullptr);
+		num = select(fd_largest_ + 1, &read_fds,fd_write_count_ ? &write_fds : nullptr, nullptr,nullptr);
 	}
-
 
 	if (num > 0)
 	{

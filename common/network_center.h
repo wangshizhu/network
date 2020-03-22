@@ -2,35 +2,39 @@
 #define NETWORK_CENTER_H_
 
 #include "platform.h"
+#include "log.h"
 #include "socket_file_discriptor.h"
+#include "event_processor.h"
+#include "interface.h"
 
 namespace network
 {
-	class InputHandler
+	enum class EnumPoller
 	{
-	public:
-		virtual ~InputHandler() {};
-		virtual int HandleInput(int fd) = 0;
+		SELECT_POLLER = 0,
+		POLL_POLLER,
+		EPOLL_POLLER,
 	};
 
-	class OutputHandler
-	{
-	public:
-		virtual ~OutputHandler() {};
-		virtual int HandleOutput (int fd) = 0;
-	};
+	using SharedSockType = std::shared_ptr<SocketWrapper>;
+	using SharedListenedInputType = std::shared_ptr<ListenInputHandler>;
 
 	class NetWorkCenter
 	{
 	public:
-		NetWorkCenter();
+		NetWorkCenter(int poller);
 		~NetWorkCenter();
 
 	public:
-		int CreateTcpServerSocket(const char* ip, short port);
+		void Run();
+
+	public:
+		int CreateTcpServer(const char* ip, short port);
 
 	private:
-		std::map<int, SocketWrapper> created_;
+		std::map<short, SharedSockType> listened_;
+		std::map<int, SharedListenedInputType> listened_input_;
+		EventProcessor event_processor_;
 	};
 }
 

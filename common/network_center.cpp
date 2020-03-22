@@ -1,51 +1,70 @@
 #include "network_center.h"
 
-network::NetWorkCenter::NetWorkCenter()
+network::NetWorkCenter::NetWorkCenter(int poller):event_processor_(poller)
 {
-	created_.clear();
+	listened_.clear();
+	listened_input_.clear();
 }
 
 network::NetWorkCenter::~NetWorkCenter()
 {
-	created_.clear();
+	listened_.clear();
+	listened_input_.clear();
 }
 
-int network::NetWorkCenter::CreateTcpServerSocket(const char* ip, short port)
+void network::NetWorkCenter::Run()
 {
-	SocketWrapper sock;
+	event_processor_.ProcessEvent();
+}
 
-	/* 创建字节流类型的IPV4 socket. */
-	sock.CreateSocket(SOCK_STREAM);
-
-	if (!sock.IsGood())
+int network::NetWorkCenter::CreateTcpServer(const char* ip, short port)
+{
+	auto it = listened_.find(port);
+	if (it != listened_.end())
 	{
+		DEBUG_INFO("the port is listened yet");
+
 		return 0;
 	}
 
-	auto it = created_.find(sock.GetSocket());
-	if (it != created_.end())
+	network::SharedSockType sock = std::make_shared<SocketWrapper>();
+
+	/* 创建字节流类型的IPV4 socket. */
+	sock->CreateSocket(SOCK_STREAM);
+
+	if (!sock->IsGood())
 	{
+		DEBUG_INFO("the created socket isnt good");
 		return 0;
 	}
 
 	// 设置非阻塞
-	sock.SetNonBlocking(true);
+	sock->SetNonBlocking(true);
 
 	// 禁用Nagle
-	sock.SetNoDelay();
+	sock->SetNoDelay();
 
-	if (sock.bind(ip, port) < 0)
+	if (sock->bind(ip, port) < 0)
 	{
+		DEBUG_INFO("bind faild");
 		return 0;
 	}
 
-	if (sock.listen() < 0)
+	if (sock->listen() < 0)
 	{
+		DEBUG_INFO("listen faild");
 		return 0;
 	}
 
-	int fd = sock.GetSocket();
-	created_.emplace(fd,std::move(sock));
+	SharedListenedInputType tmp = std::make_shared<ListenTcpInputHandler>(sock);
+	if (!event_processor_.RegisterRead(sock->GetSocket(), tmp))
+	{
+		DEBUG_INFO("regist faild");
+		return 0;
+	}
 
-	return fd;
+	listened_input_[sock->GetSocket()] = tmp;
+	listened_[port] = sock;
+
+	return sock->GetSocket();
 }

@@ -10,7 +10,6 @@ namespace network
 		ENUM_TCP = 0,
 		ENUM_UDP
 	};
-
 	class SocketWrapper
 	{
 	public:
@@ -24,10 +23,12 @@ namespace network
 	public:
 		int bind(const char* ip, short port);
 		int listen();
+		std::shared_ptr<SocketWrapper> accept();
 		int SetNonBlocking(bool nonblocking);
 		int SetNoDelay(bool nodelay = true);
 		int SetLinger(uint16 onoff, uint16 linger);
 		int close();
+		void SetSocket(GENERALSOCKET sock);
 
 	public:
 		void CreateSocket(int type);

@@ -64,6 +64,35 @@ int network::SocketWrapper::listen()
 	return ::listen(socket_, LISTENQ);
 }
 
+std::shared_ptr<network::SocketWrapper> network::SocketWrapper::accept()
+{
+	struct sockaddr_in client_sock_addr;
+	memset(&client_sock_addr, 0, sizeof(client_sock_addr));
+	socklen_t cli_addr_len = sizeof(client_sock_addr);
+
+	int ret = (int)::accept(socket_, (sockaddr*)&client_sock_addr, &cli_addr_len);
+
+#if GENERAL_PLATFORM == PLATFORM_WIN32
+	if (ret == INVALID_SOCKET)
+	{
+		return nullptr;
+	}
+#else
+	if (ret < 0) 
+	{
+		return nullptr;
+	}
+#endif
+
+	std::shared_ptr<SocketWrapper> new_sock = std::make_shared<SocketWrapper>();
+
+	new_sock->SetSocket(ret);
+	new_sock->SetNonBlocking(true);
+	new_sock->SetNoDelay(true);
+
+	return new_sock;
+}
+
 int network::SocketWrapper::SetNonBlocking(bool nonblocking)
 {
 #if GENERAL_PLATFORM == PLATFORM_WIN32
@@ -113,7 +142,13 @@ int network::SocketWrapper::close()
 	const GENERALSOCKET invalid_socket = -1;
 #endif
 
-	socket_ = invalid_socket;
+
+	SetSocket(invalid_socket);
 
 	return ret;
+}
+
+void network::SocketWrapper::SetSocket(GENERALSOCKET sock)
+{
+	socket_ = sock;
 }

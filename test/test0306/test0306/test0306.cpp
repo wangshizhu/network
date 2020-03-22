@@ -23,33 +23,35 @@ void ReadData(int sock)
 int main()
 {
 	{
-		network::NetWorkCenter net;
-		int sock = net.CreateTcpServerSocket("127.0.0.1", 5700);
+		network::NetWorkCenter net((int)network::EnumPoller::SELECT_POLLER);
+		int sock = net.CreateTcpServer("127.0.0.1", 5700);
 		if (sock == 0)
 		{
 			return 0;
 		}
 
-		int conn_fd;
-		struct sockaddr_in client_sock_addr;
-		memset(&client_sock_addr, 0, sizeof(client_sock_addr));
-		socklen_t cli_addr_len = sizeof(client_sock_addr);
-		while (true)
-		{
-			conn_fd = ::accept(sock, (struct sockaddr *) &client_sock_addr, &cli_addr_len);
-			if (conn_fd == -1)
-			{
-				continue;
-			}
+		net.Run();
 
-			// !TODO
-			ReadData(conn_fd);
-
-			CLOSE_SOCKET(conn_fd);
-#if GENERAL_PLATFORM == PLATFORM_WIN32
-			WSACleanup();
-#endif
-		}
+//		int conn_fd;
+//		struct sockaddr_in client_sock_addr;
+//		memset(&client_sock_addr, 0, sizeof(client_sock_addr));
+//		socklen_t cli_addr_len = sizeof(client_sock_addr);
+//		while (true)
+//		{
+//			conn_fd = ::accept(sock, (struct sockaddr *) &client_sock_addr, &cli_addr_len);
+//			if (conn_fd == -1)
+//			{
+//				continue;
+//			}
+//
+//			// !TODO
+//			ReadData(conn_fd);
+//
+//			CLOSE_SOCKET(conn_fd);
+//#if GENERAL_PLATFORM == PLATFORM_WIN32
+//			WSACleanup();
+//#endif
+//		}
 	}
 	return 0;
 }
