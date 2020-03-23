@@ -34,21 +34,21 @@ namespace network
 
 	bool EventProcessor::RegisterRead(int fd, SharedInputHandlerType handler)
 	{
-		poller_->RegisterRead(fd, handler);
+		return poller_->RegisterRead(fd, handler);
 	}
 
 	bool EventProcessor::DeregisterRead(int fd)
 	{
-		poller_->DeregisterRead(fd);
+		return poller_->DeregisterRead(fd);
 	}
 
 	bool EventProcessor::RegisterWrite(int fd, SharedOutputHandlerType handler)
 	{
-		poller_->RegisterWrite(fd, handler);
+		return poller_->RegisterWrite(fd, handler);
 	}
 
 	bool EventProcessor::DeregisterWrite(int fd)
 	{
-		poller_->DeregisterWrite(fd);
+		return poller_->DeregisterWrite(fd);
 	}
 }

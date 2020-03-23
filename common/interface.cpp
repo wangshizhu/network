@@ -19,7 +19,7 @@ namespace network
 		while (tick_num++ < 256)
 		{
 			auto new_sock = sock->accept();
-			if (new_sock == NULL) 
+			if (new_sock == nullptr) 
 			{
 				break;
 			}

@@ -7,6 +7,7 @@
 #include "event_processor.h"
 #include "interface.h"
 
+
 namespace network
 {
 	enum class EnumPoller
@@ -16,6 +17,10 @@ namespace network
 		EPOLL_POLLER,
 	};
 
+	class EventProcessor;
+	class ListenInputHandler;
+
+	using UniqEventProcessorType = std::unique_ptr<EventProcessor>;
 	using SharedSockType = std::shared_ptr<SocketWrapper>;
 	using SharedListenedInputType = std::shared_ptr<ListenInputHandler>;
 
@@ -27,14 +32,12 @@ namespace network
 
 	public:
 		void Run();
-
-	public:
 		int CreateTcpServer(const char* ip, short port);
 
 	private:
 		std::map<short, SharedSockType> listened_;
 		std::map<int, SharedListenedInputType> listened_input_;
-		EventProcessor event_processor_;
+		UniqEventProcessorType event_processor_;
 	};
 }
 

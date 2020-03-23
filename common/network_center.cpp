@@ -1,9 +1,10 @@
 #include "network_center.h"
 
-network::NetWorkCenter::NetWorkCenter(int poller):event_processor_(poller)
+network::NetWorkCenter::NetWorkCenter(int poller)
 {
 	listened_.clear();
 	listened_input_.clear();
+	event_processor_ = std::make_unique<EventProcessor>(poller);
 }
 
 network::NetWorkCenter::~NetWorkCenter()
@@ -14,7 +15,7 @@ network::NetWorkCenter::~NetWorkCenter()
 
 void network::NetWorkCenter::Run()
 {
-	event_processor_.ProcessEvent();
+	event_processor_->ProcessEvent();
 }
 
 int network::NetWorkCenter::CreateTcpServer(const char* ip, short port)
@@ -57,7 +58,7 @@ int network::NetWorkCenter::CreateTcpServer(const char* ip, short port)
 	}
 
 	SharedListenedInputType tmp = std::make_shared<ListenTcpInputHandler>(sock);
-	if (!event_processor_.RegisterRead(sock->GetSocket(), tmp))
+	if (!event_processor_->RegisterRead(sock->GetSocket(), tmp))
 	{
 		DEBUG_INFO("regist faild");
 		return 0;

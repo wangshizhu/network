@@ -6,6 +6,9 @@
 
 namespace network
 {
+	class InputHandler;
+	class OutputHandler;
+	
 	using SharedInputHandlerType = std::shared_ptr<InputHandler>;
 	using SharedOutputHandlerType = std::shared_ptr<OutputHandler>;
 	using WeakInputHandlerType = std::weak_ptr<InputHandler>;
