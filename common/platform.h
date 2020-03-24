@@ -210,9 +210,9 @@ typedef int													GENERALSOCKET;
 #endif
 
 #if GENERAL_PLATFORM == PLATFORM_UNIX
-#define CLOSE_SOCKET(s) close(s);
+#define CLOSE_SOCKET(s) ::close(s);
 #else
-#define CLOSE_SOCKET(s) closesocket(s);
+#define CLOSE_SOCKET(s) ::closesocket(s);
 #endif
 
 #define ARRAYSZ(v)					(sizeof(v) / sizeof(v[0]))
