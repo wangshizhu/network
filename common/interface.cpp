@@ -31,4 +31,13 @@ namespace network
 
 		return 0;
 	}
+
+	TcpPacketInputHandler::TcpPacketInputHandler(SharedSockType sock) : accepted_sock_(sock)
+	{
+	}
+
+	int TcpPacketInputHandler::HandleInput(int fd)
+	{
+		return 0;
+	}
 }

@@ -4,6 +4,9 @@
 
 #include "../../../common/network_center.h"
 
+network::NetWorkCenter net;
+#define g_network_center network::NetWorkCenter::GetInstancePtr()
+
 void ReadData(int sock)
 {
 	int n = 1024;
@@ -23,8 +26,8 @@ void ReadData(int sock)
 int main()
 {
 	{
-		network::NetWorkCenter net((int)network::EnumPoller::SELECT_POLLER);
-		int sock = net.CreateTcpServer("127.0.0.1", 5700);
+		g_network_center->Init((int)network::EnumPoller::SELECT_POLLER);
+		int sock = g_network_center->CreateTcpServer("127.0.0.1", 5700);
 		if (sock == 0)
 		{
 			return 0;

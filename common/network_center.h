@@ -24,13 +24,14 @@ namespace network
 	using SharedSockType = std::shared_ptr<SocketWrapper>;
 	using SharedListenedInputType = std::shared_ptr<ListenInputHandler>;
 
-	class NetWorkCenter
+	class NetWorkCenter : public Singleton<NetWorkCenter>
 	{
 	public:
-		NetWorkCenter(int poller);
+		NetWorkCenter();
 		~NetWorkCenter();
 
 	public:
+		bool Init(int poller);
 		void Run();
 		int CreateTcpServer(const char* ip, short port);
 
@@ -40,5 +41,6 @@ namespace network
 		UniqEventProcessorType event_processor_;
 	};
 }
+
 
 #endif // !NETWORK_CENTER_H_

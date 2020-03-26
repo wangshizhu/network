@@ -1,16 +1,22 @@
 #include "network_center.h"
 
-network::NetWorkCenter::NetWorkCenter(int poller)
+network::NetWorkCenter::NetWorkCenter()
 {
 	listened_.clear();
 	listened_input_.clear();
-	event_processor_ = std::make_unique<EventProcessor>(poller);
+	event_processor_.reset(nullptr);
 }
 
 network::NetWorkCenter::~NetWorkCenter()
 {
 	listened_.clear();
 	listened_input_.clear();
+}
+
+bool network::NetWorkCenter::Init(int poller)
+{
+	event_processor_ = std::make_unique<EventProcessor>(poller);
+	return true;
 }
 
 void network::NetWorkCenter::Run()
