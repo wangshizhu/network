@@ -142,10 +142,14 @@ int network::SocketWrapper::close()
 	const GENERALSOCKET invalid_socket = -1;
 #endif
 
-
 	SetSocket(invalid_socket);
 
 	return ret;
+}
+
+int network::SocketWrapper::recv(void* gram_data, int gram_size)
+{
+	return ::recv(socket_, (char*)gram_data, gram_size, 0);
 }
 
 void network::SocketWrapper::SetSocket(GENERALSOCKET sock)

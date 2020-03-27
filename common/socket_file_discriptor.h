@@ -5,11 +5,6 @@
 
 namespace network
 {
-	enum class IpProto
-	{
-		ENUM_TCP = 0,
-		ENUM_UDP
-	};
 	class SocketWrapper
 	{
 	public:
@@ -28,6 +23,7 @@ namespace network
 		int SetNoDelay(bool nodelay = true);
 		int SetLinger(uint16 onoff, uint16 linger);
 		int close();
+		int recv(void* gram_data, int gram_size);
 		void SetSocket(GENERALSOCKET sock);
 
 	public:

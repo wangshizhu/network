@@ -4,6 +4,7 @@
 #include "singleton.h"
 #include "event_poller.h"
 #include "interface.h"
+#include "network_define.h"
 
 namespace network
 {

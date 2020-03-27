@@ -3,11 +3,13 @@
 
 #include "network_center.h"
 #include "log.h"
+#include "session.h"
 
 namespace network
 {
 	using WeakSockType = std::weak_ptr<SocketWrapper>;
 	using SharedSockType = std::shared_ptr<SocketWrapper>;
+	using SharedSessionType = std::shared_ptr<Session>;
 
 	class InputHandler
 	{

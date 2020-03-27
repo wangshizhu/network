@@ -6,23 +6,19 @@
 #include "socket_file_discriptor.h"
 #include "event_processor.h"
 #include "interface.h"
+#include "session.h"
 
 
 namespace network
 {
-	enum class EnumPoller
-	{
-		SELECT_POLLER = 0,
-		POLL_POLLER,
-		EPOLL_POLLER,
-	};
-
 	class EventProcessor;
 	class ListenInputHandler;
+	class Session;
 
-	using UniqEventProcessorType = std::unique_ptr<EventProcessor>;
+	using SharedEventProcessorType = std::shared_ptr<EventProcessor>;
 	using SharedSockType = std::shared_ptr<SocketWrapper>;
 	using SharedListenedInputType = std::shared_ptr<ListenInputHandler>;
+	using SharedSessionType = std::shared_ptr<Session>;
 
 	class NetWorkCenter : public Singleton<NetWorkCenter>
 	{
@@ -34,11 +30,14 @@ namespace network
 		bool Init(int poller);
 		void Run();
 		int CreateTcpServer(const char* ip, short port);
+		SharedEventProcessorType GetEventProcessor();
+		void RegisterSession(int sock, SharedSessionType session);
 
 	private:
 		std::map<short, SharedSockType> listened_;
 		std::map<int, SharedListenedInputType> listened_input_;
-		UniqEventProcessorType event_processor_;
+		SharedEventProcessorType event_processor_;
+		std::map<int, SharedSessionType> session_;
 	};
 }
 

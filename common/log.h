@@ -20,5 +20,8 @@ namespace mylog
 }
 
 #define DEBUG_INFO(m) mylog::SimpleLog::GetInstancePtr()->DebugInfo(__FUNCTION__,__FILE__,__LINE__,m);
+#define ERROR_INFO(m) mylog::SimpleLog::GetInstancePtr()->DebugInfo(__FUNCTION__,__FILE__,__LINE__,m);
+#define LOG_INFO(m) mylog::SimpleLog::GetInstancePtr()->DebugInfo(__FUNCTION__,__FILE__,__LINE__,m);
+#define FATAL_INFO(m) mylog::SimpleLog::GetInstancePtr()->DebugInfo(__FUNCTION__,__FILE__,__LINE__,m);
 
 #endif // !LOG_H_

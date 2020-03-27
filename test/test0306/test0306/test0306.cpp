@@ -3,6 +3,7 @@
 
 
 #include "../../../common/network_center.h"
+#include "../../../common/network_define.h"
 
 network::NetWorkCenter net;
 #define g_network_center network::NetWorkCenter::GetInstancePtr()

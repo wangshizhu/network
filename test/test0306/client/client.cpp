@@ -5,7 +5,7 @@
 
 void SendData(int sock_fd)
 {
-	int n = 102400;
+	int n = 1023;
 	char* data = new char[n + 1];
 	data[n] = '\0';
 	for (int i = 0; i < n; i++)

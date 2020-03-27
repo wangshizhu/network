@@ -1,4 +1,5 @@
 #include "interface.h"
+#include "network_define.h"
 
 namespace network
 {
@@ -8,7 +9,7 @@ namespace network
 
 	int ListenTcpInputHandler::HandleInput(int fd)
 	{
-		auto sock = SharedSockType(listened_sock_);
+		auto sock = listened_sock_.lock();
 		if (sock == nullptr)
 		{
 			DEBUG_INFO("listened_sock_ is null");
@@ -25,7 +26,14 @@ namespace network
 			}
 			else
 			{
-				DEBUG_INFO("a new connection");
+				SharedSessionType session = std::make_shared<Session>();
+				if (!session->Init(new_sock, (short)EnumIpProto::ENUM_TCP))
+				{
+					ERROR_INFO("session initial faild");
+					return 0;
+				}
+
+				NetWorkCenter::GetInstancePtr()->RegisterSession(new_sock->GetSocket(),session);
 			}
 		}
 
@@ -38,6 +46,27 @@ namespace network
 
 	int TcpPacketInputHandler::HandleInput(int fd)
 	{
-		return 0;
+		auto sock = accepted_sock_.lock();
+		if (sock == nullptr)
+		{
+			return INVALID;
+		}
+
+		char* data = new char[1023];
+		int len = sock->recv(data,1023);
+		if (len < 0)
+		{
+			return INVALID;
+		}
+		if (len == 0)
+		{
+			return INVALID;
+		}
+
+		std::cout << data << std::endl;
+
+		delete []data;
+
+		return len;
 	}
 }
