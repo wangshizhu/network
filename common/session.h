@@ -15,6 +15,7 @@ namespace network
 	{
 	public:
 		Session();
+		~Session();
 
 	public:
 		bool Init(SharedSockType sock, int proto);

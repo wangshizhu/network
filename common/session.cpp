@@ -10,6 +10,11 @@ namespace network
 		
 	}
 
+	Session::~Session()
+	{
+		DEBUG_INFO("Session have released");
+	}
+
 	bool Session::Init(SharedSockType sock,int proto)
 	{
 		auto processor = NetWorkCenter::GetInstancePtr()->GetEventProcessor();

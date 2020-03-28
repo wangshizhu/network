@@ -47,8 +47,12 @@ namespace network
 	{
 	public:
 		TcpPacketInputHandler(SharedSockType sock);
-		virtual ~TcpPacketInputHandler() {};
+		virtual ~TcpPacketInputHandler();
 		virtual int HandleInput(int fd);
+
+	private:
+		void OnGetError(int fd);
+
 	private:
 		WeakSockType accepted_sock_;
 	};

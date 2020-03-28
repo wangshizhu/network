@@ -2,19 +2,20 @@
 //
 
 #include "../../../common/platform.h"
+#include "../../../common/test_msg_define.h"
 
 void SendData(int sock_fd)
 {
-	int n = 1023;
-	char* data = new char[n + 1];
-	data[n] = '\0';
-	for (int i = 0; i < n; i++)
+	Msg1 msg;
+	int l = sizeof(msg.data);
+	msg.msg_body_len = htonl(l);
+	for (int i = 0; i < l; i++)
 	{
-		data[i] = 'a';
+		msg.data[i] = 'a';
 	}
 
-	const char* p = data;
-	size_t remaining = strlen(data);
+	const char* p = (char*)&msg;
+	size_t remaining = sizeof(msg);
 	while (remaining)
 	{
 		int writed = send(sock_fd, p, remaining, 0);

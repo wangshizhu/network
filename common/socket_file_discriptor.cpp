@@ -1,4 +1,5 @@
 #include "socket_file_discriptor.h"
+#include "../lib/format.h"
 
 static bool g_network_initted = false;
 
@@ -13,6 +14,7 @@ socket_(-1)
 
 network::SocketWrapper::~SocketWrapper()
 {
+	DEBUG_INFO("SocketWrapper have released fd:{0}\n", socket_);
 	close();
 }
 

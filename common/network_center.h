@@ -32,6 +32,8 @@ namespace network
 		int CreateTcpServer(const char* ip, short port);
 		SharedEventProcessorType GetEventProcessor();
 		void RegisterSession(int sock, SharedSessionType session);
+		void DeregisterSession(int fd);
+		void DeregisterFd(int fd);
 
 	private:
 		std::map<short, SharedSockType> listened_;

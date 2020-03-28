@@ -44,6 +44,11 @@ namespace network
 	{
 	}
 
+	TcpPacketInputHandler::~TcpPacketInputHandler()
+	{
+		DEBUG_INFO("TcpPacketInputHandler have released");
+	}
+
 	int TcpPacketInputHandler::HandleInput(int fd)
 	{
 		auto sock = accepted_sock_.lock();
@@ -56,10 +61,12 @@ namespace network
 		int len = sock->recv(data,1023);
 		if (len < 0)
 		{
+			OnGetError(sock->GetSocket());
 			return INVALID;
 		}
 		if (len == 0)
 		{
+			OnGetError(sock->GetSocket());
 			return INVALID;
 		}
 
@@ -68,5 +75,11 @@ namespace network
 		delete []data;
 
 		return len;
+	}
+
+	void TcpPacketInputHandler::OnGetError(int fd)
+	{
+		NetWorkCenter::GetInstancePtr()->DeregisterSession(fd);
+		NetWorkCenter::GetInstancePtr()->DeregisterFd(fd);
 	}
 }

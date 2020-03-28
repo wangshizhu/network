@@ -2,6 +2,7 @@
 #define SOCKET_FILE_DISCRIPTOR_H_
 
 #include "platform.h"
+#include "log.h"
 
 namespace network
 {

@@ -39,6 +39,9 @@
     <ClCompile Include="..\..\..\common\session.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\lib\format.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\common\platform.h">
@@ -72,6 +75,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\common\network_define.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\test_msg_define.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\format.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

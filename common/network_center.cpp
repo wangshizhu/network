@@ -111,4 +111,20 @@ namespace network
 
 		session_[sock] = session;
 	}
+
+	void NetWorkCenter::DeregisterSession(int fd)
+	{
+		if (session_.find(fd) != session_.end())
+		{
+			ERROR_INFO("deregister session failed,dont find the session");
+			return;
+		}
+
+		session_.erase(fd);
+	}
+
+	void NetWorkCenter::DeregisterFd(int fd)
+	{
+		event_processor_->DeregisterRead(fd);
+	}
 }

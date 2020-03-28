@@ -150,6 +150,7 @@
     <ClCompile Include="..\..\..\common\network_center.cpp" />
     <ClCompile Include="..\..\..\common\session.cpp" />
     <ClCompile Include="..\..\..\common\socket_file_discriptor.cpp" />
+    <ClCompile Include="..\..\..\lib\format.cpp" />
     <ClCompile Include="test0306.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +165,8 @@
     <ClInclude Include="..\..\..\common\singleton.h" />
     <ClInclude Include="..\..\..\common\socket_file_discriptor.h" />
     <ClInclude Include="..\..\..\common\string_util.h" />
+    <ClInclude Include="..\..\..\common\test_msg_define.h" />
+    <ClInclude Include="..\..\..\lib\format.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
