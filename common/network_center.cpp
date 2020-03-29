@@ -114,7 +114,7 @@ namespace network
 
 	void NetWorkCenter::DeregisterSession(int fd)
 	{
-		if (session_.find(fd) != session_.end())
+		if (session_.find(fd) == session_.end())
 		{
 			ERROR_INFO("deregister session failed,dont find the session");
 			return;
