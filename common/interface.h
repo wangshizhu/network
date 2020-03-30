@@ -10,6 +10,7 @@ namespace network
 	using WeakSockType = std::weak_ptr<SocketWrapper>;
 	using SharedSockType = std::shared_ptr<SocketWrapper>;
 	using SharedSessionType = std::shared_ptr<Session>;
+	using WeakSessionType = std::weak_ptr<Session>;
 
 	class InputHandler
 	{
@@ -41,20 +42,28 @@ namespace network
 	public:
 		virtual ~PacketInputHandler() {};
 		virtual int HandleInput(int fd) = 0;
+
+	protected:
+		virtual void CatchSockError() = 0;
+
 	};
 
 	class TcpPacketInputHandler : public PacketInputHandler
 	{
 	public:
-		TcpPacketInputHandler(SharedSockType sock);
+		TcpPacketInputHandler(SharedSockType sock, SharedSessionType session);
 		virtual ~TcpPacketInputHandler();
 		virtual int HandleInput(int fd);
+
+	protected:
+		void CatchSockError() override;
 
 	private:
 		void OnGetError(int fd);
 
 	private:
 		WeakSockType accepted_sock_;
+		WeakSessionType session_;
 	};
 
 	class OutputHandler

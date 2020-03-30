@@ -40,7 +40,8 @@ namespace network
 		return 0;
 	}
 
-	TcpPacketInputHandler::TcpPacketInputHandler(SharedSockType sock) : accepted_sock_(sock)
+	TcpPacketInputHandler::TcpPacketInputHandler(SharedSockType sock, SharedSessionType session) 
+		: accepted_sock_(sock),session_(session)
 	{
 	}
 
@@ -57,10 +58,15 @@ namespace network
 			return INVALID;
 		}
 
-		char* data = new char[1023];
-		int len = sock->recv(data,1023);
+		auto session = session_.lock();
+		if (session == nullptr)
+		{
+			return INVALID;
+		}
+		int len = session->RecvMsg();
 		if (len < 0)
 		{
+			CatchSockError();
 			OnGetError(sock->GetSocket());
 			return INVALID;
 		}
@@ -70,11 +76,32 @@ namespace network
 			return INVALID;
 		}
 
-		std::cout << data << std::endl;
-
-		delete []data;
-
 		return len;
+	}
+
+	void TcpPacketInputHandler::CatchSockError()
+	{
+		auto sock = accepted_sock_.lock();
+		if (sock == nullptr)
+		{
+			return;
+		}
+
+#if GENERAL_PLATFORM == PLATFORM_WIN32
+		DWORD win_err = WSAGetLastError();
+#endif
+#if GENERAL_PLATFORM == UNIX_FLAVOUR_LINUX
+		if (errno == EAGAIN ||							// 已经无数据可读了
+			errno == ECONNREFUSED ||					// 连接被服务器拒绝
+			errno == EHOSTUNREACH)						// 目的地址不可到达
+		{
+			DEBUG_INFO("catch socket error fd:{0},err_number:{1}\n", sock->GetSocket(),errno);
+			return;
+		}
+#else
+		DEBUG_INFO("catch socket error fd:{0},err_number:{1}\n", sock->GetSocket(), win_err);
+
+#endif
 	}
 
 	void TcpPacketInputHandler::OnGetError(int fd)

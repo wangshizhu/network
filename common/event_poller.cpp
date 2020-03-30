@@ -252,6 +252,11 @@ int network::SelectPoller::ProcessEvent()
 	read_fds = fd_read_set_;
 	write_fds = fd_write_set_;
 
+	struct timeval tv;
+	// TODO: select 超时时间有待修改
+	tv.tv_sec = 1;
+	tv.tv_usec = 500;
+
 	int num = 0;
 
 #if GENERAL_PLATFORM == PLATFORM_WIN32
@@ -262,7 +267,7 @@ int network::SelectPoller::ProcessEvent()
 	else
 #endif
 	{
-		num = select(fd_largest_ + 1, &read_fds,fd_write_count_ ? &write_fds : nullptr, nullptr,nullptr);
+		num = select(fd_largest_ + 1, &read_fds,fd_write_count_ ? &write_fds : nullptr, nullptr, &tv);
 	}
 
 	if (num > 0)

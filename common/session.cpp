@@ -5,7 +5,7 @@
 
 namespace network
 {
-	Session::Session():sock_(nullptr),proto_(INVALID),input_(nullptr)
+	Session::Session():sock_(nullptr),proto_(INVALID),input_(nullptr), reader_(nullptr)
 	{
 		
 	}
@@ -24,13 +24,14 @@ namespace network
 			return false;
 		}
 		
-		SharedTcpPacketInputType handler = std::make_shared<TcpPacketInputHandler>(sock);
+		SharedTcpPacketInputType handler = std::make_shared<TcpPacketInputHandler>(sock,shared_from_this());
 		if (!processor->RegisterRead(sock->GetSocket(), handler))
 		{
 			ERROR_INFO("regist the socket that it is accepted failed ");
 			return false;
 		}
 
+		reader_ = std::make_unique<PacketReader>(sock);
 		sock_ = sock;
 		proto_ = proto;
 		input_ = handler;
@@ -46,5 +47,17 @@ namespace network
 	const bool Session::IsUdp() const
 	{
 		return proto_ == (short)EnumIpProto::ENUM_UDP;
+	}
+
+	int Session::RecvMsg()
+	{
+		if (reader_ == nullptr)
+		{
+			ERROR_INFO("reader_ is nullptr");
+
+			return INVALID;
+		}
+
+		return reader_->RecvMsg();
 	}
 }

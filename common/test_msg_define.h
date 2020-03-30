@@ -7,7 +7,7 @@ struct MsgHeader
 {
 	MsgHeader(unsigned int id) :msg_id(htonl(id)) {}
 	unsigned int msg_body_len;
-	unsigned int msg_id;
+	unsigned short msg_id;
 };
 
 struct Msg1 : public MsgHeader

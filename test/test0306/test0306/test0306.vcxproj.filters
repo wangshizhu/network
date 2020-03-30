@@ -42,6 +42,9 @@
     <ClCompile Include="..\..\..\lib\format.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\common\packet_reader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\common\platform.h">
@@ -81,6 +84,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\lib\format.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\packet_reader.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
