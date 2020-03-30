@@ -14,11 +14,12 @@ namespace network
 		PacketReader(SharedSockType sock);
 
 	public:
-		int RecvMsg();
+		int RecvMsg(int max_recv_size);
 
 	private:
-		unsigned short cur_msg_id_;
-		unsigned int cur_msg_body_len_;
+		uint16 cur_msg_id_;
+		uint32 cur_msg_body_len_;
+		uint32 cur_pos;
 		char* data_;
 		WeakSockType sock_;
 	};

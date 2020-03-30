@@ -49,7 +49,7 @@ namespace network
 		return proto_ == (short)EnumIpProto::ENUM_UDP;
 	}
 
-	int Session::RecvMsg()
+	int Session::RecvMsg(int max_recv_size)
 	{
 		if (reader_ == nullptr)
 		{

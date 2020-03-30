@@ -63,7 +63,7 @@ namespace network
 		{
 			return INVALID;
 		}
-		int len = session->RecvMsg();
+		int len = session->RecvMsg(PACKET_MAX_SIZE_TCP);
 		if (len < 0)
 		{
 			CatchSockError();

@@ -23,7 +23,7 @@ namespace network
 		bool Init(SharedSockType sock, int proto);
 		const bool IsTcp() const;
 		const bool IsUdp() const;
-		int RecvMsg();
+		int RecvMsg(int max_recv_size);
 
 	private:
 		SharedSockType sock_;
