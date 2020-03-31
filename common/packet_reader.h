@@ -17,10 +17,6 @@ namespace network
 		int RecvMsg(int max_recv_size);
 
 	private:
-		uint16 cur_msg_id_;
-		uint32 cur_msg_body_len_;
-		uint32 cur_pos;
-		char* data_;
 		WeakSockType sock_;
 	};
 }

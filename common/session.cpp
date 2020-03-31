@@ -58,6 +58,6 @@ namespace network
 			return INVALID;
 		}
 
-		return reader_->RecvMsg();
+		return reader_->RecvMsg(max_recv_size);
 	}
 }

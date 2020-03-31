@@ -3,8 +3,7 @@
 
 namespace network
 {
-	PacketReader::PacketReader(SharedSockType sock):cur_msg_id_(0), 
-		cur_msg_body_len_(0), cur_pos(0), data_(nullptr), sock_(sock)
+	PacketReader::PacketReader(SharedSockType sock):sock_(sock)
 	{
 	}
 

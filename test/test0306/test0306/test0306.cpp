@@ -4,6 +4,7 @@
 
 #include "../../../common/network_center.h"
 #include "../../../common/network_define.h"
+#include "../src/player_manager.h"
 
 network::NetWorkCenter net;
 #define g_network_center network::NetWorkCenter::GetInstancePtr()
@@ -27,6 +28,8 @@ void ReadData(int sock)
 int main()
 {
 	{
+		PlayerManager mgr;
+
 		g_network_center->Init((int)network::EnumPoller::SELECT_POLLER);
 		int sock = g_network_center->CreateTcpServer("127.0.0.1", 5700);
 		if (sock == 0)

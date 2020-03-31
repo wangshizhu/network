@@ -152,6 +152,7 @@
     <ClCompile Include="..\..\..\common\session.cpp" />
     <ClCompile Include="..\..\..\common\socket_file_discriptor.cpp" />
     <ClCompile Include="..\..\..\lib\format.cpp" />
+    <ClCompile Include="..\src\player_manager.cpp" />
     <ClCompile Include="test0306.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +160,8 @@
     <ClInclude Include="..\..\..\common\event_processor.h" />
     <ClInclude Include="..\..\..\common\interface.h" />
     <ClInclude Include="..\..\..\common\log.h" />
+    <ClInclude Include="..\..\..\common\message_manager.h" />
+    <ClInclude Include="..\..\..\common\message_memory.h" />
     <ClInclude Include="..\..\..\common\network_center.h" />
     <ClInclude Include="..\..\..\common\network_define.h" />
     <ClInclude Include="..\..\..\common\packet_reader.h" />
@@ -169,6 +172,7 @@
     <ClInclude Include="..\..\..\common\string_util.h" />
     <ClInclude Include="..\..\..\common\test_msg_define.h" />
     <ClInclude Include="..\..\..\lib\format.h" />
+    <ClInclude Include="..\src\player_manager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
