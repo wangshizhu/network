@@ -9,7 +9,7 @@ if(CMAKE_COMPILER_IS_GNUCC)
     ADD_DEFINITIONS ( -std=c++1y)
 endif(CMAKE_COMPILER_IS_GNUCC)
 
-file(GLOB_RECURSE CURRENT_HEADERS  *.h *.hpp ../../../common/*.h ../../../common/*.cpp)
+file(GLOB_RECURSE CURRENT_HEADERS  *.h *.hpp ../../../common/*.h ../../../common/*.cpp ../../../lib/*.h ../../../lib/*.cpp ../src/*.h ../src/*.cpp)
 source_group("Header" FILES ${CURRENT_HEADERS}) 
 
 aux_source_directory(. DIR_SRCS)
