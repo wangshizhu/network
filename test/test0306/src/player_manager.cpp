@@ -6,8 +6,8 @@ network::MessageHandlerMgr<MsgBase, std::tr1::function<void(MsgBase*)>> msg_mgr;
 
 PlayerManager::PlayerManager()
 {
-	msg_mgr.RegisterHandler<Msg1, std::tr1::function<void(MsgBase*)>>(1, std::bind(&PlayerManager::Msg1Handler, this, std::placeholders::_1));
-	msg_mgr.RegisterHandler<Msg2, std::tr1::function<void(MsgBase*)>>(2, std::bind(&PlayerManager::Msg2Handler, this, std::placeholders::_1));
+	msg_mgr.RegisterHandler<Msg1, std::tr1::function<void(MsgBase*)>>(1, std::tr1::bind(&PlayerManager::Msg1Handler, this, std::placeholders::_1));
+	msg_mgr.RegisterHandler<Msg2, std::tr1::function<void(MsgBase*)>>(2, std::tr1::bind(&PlayerManager::Msg2Handler, this, std::placeholders::_1));
 }
 
 void PlayerManager::Msg1Handler(MsgBase* msg)
