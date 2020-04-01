@@ -76,6 +76,6 @@ namespace network
 
 }
 
-#define g_message_mgr network::MessageHandlerMgr<MsgBase, std::function<void(MsgBase*)>>::GetInstancePtr()
+#define g_message_mgr network::MessageHandlerMgr<MsgBase, std::tr1::function<void(MsgBase*)>>::GetInstancePtr()
 
 #endif
