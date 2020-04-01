@@ -27,10 +27,10 @@ namespace mylog
 	};
 }
 
-#define DEBUG_INFO(m,...) mylog::SimpleLog::GetInstancePtr()->DebugInfo(__FUNCTION__,__FILE__,__LINE__,(m),__VA_ARGS__);
-#define ERROR_INFO(m,...) mylog::SimpleLog::GetInstancePtr()->DebugInfo(__FUNCTION__,__FILE__,__LINE__,(m),__VA_ARGS__);
-#define LOG_INFO(m,...) mylog::SimpleLog::GetInstancePtr()->DebugInfo(__FUNCTION__,__FILE__,__LINE__,(m),__VA_ARGS__);
-#define FATAL_INFO(m,...) mylog::SimpleLog::GetInstancePtr()->DebugInfo(__FUNCTION__,__FILE__,__LINE__,(m),__VA_ARGS__);
+#define DEBUG_INFO(m,...) mylog::SimpleLog::GetInstancePtr()->DebugInfo(__FUNCTION__,__FILE__,__LINE__,(m),__VA_ARGS__)
+#define ERROR_INFO(m,...) mylog::SimpleLog::GetInstancePtr()->DebugInfo(__FUNCTION__,__FILE__,__LINE__,(m),__VA_ARGS__)
+#define LOG_INFO(m,...) mylog::SimpleLog::GetInstancePtr()->DebugInfo(__FUNCTION__,__FILE__,__LINE__,(m),__VA_ARGS__)
+#define FATAL_INFO(m,...) mylog::SimpleLog::GetInstancePtr()->DebugInfo(__FUNCTION__,__FILE__,__LINE__,(m),__VA_ARGS__)
 
 
 #endif // !LOG_H_
