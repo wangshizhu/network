@@ -13,6 +13,7 @@ public:
 
 public:
 	void Msg1Handler(MsgBase* msg);
+	void Msg2Handler(MsgBase* msg);
 
 };
 

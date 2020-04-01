@@ -3,16 +3,15 @@
 
 #include "../../../common/platform.h"
 #include "../../../common/test_msg_define.h"
+#include "../../../common/network_define.h"
+
 
 void SendData(int sock_fd)
 {
-	Msg1 msg;
-	int l = sizeof(msg.data);
-	msg.msg_body_len = htonl(l);
-	for (int i = 0; i < l; i++)
-	{
-		msg.data[i] = 'a';
-	}
+	Msg2 msg;
+	int l = sizeof(msg.id)+ MESSAGE_ID_SIZE + MESSAGE_LENGTH_SIZE;
+	msg.msg_len = l;
+	msg.id = 213;
 
 	const char* p = (char*)&msg;
 	size_t remaining = sizeof(msg);

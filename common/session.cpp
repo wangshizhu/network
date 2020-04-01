@@ -60,4 +60,20 @@ namespace network
 
 		return reader_->RecvMsg(max_recv_size);
 	}
+
+	void Session::ProcessMsg()
+	{
+		while (true)
+		{
+			uint8 const*const p = reader_->ProcessMsg();
+			if (p == nullptr)
+			{
+				return;
+			}
+
+			g_message_mgr->HandleMsg(reader_->GetMsgId(), p, reader_->GetMsgLength());
+
+			reader_->ProcessMsgDone();
+		}
+	}
 }

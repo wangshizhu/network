@@ -26,7 +26,7 @@ namespace network
 			SAFE_RELEASE(p_);
 		}
 
-		void HandleMsg(uint8* msg,size_t l)
+		void HandleMsg(uint8 const*const msg, const MessageLength l)
 		{
 			memcpy((uint8*)p_, msg, l);
 			f_(p_);
@@ -48,7 +48,7 @@ namespace network
 		}
 
 		template<typename MsgSubType,typename F>
-		bool RegisterHandler(uint16 msg_id,F&& f)
+		bool RegisterHandler(const MessageID msg_id,F&& f)
 		{
 			if (msg_.find(msg_id) != msg_.end())
 			{
@@ -60,7 +60,7 @@ namespace network
 			return true;
 		}
 
-		void HandleMsg(uint16 msg_id, uint8* msg,size_t l)
+		void HandleMsg(const MessageID msg_id, uint8 const*const msg,const MessageLength l)
 		{
 			if (msg_.find(msg_id) == msg_.end())
 			{
@@ -73,6 +73,9 @@ namespace network
 	private:
 		std::map<int, MessageHandler<MsgBaseType, Fun>> msg_;
 	};
+
 }
+
+#define g_message_mgr network::MessageHandlerMgr<MsgBase, std::function<void(MsgBase*)>>::GetInstancePtr()
 
 #endif

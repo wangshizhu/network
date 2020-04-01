@@ -3,7 +3,7 @@
 
 namespace network
 {
-	PacketReader::PacketReader(SharedSockType sock):sock_(sock)
+	PacketReader::PacketReader(SharedSockType sock):MessageMemory(),sock_(sock)
 	{
 	}
 
@@ -23,8 +23,63 @@ namespace network
 			return len;
 		}
 
+		WriteData(data, len);
+
 		SAFE_RELEASE_ARRAY(data);
 
-		return 0;
+		return len;
+	}
+
+	uint8 const*const PacketReader::ProcessMsg()
+	{
+		if (read_pos_ >= write_pos_)
+		{
+			return nullptr;
+		}
+
+		uint32 recv_len = write_pos_ - read_pos_;
+		// 消息id还没有接收完整，继续接收
+		if (recv_len < MESSAGE_ID_SIZE)
+		{
+			return nullptr;
+		}
+
+		if (GetMsgId() == 0)
+		{
+			memcpy((uint8*)&cur_msg_id_, &data_[read_pos_], MESSAGE_ID_SIZE);
+		}
+
+		recv_len = recv_len - MESSAGE_ID_SIZE;
+		// 消息长度还没有接收完整，继续接收
+		if (recv_len < MESSAGE_LENGTH_SIZE)
+		{
+			return nullptr;
+		}
+
+		if (GetMsgLength() == 0)
+		{
+			memcpy((uint8*)&cur_msg_len_, &data_[read_pos_+ MESSAGE_ID_SIZE], MESSAGE_LENGTH_SIZE);
+		}
+
+		// 消息体还没有接收完整，继续接收
+		if ((write_pos_ - read_pos_) < GetMsgLength())
+		{
+			return nullptr;
+		}
+
+		return GetReadPos();
+	}
+
+	void PacketReader::ProcessMsgDone()
+	{
+		read_pos_ += GetMsgLength();
+		cur_msg_id_ = 0;
+		cur_msg_len_ = 0;
+		if (read_pos_ == write_pos_)
+		{
+			read_pos_ = 0;
+			write_pos_ = 0;
+			data_.clear();
+		}
 	}
 }

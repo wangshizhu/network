@@ -5,6 +5,7 @@
 #include "network_define.h"
 #include "interface.h"
 #include "packet_reader.h"
+#include "message_manager.h"
 
 namespace network
 {
@@ -24,6 +25,7 @@ namespace network
 		const bool IsTcp() const;
 		const bool IsUdp() const;
 		int RecvMsg(int max_recv_size);
+		void ProcessMsg();
 
 	private:
 		SharedSockType sock_;
