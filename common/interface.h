@@ -30,7 +30,7 @@ namespace network
 	{
 	public:
 		ListenTcpInputHandler(SharedSockType sock);
-		virtual ~ListenTcpInputHandler() {};
+		virtual ~ListenTcpInputHandler();
 		virtual int HandleInput(int fd);
 
 	private:

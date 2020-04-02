@@ -30,7 +30,7 @@ namespace network
 		{
 			memcpy((uint8*)p_, msg, l);
 			f_(p_);
-			memset((uint8*)p_, 0, l);
+			/*memset((uint8*)p_, 0, l);*/
 		}
 
 	private:

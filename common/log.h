@@ -19,7 +19,7 @@ namespace mylog
 			const char* msg,Args&&... args) const
 		{
 			auto&& fmt_msg = fmt::format(msg, std::forward<decltype(args)>(args)...);
-			std::cout << "file: " << file_name << " ,function: " << func_name << " ,line_num: " << line_num << " ,msg: " << fmt_msg.c_str() << std::endl;
+			//std::cout << "file: " << file_name << " ,function: " << func_name << " ,line_num: " << line_num << " ,msg: " << fmt_msg.c_str() << std::endl;
 		}
 
 	private:

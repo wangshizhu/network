@@ -67,19 +67,24 @@ int network::EventPoller::MaxFd()const
 
 bool network::EventPoller::ProcessRead(int fd)
 {
-	InputMapType::iterator it = in_map.find(fd);
-	if (it == in_map.end())
+	InputHandler* p = nullptr;
 	{
-		return false;
-	}
+		InputMapType::iterator it = in_map.find(fd);
+		if (it == in_map.end())
+		{
+			return false;
+		}
 
-	auto tmp = it->second.lock();
-	if (tmp == nullptr)
-	{
-		return false;
+		SharedInputHandlerType tmp = it->second.lock();
+		if (tmp == nullptr)
+		{
+			return false;
+		}
+		p = tmp.get();
 	}
+	
 
-	tmp->HandleInput(fd);
+	p->HandleInput(fd);
 
 	return true;
 }

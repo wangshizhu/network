@@ -7,6 +7,11 @@ namespace network
 	{
 	}
 
+	ListenTcpInputHandler::~ListenTcpInputHandler()
+	{
+		DEBUG_INFO("listened_sock_ have released");
+	}
+
 	int ListenTcpInputHandler::HandleInput(int fd)
 	{
 		auto sock = listened_sock_.lock();

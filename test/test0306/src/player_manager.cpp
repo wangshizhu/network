@@ -19,4 +19,5 @@ void PlayerManager::Msg2Handler(MsgBase* msg)
 {
 	Msg2* p = static_cast<Msg2*>(msg);
 	DEBUG_INFO("msg2,msg_id:{0},msg_len:{1},data:{2}", p->msg_id, p->msg_len, p->id);
+	GeneralSleep(501);
 }
