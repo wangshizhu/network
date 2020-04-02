@@ -12,7 +12,7 @@ network::EventPoller::~EventPoller()
 
 bool network::EventPoller::RegisterRead(int fd, SharedInputHandlerType handler)
 {
-	in_map[fd] = WeakInputHandlerType(handler);
+	in_map[fd] = handler;
 	return true;
 }
 

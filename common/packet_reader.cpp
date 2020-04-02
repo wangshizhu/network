@@ -77,9 +77,9 @@ namespace network
 		cur_msg_len_ = 0;
 		if (read_pos_ == write_pos_)
 		{
+			memset(&data_[0], 0, read_pos_);
 			read_pos_ = 0;
 			write_pos_ = 0;
-			data_.clear();
 		}
 	}
 }

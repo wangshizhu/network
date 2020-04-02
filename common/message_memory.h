@@ -16,6 +16,9 @@ namespace network
 
 		virtual ~MessageMemory()
 		{
+			write_pos_ = 0;
+			read_pos_ = 0;
+			data_.clear();
 		}
 
 	public:
