@@ -8,14 +8,14 @@
 
 struct MsgHeader
 {
-	MsgHeader(network::MessageID id) :msg_id(id) {}
+	MsgHeader(network::MessageID id) :msg_id(id), msg_len(0){}
 	network::MessageID msg_id;
 	network::MessageLength msg_len;
 };
 
 struct MsgBase : public MsgHeader
 {
-	MsgBase(uint16 id) :MsgHeader(id) {}
+	MsgBase(network::MessageID id) :MsgHeader(id) {}
 };
 
 struct Msg1 : public MsgBase
@@ -26,7 +26,7 @@ struct Msg1 : public MsgBase
 
 struct Msg2 : public MsgBase
 {
-	Msg2() :MsgBase(2) {}
+	Msg2() :MsgBase(2), id(0){}
 	int id;
 };
 

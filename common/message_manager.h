@@ -16,8 +16,8 @@ namespace network
 		{
 		}
 
-		template<typename MsgSubType, typename F>
-		MessageHandler(F&& fun, MsgSubType* msg) :f_(std::forward<F>(fun)), p_(msg)
+		template<typename F,typename MsgType>
+		MessageHandler(F&& fun, MsgType* msg) :f_(std::forward<F>(fun)), p_(msg)
 		{
 		}
 
@@ -30,7 +30,7 @@ namespace network
 		{
 			memcpy((uint8*)p_, msg, l);
 			f_(p_);
-			/*memset((uint8*)p_, 0, l);*/
+			memset((uint8*)p_, 0, l);
 		}
 
 	private:
@@ -42,8 +42,18 @@ namespace network
 	class MessageHandlerMgr : public Singleton<MessageHandlerMgr<MsgBaseType, Fun>>
 	{
 	public:
+
 		MessageHandlerMgr()
 		{
+			msg_.clear();
+		}
+
+		~MessageHandlerMgr()
+		{
+			for (auto p : msg_)
+			{
+				SAFE_RELEASE(p.second);
+			}
 			msg_.clear();
 		}
 
@@ -55,7 +65,9 @@ namespace network
 				return false;
 			}
 
-			msg_[msg_id] = MessageHandler<MsgBaseType, F>(std::forward<F>(f), new MsgSubType());
+			MsgBaseType * p = new MsgSubType();
+			MessageHandler<MsgBaseType, F> * handler = new MessageHandler<MsgBaseType, F>(std::forward<F>(f), p);
+			msg_[msg_id] = handler;
 			
 			return true;
 		}
@@ -67,11 +79,11 @@ namespace network
 				ERROR_INFO("dont find the target msg,msg_id:{0}", msg_id);
 				return;
 			}
-			msg_[msg_id].HandleMsg(msg,l);
+			msg_[msg_id]->HandleMsg(msg,l);
 		}
 
 	private:
-		std::map<int, MessageHandler<MsgBaseType, Fun>> msg_;
+		std::map<int, MessageHandler<MsgBaseType, Fun>*> msg_;
 	};
 
 }
