@@ -5,14 +5,18 @@
 #include "network_define.h"
 #include "interface.h"
 #include "packet_reader.h"
+#include "packet_sender.h"
 #include "message_manager.h"
 
 namespace network
 {
 	class TcpPacketInputHandler;
+	class TcpPacketOutputHandler;
 	using SharedSockType = std::shared_ptr<SocketWrapper>;
 	using SharedTcpPacketInputType = std::shared_ptr<TcpPacketInputHandler>;
+	using SharedTcpPacketOutputType = std::shared_ptr<TcpPacketOutputHandler>;
 	using UniqPacketReaderType = std::unique_ptr<PacketReader>;
+	using UniqPacketSenderType = std::unique_ptr<PacketSender>;
 
 	class Session : public std::enable_shared_from_this<Session>
 	{
@@ -25,13 +29,21 @@ namespace network
 		const bool IsTcp() const;
 		const bool IsUdp() const;
 		int RecvMsg(int max_recv_size);
-		void ProcessMsg();
+		void ProcessRecvMsg();
+		void WriteMsg(uint8 const*const msg, MessageID id, MessageLength len);
+		EnumReason ProcessSendMsg();
+
+	private:
+		bool TryToCreateOutput();
+		bool TryToCreateSender();
 
 	private:
 		SharedSockType sock_;
 		short proto_;
 		SharedTcpPacketInputType input_;
+		SharedTcpPacketOutputType output_;
 		UniqPacketReaderType reader_;
+		UniqPacketSenderType sender_;
 	};
 }
 

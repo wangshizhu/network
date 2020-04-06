@@ -37,15 +37,17 @@ namespace network
 			return (uint8*)&data_[read_pos_];
 		}
 
-		void WriteData(char const*const data, const int len)
+		virtual EnumReason ProcessMsg() = 0;
+
+		void WriteData(uint8 const*const data, const MessageLength len)
 		{
 			int after_len = write_pos_ + len;
 			if ((size_t)after_len > data_.capacity())
 			{
-				data_.reserve(after_len);
+				data_.resize(after_len);
 			}
 
-			if (data_.size() < after_len)
+			if (after_len > data_.size())
 			{
 				data_.resize(after_len);
 			}

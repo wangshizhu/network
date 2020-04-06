@@ -41,5 +41,16 @@ namespace network
 		ENUM_UDP
 	};
 
+	enum EnumReason
+	{
+		ENUM_SUCCESS = 0,
+		ENUM_INVALID_VARIABLE,
+		ENUM_SEND_FAILED,
+		ENUM_SEND_CONTINUE,
+		ENUM_NO_MSG_WAITING_SEND,
+		ENUM_NO_MSG_WAITING_PROCESS,
+		ENUM_WAITING_RECV,
+	};
+
 }
 #endif

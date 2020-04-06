@@ -9,7 +9,7 @@
 void SendData(int sock_fd)
 {
 	Msg2 msg;
-	msg.msg_id = htons(2);
+	msg.msg_id = /*htons(*/2/*)*/;
 	int l = sizeof(msg.id)+ MESSAGE_ID_SIZE + MESSAGE_LENGTH_SIZE;
 	msg.msg_len = l;
 	msg.id = 213;

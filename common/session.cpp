@@ -5,7 +5,8 @@
 
 namespace network
 {
-	Session::Session():sock_(nullptr),proto_(INVALID),input_(nullptr), reader_(nullptr)
+	Session::Session():sock_(nullptr),proto_(INVALID),input_(nullptr), reader_(nullptr),
+		sender_(nullptr)
 	{
 		
 	}
@@ -61,19 +62,83 @@ namespace network
 		return reader_->RecvMsg(max_recv_size);
 	}
 
-	void Session::ProcessMsg()
+	void Session::ProcessRecvMsg()
 	{
 		while (true)
 		{
-			uint8 const*const p = reader_->ProcessMsg();
-			if (p == nullptr)
+			EnumReason reason = reader_->ProcessMsg();
+			if (reason != ENUM_SUCCESS)
 			{
 				return;
 			}
 
-			g_message_mgr->HandleMsg(reader_->GetMsgId(), p, reader_->GetMsgLength());
+			g_message_mgr->HandleMsg(reader_->GetMsgId(), reader_->GetReadPos(), reader_->GetMsgLength());
 
 			reader_->ProcessMsgDone();
 		}
+	}
+
+	void Session::WriteMsg(uint8 const*const msg, MessageID id,MessageLength len)
+	{
+		if (!TryToCreateOutput())
+		{
+			return;
+		}
+
+		if (!TryToCreateSender())
+		{
+			return;
+		}
+
+		sender_->WriteData(msg, len);
+	}
+
+	EnumReason Session::ProcessSendMsg()
+	{
+		if (sender_ == nullptr)
+		{
+			ERROR_INFO("sender is nullptr");
+			return EnumReason::ENUM_INVALID_VARIABLE;
+		}
+
+		return sender_->ProcessMsg();
+	}
+
+	bool Session::TryToCreateOutput()
+	{
+		if (output_ != nullptr)
+		{
+			return true;
+		}
+
+		auto processor = NetWorkCenter::GetInstancePtr()->GetEventProcessor();
+		if (processor == nullptr)
+		{
+			ERROR_INFO("Please create processor first");
+			return false;
+		}
+
+		SharedTcpPacketOutputType output = std::make_shared<TcpPacketOutputHandler>(shared_from_this(), sock_);
+		if (!processor->RegisterWrite(sock_->GetSocket(), output))
+		{
+			ERROR_INFO("register write failed,socket:{0}", sock_->GetSocket());
+			return false;
+		}
+
+		output_ = output;
+
+		return true;
+	}
+
+	bool Session::TryToCreateSender()
+	{
+		if (sender_ != nullptr)
+		{
+			return false;
+		}
+
+		sender_ = std::make_unique<PacketSender>(sock_);
+
+		return true;
 	}
 }

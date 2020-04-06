@@ -158,3 +158,8 @@ void network::SocketWrapper::SetSocket(GENERALSOCKET sock)
 {
 	socket_ = sock;
 }
+
+int network::SocketWrapper::send(const void * gram_data, int gram_size)
+{
+	return ::send(socket_, (char*)gram_data, gram_size,0);
+}

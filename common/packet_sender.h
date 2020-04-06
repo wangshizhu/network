@@ -1,9 +1,8 @@
-#ifndef PACKET_READER_H_
-#define PACKET_READER_H_
+#ifndef PACKET_SENDER_H_
+#define PACKET_SENDER_H_
 
 #include "platform.h"
 #include "socket_file_discriptor.h"
-#include "test_msg_define.h"
 #include "message_memory.h"
 
 namespace network
@@ -11,15 +10,13 @@ namespace network
 	using WeakSockType = std::weak_ptr<SocketWrapper>;
 	using SharedSockType = std::shared_ptr<SocketWrapper>;
 
-	class PacketReader : public MessageMemory
+	class PacketSender : public MessageMemory
 	{
 	public:
-		PacketReader(SharedSockType sock);
+		PacketSender(SharedSockType sock);
 
 	public:
-		int RecvMsg(int max_recv_size);
 		EnumReason ProcessMsg() override;
-		void ProcessMsgDone();
 
 	private:
 		WeakSockType sock_;
@@ -27,4 +24,3 @@ namespace network
 }
 
 #endif
-

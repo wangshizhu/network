@@ -82,7 +82,7 @@ namespace network
 			return INVALID;
 		}
 
-		session->ProcessMsg();
+		session->ProcessRecvMsg();
 
 		return len;
 	}
@@ -113,6 +113,62 @@ namespace network
 	}
 
 	void TcpPacketInputHandler::OnGetError(int fd)
+	{
+		NetWorkCenter::GetInstancePtr()->DeregisterSession(fd);
+		NetWorkCenter::GetInstancePtr()->DeregisterFd(fd);
+	}
+
+	TcpPacketOutputHandler::TcpPacketOutputHandler(SharedSessionType session, SharedSockType sock):
+		session_(session), accepted_sock_(sock)
+	{
+	}
+
+	void TcpPacketOutputHandler::HandleOutput(int fd)
+	{
+		auto session = session_.lock();
+		if (session == nullptr)
+		{
+			return;
+		}
+
+		auto sock = accepted_sock_.lock();
+		if (sock == nullptr)
+		{
+			return;
+		}
+
+		EnumReason reson = session->ProcessSendMsg();
+		if (reson == EnumReason::ENUM_SEND_FAILED)
+		{
+			CatchSockError();
+			OnGetError(sock->GetSocket());
+			return;
+		}
+	}
+
+	void TcpPacketOutputHandler::CatchSockError()
+	{
+		auto sock = accepted_sock_.lock();
+		if (sock == nullptr)
+		{
+			return;
+		}
+
+		int err;
+
+#if GENERAL_PLATFORM == PLATFORM_WIN32
+		err = WSAGetLastError();
+
+		DEBUG_INFO("catch socket error fd:{0},err_number:{1}\n", sock->GetSocket(), err);
+		
+#else
+		err = errno;
+
+		DEBUG_INFO("catch socket error fd:{0},err_number:{1}\n", sock->GetSocket(), err);
+#endif
+	}
+
+	void TcpPacketOutputHandler::OnGetError(int fd)
 	{
 		NetWorkCenter::GetInstancePtr()->DeregisterSession(fd);
 		NetWorkCenter::GetInstancePtr()->DeregisterFd(fd);

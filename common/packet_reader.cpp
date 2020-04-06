@@ -15,7 +15,7 @@ namespace network
 			return INVALID;
 		}
 
-		char* data = new char[max_recv_size];
+		uint8* data = new uint8[max_recv_size];
 		int len = sock->recv(data, max_recv_size);
 		if (len <= 0)
 		{
@@ -30,18 +30,18 @@ namespace network
 		return len;
 	}
 
-	uint8 const*const PacketReader::ProcessMsg()
+	EnumReason PacketReader::ProcessMsg()
 	{
 		if (read_pos_ >= write_pos_)
 		{
-			return nullptr;
+			return EnumReason::ENUM_NO_MSG_WAITING_PROCESS;
 		}
 
 		uint32 recv_len = write_pos_ - read_pos_;
 		// 消息id还没有接收完整，继续接收
 		if (recv_len < MESSAGE_ID_SIZE)
 		{
-			return nullptr;
+			return EnumReason::ENUM_WAITING_RECV;
 		}
 
 		if (GetMsgId() == 0)
@@ -53,7 +53,7 @@ namespace network
 		// 消息长度还没有接收完整，继续接收
 		if (recv_len < MESSAGE_LENGTH_SIZE)
 		{
-			return nullptr;
+			return EnumReason::ENUM_WAITING_RECV;;
 		}
 
 		if (GetMsgLength() == 0)
@@ -64,10 +64,10 @@ namespace network
 		// 消息体还没有接收完整，继续接收
 		if ((write_pos_ - read_pos_) < GetMsgLength())
 		{
-			return nullptr;
+			return EnumReason::ENUM_WAITING_RECV;
 		}
 
-		return GetReadPos();
+		return EnumReason::ENUM_SUCCESS;
 	}
 
 	void PacketReader::ProcessMsgDone()

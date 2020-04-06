@@ -24,7 +24,7 @@ bool network::EventPoller::DeregisterRead(int fd)
 
 bool network::EventPoller::RegisterWrite(int fd, SharedOutputHandlerType handler)
 {
-	out_map[fd] = WeakOutputHandlerType(handler);
+	out_map[fd] = handler;
 	return true;
 }
 

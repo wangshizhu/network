@@ -70,7 +70,31 @@ namespace network
 	{
 	public:
 		virtual ~OutputHandler() {};
-		virtual int HandleOutput(int fd) = 0;
+		virtual void HandleOutput(int fd) = 0;
+	};
+
+	class PacketOutputHandler : public OutputHandler
+	{
+	public:
+		virtual ~PacketOutputHandler() {};
+		virtual void HandleOutput(int fd) = 0;
+		virtual void CatchSockError() = 0;
+	};
+
+	class TcpPacketOutputHandler : public PacketOutputHandler
+	{
+	public:
+		TcpPacketOutputHandler(SharedSessionType session,SharedSockType sock);
+		virtual ~TcpPacketOutputHandler() {};
+		virtual void HandleOutput(int fd);
+		virtual void CatchSockError();
+
+	private:
+		void OnGetError(int fd);
+
+	private:
+		WeakSockType accepted_sock_;
+		WeakSessionType session_;
 	};
 }
 

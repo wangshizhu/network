@@ -149,6 +149,7 @@
     <ClCompile Include="..\..\..\common\log.cpp" />
     <ClCompile Include="..\..\..\common\network_center.cpp" />
     <ClCompile Include="..\..\..\common\packet_reader.cpp" />
+    <ClCompile Include="..\..\..\common\packet_sender.cpp" />
     <ClCompile Include="..\..\..\common\session.cpp" />
     <ClCompile Include="..\..\..\common\socket_file_discriptor.cpp" />
     <ClCompile Include="..\..\..\lib\format.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="..\..\..\common\network_center.h" />
     <ClInclude Include="..\..\..\common\network_define.h" />
     <ClInclude Include="..\..\..\common\packet_reader.h" />
+    <ClInclude Include="..\..\..\common\packet_sender.h" />
     <ClInclude Include="..\..\..\common\platform.h" />
     <ClInclude Include="..\..\..\common\session.h" />
     <ClInclude Include="..\..\..\common\singleton.h" />
