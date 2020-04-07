@@ -72,7 +72,7 @@ namespace network
 				return;
 			}
 
-			g_message_mgr->HandleMsg(reader_->GetMsgId(), reader_->GetReadPos(), reader_->GetMsgLength());
+			g_message_mgr->HandleMsg(this,reader_->GetMsgId(), reader_->GetReadPos(), reader_->GetMsgLength());
 
 			reader_->ProcessMsgDone();
 		}

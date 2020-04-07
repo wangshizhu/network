@@ -6,14 +6,16 @@
 
 #include <iostream>
 
+using SharedSessionType = std::shared_ptr<network::Session>;
+
 class PlayerManager
 {
 public:
 	PlayerManager();
 
 public:
-	void Msg1Handler(MsgBase* msg);
-	void Msg2Handler(MsgBase* msg);
+	void Msg1Handler(network::Session* session,MsgBase* msg);
+	void Msg2Handler(network::Session* session,MsgBase* msg);
 
 };
 

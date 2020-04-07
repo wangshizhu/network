@@ -5,9 +5,13 @@
 #include "singleton.h"
 #include "network_define.h"
 #include "log.h"
+#include "session.h"
 
 namespace network
 {
+	class Session;
+
+
 	template<typename MsgBaseType, typename Fun>
 	class MessageHandler
 	{
@@ -26,10 +30,10 @@ namespace network
 			SAFE_RELEASE(p_);
 		}
 
-		void HandleMsg(uint8 const*const msg, const MessageLength l)
+		void HandleMsg(Session* session, uint8 const*const msg, const MessageLength l)
 		{
 			memcpy((uint8*)p_, msg, l);
-			f_(p_);
+			f_(session,p_);
 			memset((uint8*)p_, 0, l);
 		}
 
@@ -72,14 +76,14 @@ namespace network
 			return true;
 		}
 
-		void HandleMsg(const MessageID msg_id, uint8 const*const msg,const MessageLength l)
+		void HandleMsg(Session* session,const MessageID msg_id, uint8 const*const msg,const MessageLength l)
 		{
 			if (msg_.find(msg_id) == msg_.end())
 			{
 				ERROR_INFO("dont find the target msg,msg_id:{0}", msg_id);
 				return;
 			}
-			msg_[msg_id]->HandleMsg(msg,l);
+			msg_[msg_id]->HandleMsg(session,msg,l);
 		}
 
 	private:
@@ -88,6 +92,6 @@ namespace network
 
 }
 
-#define g_message_mgr network::MessageHandlerMgr<MsgBase, std::tr1::function<void(MsgBase*)>>::GetInstancePtr()
+#define g_message_mgr network::MessageHandlerMgr<MsgBase, std::tr1::function<void(Session*,MsgBase*)>>::GetInstancePtr()
 
 #endif

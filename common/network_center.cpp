@@ -126,5 +126,6 @@ namespace network
 	void NetWorkCenter::DeregisterFd(int fd)
 	{
 		event_processor_->DeregisterRead(fd);
+		event_processor_->DeregisterWrite(fd);
 	}
 }

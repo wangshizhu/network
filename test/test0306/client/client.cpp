@@ -69,6 +69,19 @@ int main()
 
 		SendData(sock);
 
+		while (1)
+		{
+			char* msg = new char[10];
+			int len = ::recv(sock,msg,10,0);
+			if (len > 0)
+			{
+				short id = 0;
+				memcpy((char*)&id,msg,2);
+				std::cout << id << std::endl;
+			}
+			delete[]msg;
+		}
+
 		CLOSE_SOCKET(sock);
 
 #if GENERAL_PLATFORM == PLATFORM_WIN32

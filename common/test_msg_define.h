@@ -30,6 +30,12 @@ struct Msg2 : public MsgBase
 	int id;
 };
 
+struct MsgS2C0407 : public MsgBase
+{
+	MsgS2C0407() :MsgBase(3), id(0) {}
+	int id;
+};
+
 #pragma pack(pop)
 
 #endif // !TEST_MSG_DEFINE_H_
