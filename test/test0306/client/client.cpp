@@ -1,10 +1,12 @@
 // client.cpp : 定义控制台应用程序的入口点。
 //
 
+#include <thread>
 #include "../../../common/platform.h"
 #include "../../../common/test_msg_define.h"
 #include "../../../common/network_define.h"
-
+#include "../../../common/network_center.h"
+#include "../src/player_manager.h"
 
 void SendData(int sock_fd)
 {
@@ -14,79 +16,59 @@ void SendData(int sock_fd)
 	msg.msg_len = l;
 	msg.id = 213;
 
-	const char* p = (char*)&msg;
-	size_t remaining = sizeof(msg);
-	while (remaining)
+	auto session = g_network_center->GetSession(sock_fd);
+	if (session == nullptr)
 	{
-		int writed = send(sock_fd, p, remaining, 0);
-		std::cout << "this loop send into buffer " << writed << std::endl;
-		if (writed <= 0)
-		{
-			return;
-		}
-		remaining -= writed;
-		p += writed;
+		return;
 	}
+
+	session->WriteMsg((uint8*)&msg,msg.msg_id,sizeof(msg));
+}
+
+std::thread CreateStdInThread(int sock_fd)
+{
+	std::thread t([sock = sock_fd]() {
+		while (true)
+		{
+			int i = 0;
+			std::cout << "enter send num:";
+			std::cin >> i;
+			if (std::cin.fail())
+			{
+				return;
+			}
+			for (int j = 0; j < i; ++j)
+			{
+				SendData(sock);
+			}
+		}
+	});
+
+	return t;
 }
 
 int main()
 {
+
 	{
-#if GENERAL_PLATFORM == PLATFORM_WIN32
-		WSAData wsdata;
-		WSAStartup(0x202, &wsdata);
-#endif
+		network::NetWorkCenter net;
+		PlayerManager mgr;
 
-		/* 创建字节流类型的IPV4 socket. */
-		int sock = (int)::socket(AF_INET, SOCK_STREAM, 0);
-		if (sock < 0) {
+		g_network_center->Init((int)network::EnumPoller::SELECT_POLLER);
+		int sock = g_network_center->CreateTcpConnectionClient2Server("127.0.0.1", 5700);
+		if (sock == 0)
+		{
 			return 0;
 		}
 
-		// 绑定到port和ip
-		struct sockaddr_in server_sock_addr;
-		memset(&server_sock_addr, 0, sizeof(server_sock_addr));
-		server_sock_addr.sin_family = AF_INET;
-		server_sock_addr.sin_port = htons(5700);
-		struct in_addr dst;
-		const char* ip = "127.0.0.1";
-		int r = IPToN(AF_INET, ip, &server_sock_addr.sin_addr);
+		auto t = CreateStdInThread(sock);
 
-		int conn_rt = ::connect(sock, (struct sockaddr*)&server_sock_addr, sizeof(server_sock_addr));
-		if (conn_rt < 0)
+		t.detach();
+
+		while (true)
 		{
-#if GENERAL_PLATFORM == PLATFORM_WIN32
-			std::cout << "连接失败! 错误代码:" << WSAGetLastError() << std::endl;
-#endif
-
-			CLOSE_SOCKET(sock);
-
-#if GENERAL_PLATFORM == PLATFORM_WIN32
-			WSACleanup();
-#endif
-			return 0;
+			net.Run();
 		}
-
-		SendData(sock);
-
-		while (1)
-		{
-			char* msg = new char[10];
-			int len = ::recv(sock,msg,10,0);
-			if (len > 0)
-			{
-				short id = 0;
-				memcpy((char*)&id,msg,2);
-				std::cout << id << std::endl;
-			}
-			delete[]msg;
-		}
-
-		CLOSE_SOCKET(sock);
-
-#if GENERAL_PLATFORM == PLATFORM_WIN32
-		WSACleanup();
-#endif
 	}
 
 	return 0;

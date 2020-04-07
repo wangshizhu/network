@@ -6,12 +6,10 @@
 #include "../../../common/network_define.h"
 #include "../src/player_manager.h"
 
-network::NetWorkCenter net;
-#define g_network_center network::NetWorkCenter::GetInstancePtr()
-
 int main()
 {
 	{
+		network::NetWorkCenter net;
 		PlayerManager mgr;
 
 		g_network_center->Init((int)network::EnumPoller::SELECT_POLLER);

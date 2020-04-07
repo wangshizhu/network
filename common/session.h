@@ -35,7 +35,7 @@ namespace network
 
 	private:
 		bool TryToCreateOutput();
-		bool TryToCreateSender();
+		void TryToCreateSender();
 
 	private:
 		SharedSockType sock_;

@@ -26,7 +26,8 @@ namespace network
 		int close();
 		int recv(void* gram_data, int gram_size);
 		void SetSocket(GENERALSOCKET sock);
-		int send(const void * gram_data, int gram_size);
+		int Send(const void * gram_data, int gram_size);
+		int Connect(const char* ip, short port);
 
 	public:
 		void CreateSocket(int type);

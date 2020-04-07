@@ -8,6 +8,7 @@ PlayerManager::PlayerManager()
 {
 	msg_mgr.RegisterHandler<Msg1, std::tr1::function<void(network::Session*,MsgBase*)>>(1, std::tr1::bind(&PlayerManager::Msg1Handler, this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
 	msg_mgr.RegisterHandler<Msg2, std::tr1::function<void(network::Session*,MsgBase*)>>(2, std::tr1::bind(&PlayerManager::Msg2Handler, this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
+	msg_mgr.RegisterHandler<MsgS2C0407, std::tr1::function<void(network::Session*, MsgBase*)>>(3, std::tr1::bind(&PlayerManager::MsgS2C0407Handler, this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
 }
 
 void PlayerManager::Msg1Handler(network::Session* session, MsgBase* msg)
@@ -23,6 +24,13 @@ void PlayerManager::Msg2Handler(network::Session* session, MsgBase* msg)
 
 	MsgS2C0407 resp;
 	resp.id = 512;
+	resp.msg_len = sizeof(resp);
 
-	session->WriteMsg((uint8*)&resp,resp.msg_id,sizeof(resp));
+	session->WriteMsg((uint8*)&resp,resp.msg_id, resp.msg_len);
+}
+
+void PlayerManager::MsgS2C0407Handler(network::Session* session, MsgBase* msg)
+{
+	MsgS2C0407* p = static_cast<MsgS2C0407*>(msg);
+	DEBUG_INFO("MsgS2C0407,msg_id:{0},msg_len:{1},data:{2}", p->msg_id, p->msg_len, p->id);
 }

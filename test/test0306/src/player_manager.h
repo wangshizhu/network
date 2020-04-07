@@ -16,6 +16,7 @@ public:
 public:
 	void Msg1Handler(network::Session* session,MsgBase* msg);
 	void Msg2Handler(network::Session* session,MsgBase* msg);
+	void MsgS2C0407Handler(network::Session* session, MsgBase* msg);
 
 };
 

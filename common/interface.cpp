@@ -95,20 +95,18 @@ namespace network
 			return;
 		}
 
-#if GENERAL_PLATFORM == PLATFORM_WIN32
-		DWORD win_err = WSAGetLastError();
-#endif
+		int err_no = CatchLastError();
+
 #if GENERAL_PLATFORM == UNIX_FLAVOUR_LINUX
-		if (errno == EAGAIN ||							// 已经无数据可读了
-			errno == ECONNREFUSED ||					// 连接被服务器拒绝
-			errno == EHOSTUNREACH)						// 目的地址不可到达
+		if (err_no == EAGAIN ||							// 已经无数据可读了
+			err_no == ECONNREFUSED ||					// 连接被服务器拒绝
+			err_no == EHOSTUNREACH)						// 目的地址不可到达
 		{
-			DEBUG_INFO("catch socket error fd:{0},err_number:{1}\n", sock->GetSocket(),errno);
+			DEBUG_INFO("catch socket error fd:{0},err_number:{1}\n", sock->GetSocket(), err_no);
 			return;
 		}
 #else
-		DEBUG_INFO("catch socket error fd:{0},err_number:{1}\n", sock->GetSocket(), win_err);
-
+		DEBUG_INFO("catch socket error fd:{0},err_number:{1}\n", sock->GetSocket(), err_no);
 #endif
 	}
 

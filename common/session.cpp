@@ -85,10 +85,7 @@ namespace network
 			return;
 		}
 
-		if (!TryToCreateSender())
-		{
-			return;
-		}
+		TryToCreateSender();
 
 		sender_->WriteData(msg, len);
 	}
@@ -130,15 +127,13 @@ namespace network
 		return true;
 	}
 
-	bool Session::TryToCreateSender()
+	void Session::TryToCreateSender()
 	{
 		if (sender_ != nullptr)
 		{
-			return false;
+			return;
 		}
 
 		sender_ = std::make_unique<PacketSender>(sock_);
-
-		return true;
 	}
 }

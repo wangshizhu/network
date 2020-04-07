@@ -96,6 +96,50 @@ namespace network
 		return sock->GetSocket();
 	}
 
+	int NetWorkCenter::CreateTcpConnectionClient2Server(const char* ip, short port)
+	{
+		if (event_processor_ == nullptr)
+		{
+			ERROR_INFO("Please create processor first");
+			return 0;
+		}
+
+		SharedSockType sock = std::make_shared<SocketWrapper>();
+
+		/* 创建字节流类型的IPV4 socket. */
+		sock->CreateSocket(SOCK_STREAM);
+
+		if (!sock->IsGood())
+		{
+			DEBUG_INFO("the created socket isnt good");
+			return 0;
+		}
+
+		// 禁用Nagle
+		sock->SetNoDelay();
+
+		int ret = sock->Connect(ip, port);
+		if (ret < 0)
+		{
+			ERROR_INFO("connect failed err_no:{0}", CatchLastError());
+			return 0;
+		}
+
+		// 设置非阻塞
+		sock->SetNonBlocking(true);
+
+		SharedSessionType session = std::make_shared<Session>();
+		if (!session->Init(sock, (short)EnumIpProto::ENUM_TCP))
+		{
+			ERROR_INFO("session initial faild");
+			return 0;
+		}
+
+		RegisterSession(sock->GetSocket(), session);
+
+		return sock->GetSocket();
+	}
+
 	SharedEventProcessorType NetWorkCenter::GetEventProcessor()
 	{
 		return event_processor_;
@@ -127,5 +171,15 @@ namespace network
 	{
 		event_processor_->DeregisterRead(fd);
 		event_processor_->DeregisterWrite(fd);
+	}
+
+	SharedSessionType NetWorkCenter::GetSession(int fd)const
+	{
+		auto it = session_.find(fd);
+		if (it == session_.end())
+		{
+			return nullptr;
+		}
+		return it->second;
 	}
 }

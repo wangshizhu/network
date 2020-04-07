@@ -159,7 +159,19 @@ void network::SocketWrapper::SetSocket(GENERALSOCKET sock)
 	socket_ = sock;
 }
 
-int network::SocketWrapper::send(const void * gram_data, int gram_size)
+int network::SocketWrapper::Send(const void * gram_data, int gram_size)
 {
 	return ::send(socket_, (char*)gram_data, gram_size,0);
+}
+
+int network::SocketWrapper::Connect(const char* ip, short port)
+{
+	struct sockaddr_in server_sock_addr;
+	memset(&server_sock_addr, 0, sizeof(server_sock_addr));
+
+	server_sock_addr.sin_family = AF_INET;
+	server_sock_addr.sin_port = htons(port);
+	IPToN(AF_INET, ip, &server_sock_addr.sin_addr);
+
+	return ::connect(socket_, (struct sockaddr*)&server_sock_addr, sizeof(server_sock_addr));
 }

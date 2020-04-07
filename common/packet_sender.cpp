@@ -20,7 +20,7 @@ namespace network
 			return EnumReason::ENUM_INVALID_VARIABLE;
 		}
 
-		int sent = sock->send((uint8*)&data_[read_pos_],write_pos_ - read_pos_);
+		int sent = sock->Send((uint8*)&data_[read_pos_],write_pos_ - read_pos_);
 		if (sent < 0)
 		{
 			return EnumReason::ENUM_SEND_FAILED;

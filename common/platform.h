@@ -258,6 +258,15 @@ inline int32 getProcessPID()
 #endif
 }
 
+inline int CatchLastError()
+{
+#if GENERAL_PLATFORM != PLATFORM_WIN32
+	return errno;
+#else
+	return WSAGetLastError();
+#endif
+}
+
 inline u_int32_t IPToN(int family, const char* ip, void* out)
 {
 #if GENERAL_PLATFORM == PLATFORM_WIN32

@@ -30,10 +30,12 @@ namespace network
 		bool Init(int poller);
 		void Run();
 		int CreateTcpServer(const char* ip, short port);
+		int CreateTcpConnectionClient2Server(const char* ip, short port);
 		SharedEventProcessorType GetEventProcessor();
 		void RegisterSession(int sock, SharedSessionType session);
 		void DeregisterSession(int fd);
 		void DeregisterFd(int fd);
+		SharedSessionType GetSession(int fd)const;
 
 	private:
 		std::map<short, SharedSockType> listened_;
@@ -43,5 +45,6 @@ namespace network
 	};
 }
 
+#define g_network_center network::NetWorkCenter::GetInstancePtr()
 
 #endif // !NETWORK_CENTER_H_
