@@ -22,29 +22,40 @@ void SendData(int sock_fd)
 		return;
 	}
 
-	session->WriteMsg((uint8*)&msg,msg.msg_id,sizeof(msg));
+	session->WriteMsg((uint8*)&msg,sizeof(msg));
 }
 
-std::thread CreateStdInThread(int sock_fd)
+void Send10Msg(int sock_fd)
 {
-	std::thread t([sock = sock_fd]() {
-		while (true)
-		{
-			int i = 0;
-			std::cout << "enter send num:";
-			std::cin >> i;
-			if (std::cin.fail())
-			{
-				return;
-			}
-			for (int j = 0; j < i; ++j)
-			{
-				SendData(sock);
-			}
-		}
-	});
+	MsgC2S10 msg;
+	msg.id = 10;
+	msg.level = 1;
 
-	return t;
+	auto session = g_network_center->GetSession(sock_fd);
+	if (session == nullptr)
+	{
+		return;
+	}
+
+	network::SerializationMsgToMemory(&msg,session.get());
+}
+
+void MoreSendData(int sock_fd)
+{
+	while (true)
+	{
+		int i = 0;
+		std::cout << "enter send num:";
+		std::cin >> i;
+		if (std::cin.fail())
+		{
+			return;
+		}
+		for (int j = 0; j < i; ++j)
+		{
+			Send10Msg(sock_fd);
+		}
+	}
 }
 
 int main()
@@ -61,8 +72,7 @@ int main()
 			return 0;
 		}
 
-		auto t = CreateStdInThread(sock);
-
+		std::thread t(MoreSendData, sock);
 		t.detach();
 
 		while (true)

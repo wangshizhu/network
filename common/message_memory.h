@@ -16,6 +16,8 @@ namespace network
 
 		virtual ~MessageMemory()
 		{
+			cur_msg_id_ = 0;
+			cur_msg_len_ = 0;
 			write_pos_ = 0;
 			read_pos_ = 0;
 			data_.clear();
@@ -35,6 +37,11 @@ namespace network
 		uint8 const*const GetReadPos()
 		{
 			return (uint8*)&data_[read_pos_];
+		}
+
+		uint8 const*const GetMsgBodyAddr()
+		{
+			return (uint8*)&data_[read_pos_ + MESSAGE_HEAD_SIZE];
 		}
 
 		virtual EnumReason ProcessMsg() = 0;

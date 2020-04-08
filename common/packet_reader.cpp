@@ -53,7 +53,7 @@ namespace network
 		// 消息长度还没有接收完整，继续接收
 		if (recv_len < MESSAGE_LENGTH_SIZE)
 		{
-			return EnumReason::ENUM_WAITING_RECV;;
+			return EnumReason::ENUM_WAITING_RECV;
 		}
 
 		if (GetMsgLength() == 0)
@@ -62,7 +62,7 @@ namespace network
 		}
 
 		// 消息体还没有接收完整，继续接收
-		if ((write_pos_ - read_pos_) < GetMsgLength())
+		if ((write_pos_ - MESSAGE_HEAD_SIZE) < GetMsgLength())
 		{
 			return EnumReason::ENUM_WAITING_RECV;
 		}
@@ -72,7 +72,7 @@ namespace network
 
 	void PacketReader::ProcessMsgDone()
 	{
-		read_pos_ += GetMsgLength();
+		read_pos_ += GetMsgLength() + MESSAGE_HEAD_SIZE;
 		cur_msg_id_ = 0;
 		cur_msg_len_ = 0;
 		if (read_pos_ == write_pos_)

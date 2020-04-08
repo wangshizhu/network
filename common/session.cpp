@@ -72,13 +72,13 @@ namespace network
 				return;
 			}
 
-			g_message_mgr->HandleMsg(this,reader_->GetMsgId(), reader_->GetReadPos(), reader_->GetMsgLength());
+			g_message_mgr->HandleMsg(this,reader_->GetMsgId(), reader_->GetMsgBodyAddr(), reader_->GetMsgLength());
 
 			reader_->ProcessMsgDone();
 		}
 	}
 
-	void Session::WriteMsg(uint8 const*const msg, MessageID id,MessageLength len)
+	void Session::WriteMsg(uint8 const*const msg,MessageLength len)
 	{
 		if (!TryToCreateOutput())
 		{

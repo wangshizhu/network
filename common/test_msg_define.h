@@ -6,16 +6,9 @@
 
 #pragma pack(push,1)
 
-struct MsgHeader
+struct MsgBase : public network::MsgHeader
 {
-	MsgHeader(network::MessageID id) :msg_id(id), msg_len(0){}
-	network::MessageID msg_id;
-	network::MessageLength msg_len;
-};
-
-struct MsgBase : public MsgHeader
-{
-	MsgBase(network::MessageID id) :MsgHeader(id) {}
+	MsgBase(network::MessageID id) : network::MsgHeader(id) {}
 };
 
 struct Msg1 : public MsgBase
@@ -37,5 +30,45 @@ struct MsgS2C0407 : public MsgBase
 };
 
 #pragma pack(pop)
+
+struct MsgBaseEx
+{
+	MsgBaseEx(network::MessageID id)
+	{
+		msg_id = id;
+	}
+	virtual ~MsgBaseEx() {}
+	virtual void Write(msgpack::packer<msgpack::sbuffer>& pack)const {}
+	virtual void Read(msgpack::object& obj) {};
+
+	network::MessageID MsgId()const { return msg_id; }
+	
+	network::MessageID msg_id;
+};
+
+struct MsgC2S10 : public MsgBaseEx
+{
+	MsgC2S10() :MsgBaseEx(10)
+	{
+	}
+
+	virtual void Write(msgpack::packer<msgpack::sbuffer>& pack)const override
+	{
+		WRITE_MAP(pack, 3);
+		WRITE_KEY_VALUE(pack, NAME_TO_STR(msg_id), msg_id);
+		WRITE_KEY_VALUE(pack, NAME_TO_STR(id), id);
+		WRITE_KEY_VALUE(pack, NAME_TO_STR(level), level);
+	}
+
+	virtual void Read(msgpack::object& obj)
+	{
+		READ_MAP_DATA(obj, NAME_TO_STR(msg_id), msg_id);
+		READ_MAP_DATA(obj, NAME_TO_STR(id), id);
+		READ_MAP_DATA(obj, NAME_TO_STR(level), level);
+	}
+
+	int id;
+	int level;
+};
 
 #endif // !TEST_MSG_DEFINE_H_

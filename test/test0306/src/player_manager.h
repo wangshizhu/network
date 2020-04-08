@@ -17,7 +17,11 @@ public:
 	void Msg1Handler(network::Session* session,MsgBase* msg);
 	void Msg2Handler(network::Session* session,MsgBase* msg);
 	void MsgS2C0407Handler(network::Session* session, MsgBase* msg);
+	void MsgC2S10Handler(network::Session* session, MsgBaseEx* msg);
 
 };
+
+#define SEND_MSG(session,msg) msg.msg_len = sizeof(msg); \
+session->WriteMsg((uint8*)&msg, msg.msg_len);\
 
 #endif

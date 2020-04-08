@@ -30,7 +30,7 @@ namespace network
 		const bool IsUdp() const;
 		int RecvMsg(int max_recv_size);
 		void ProcessRecvMsg();
-		void WriteMsg(uint8 const*const msg, MessageID id, MessageLength len);
+		void WriteMsg(uint8 const*const msg, MessageLength len);
 		EnumReason ProcessSendMsg();
 
 	private:

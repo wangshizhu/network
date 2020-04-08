@@ -32,9 +32,16 @@ namespace network
 
 		void HandleMsg(Session* session, uint8 const*const msg, const MessageLength l)
 		{
-			memcpy((uint8*)p_, msg, l);
+			msgpack::unpacked  unpack;
+			msgpack::unpack(&unpack, (char*)msg,l);
+			msgpack::object obj = unpack.get();
+			p_->Read(obj);
+
+			f_(session, p_);
+
+			/*memcpy((uint8*)p_, msg, l);
 			f_(session,p_);
-			memset((uint8*)p_, 0, l);
+			memset((uint8*)p_, 0, l);*/
 		}
 
 	private:
@@ -90,8 +97,21 @@ namespace network
 		std::map<int, MessageHandler<MsgBaseType, Fun>*> msg_;
 	};
 
+	template<typename MsgBaseType>
+	INLINE void SerializationMsgToMemory(MsgBaseType const*const msg,Session* session)
+	{
+		msgpack::sbuffer buffer;
+		msgpack::packer<msgpack::sbuffer> pac(&buffer);
+		msg->Write(pac);
+
+		MsgHeader header(msg->MsgId());
+		header.msg_len = buffer.size();
+
+		session->WriteMsg((uint8*)&header, sizeof(header));
+		session->WriteMsg((uint8*)buffer.data(), header.msg_len);
+	}
 }
 
-#define g_message_mgr network::MessageHandlerMgr<MsgBase, std::tr1::function<void(Session*,MsgBase*)>>::GetInstancePtr()
+#define g_message_mgr network::MessageHandlerMgr<MsgBaseEx, std::tr1::function<void(Session*,MsgBaseEx*)>>::GetInstancePtr()
 
 #endif
