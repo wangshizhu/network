@@ -2,30 +2,6 @@
 
 namespace network
 {
-	MessageCenter::MessageCenter(EnumAppProto proto) :Singleton<MessageCenter>(), 
-		proto_(proto), buff_proto_handler_mgr_(), msg_pack_proto_handler_mgr_()
-	{
-	}
-	MessageHandlerMgr<MsgBase, HandlerBuffFunType>* MessageCenter::BuffProtoHandlerMgr()
-	{
-		return &buff_proto_handler_mgr_;
-	}
-	MessageHandlerMgr<MsgBaseEx, HandlerMsgPackFunType>* MessageCenter::MsgPackProtoHandlerMgr()
-	{
-		return &msg_pack_proto_handler_mgr_;
-	}
-
-	void MessageCenter::HandleMsg(Session* session, const MessageID msg_id, uint8 const*const msg, const MessageLength l)
-	{
-		if (proto_ == EnumAppProto::ENUM_BUFF)
-		{
-			buff_proto_handler_mgr_.HandleMsg(session, msg_id, msg,l);
-		}
-		else if (proto_ == EnumAppProto::ENUM_MSGPACK)
-		{
-			msg_pack_proto_handler_mgr_.HandleMsg(session, msg_id, msg, l);
-		}
-	}
 
 	void MessageCenter::DeserializationMsgByMsgPack(MsgBaseEx* base, uint8 const*const msg, const MessageLength l)
 	{

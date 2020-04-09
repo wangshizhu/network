@@ -1,14 +1,14 @@
 #ifndef MESSAGE_MANAGER_H_
 #define MESSAGE_MANAGER_H_
 
-#include "platform.h"
-#include "singleton.h"
-#include "network_define.h"
-#include "log.h"
-#include "session.h"
-#include "message_center.h"
+//#include "platform.h"
+//#include "singleton.h"
+//#include "network_define.h"
+//#include "log.h"
+//#include "session.h"
+//#include "message_center.h"
 
-namespace network
+/*namespace network
 {
 	class Session;
 
@@ -17,7 +17,7 @@ namespace network
 	class MessageHandler
 	{
 	public:
-		MessageHandler() 
+		MessageHandler()
 		{
 		}
 
@@ -75,7 +75,7 @@ namespace network
 			MsgBaseType * p = new MsgSubType();
 			MessageHandler<MsgBaseType, F> * handler = new MessageHandler<MsgBaseType, F>(std::forward<F>(f), p);
 			msg_[msg_id] = handler;
-			
+
 			return true;
 		}
 
@@ -92,6 +92,6 @@ namespace network
 	private:
 		std::map<int, MessageHandler<MsgBaseType, Fun>*> msg_;
 	};
-}
+}*/
 
 #endif
