@@ -14,10 +14,10 @@ public:
 	PlayerManager();
 
 public:
-	void Msg1Handler(network::Session* session,MsgBase* msg);
-	void Msg2Handler(network::Session* session,MsgBase* msg);
-	void MsgS2C0407Handler(network::Session* session, MsgBase* msg);
-	void MsgC2S10Handler(network::Session* session, MsgBaseEx* msg);
+	void Msg1Handler(network::Session* session, network::MsgBase* msg);
+	void Msg2Handler(network::Session* session, network::MsgBase* msg);
+	void MsgS2C0407Handler(network::Session* session, network::MsgBase* msg);
+	void MsgC2S10Handler(network::Session* session, network::MsgBaseEx* msg);
 
 };
 

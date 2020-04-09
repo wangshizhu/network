@@ -3,12 +3,14 @@
 
 
 #include "../../../common/network_center.h"
+#include "../../../common/message_center.h"
 #include "../../../common/network_define.h"
 #include "../src/player_manager.h"
 
 int main()
 {
 	{
+		network::MessageCenter msg_center(network::EnumAppProto::ENUM_MSGPACK);
 		network::NetWorkCenter net;
 		PlayerManager mgr;
 

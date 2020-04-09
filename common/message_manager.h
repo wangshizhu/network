@@ -6,6 +6,7 @@
 #include "network_define.h"
 #include "log.h"
 #include "session.h"
+#include "message_center.h"
 
 namespace network
 {
@@ -32,16 +33,11 @@ namespace network
 
 		void HandleMsg(Session* session, uint8 const*const msg, const MessageLength l)
 		{
-			msgpack::unpacked  unpack;
-			msgpack::unpack(&unpack, (char*)msg,l);
-			msgpack::object obj = unpack.get();
-			p_->Read(obj);
+			MessageCenter::GetInstancePtr()->DeserializationMsg(p_, msg, l);
 
 			f_(session, p_);
 
-			/*memcpy((uint8*)p_, msg, l);
-			f_(session,p_);
-			memset((uint8*)p_, 0, l);*/
+			MessageCenter::GetInstancePtr()->HandleDone(p_,l);
 		}
 
 	private:
@@ -96,22 +92,6 @@ namespace network
 	private:
 		std::map<int, MessageHandler<MsgBaseType, Fun>*> msg_;
 	};
-
-	template<typename MsgBaseType>
-	INLINE void SerializationMsgToMemory(MsgBaseType const*const msg,Session* session)
-	{
-		msgpack::sbuffer buffer;
-		msgpack::packer<msgpack::sbuffer> pac(&buffer);
-		msg->Write(pac);
-
-		MsgHeader header(msg->MsgId());
-		header.msg_len = buffer.size();
-
-		session->WriteMsg((uint8*)&header, sizeof(header));
-		session->WriteMsg((uint8*)buffer.data(), header.msg_len);
-	}
 }
-
-#define g_message_mgr network::MessageHandlerMgr<MsgBaseEx, std::tr1::function<void(Session*,MsgBaseEx*)>>::GetInstancePtr()
 
 #endif

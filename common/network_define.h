@@ -11,11 +11,42 @@ namespace network
 #pragma pack(push,1)
 	struct MsgHeader
 	{
-		MsgHeader(MessageID id) :msg_id(id), msg_len(0) {}
+		MsgHeader(MessageID id, MessageLength l) : msg_id(id), msg_len(l) 
+		{
+		}
 		MessageID msg_id;
 		MessageLength msg_len;
 	};
+
+	struct MsgBase
+	{
+		MsgBase(MessageID id, MessageLength l) : msg_id(id), msg_len(l)
+		{
+		}
+
+		MessageLength MsgLen()const { return msg_len; }
+		MessageID MsgId()const { return msg_id; }
+
+		MessageID msg_id;
+		MessageLength msg_len;
+
+	};
 #pragma pack(pop)
+
+	struct MsgBaseEx
+	{
+		MsgBaseEx(MessageID id)
+		{
+			msg_id = id;
+		}
+		virtual ~MsgBaseEx() {}
+		virtual void Write(msgpack::packer<msgpack::sbuffer>& pack)const {}
+		virtual void Read(msgpack::object& obj) {};
+
+		MessageID MsgId()const { return msg_id; }
+
+		MessageID msg_id;
+	};
 	
 	#define INLINE inline
 	#define MESSAGE_ID_SIZE	sizeof(network::MessageID)
@@ -462,6 +493,13 @@ namespace network
 		ENUM_WAITING_RECV,
 	};
 
+	enum EnumAppProto
+	{
+		ENUM_BUFF = 0,
+		ENUM_MSGPACK,
+		ENUM_PROTOBUF,
+	};
+
 }
 
 #define READ_MAP_DATA(obj,key,data) network::ReadMapValue(obj,key,data);
@@ -479,4 +517,5 @@ namespace network
 #define WRITE_ARRAY(pack,size) pack.pack_array(size);
 
 #define NAME_TO_STR(var)  (#var)
+
 #endif

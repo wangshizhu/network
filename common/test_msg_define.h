@@ -6,49 +6,29 @@
 
 #pragma pack(push,1)
 
-struct MsgBase : public network::MsgHeader
+struct Msg1 : public network::MsgBase
 {
-	MsgBase(network::MessageID id) : network::MsgHeader(id) {}
-};
-
-struct Msg1 : public MsgBase
-{
-	Msg1() :MsgBase(1) {}
+	Msg1() :network::MsgBase(1, sizeof(Msg1)) {}
 	char data[128];
 };
 
-struct Msg2 : public MsgBase
+struct Msg2 : public network::MsgBase
 {
-	Msg2() :MsgBase(2), id(0){}
+	Msg2() :network::MsgBase(2, sizeof(Msg2)), id(0){}
 	int id;
 };
 
-struct MsgS2C0407 : public MsgBase
+struct MsgS2C0407 : public network::MsgBase
 {
-	MsgS2C0407() :MsgBase(3), id(0) {}
+	MsgS2C0407() :network::MsgBase(3, sizeof(MsgS2C0407)), id(0) {}
 	int id;
 };
 
 #pragma pack(pop)
 
-struct MsgBaseEx
+struct MsgC2S10 : public network::MsgBaseEx
 {
-	MsgBaseEx(network::MessageID id)
-	{
-		msg_id = id;
-	}
-	virtual ~MsgBaseEx() {}
-	virtual void Write(msgpack::packer<msgpack::sbuffer>& pack)const {}
-	virtual void Read(msgpack::object& obj) {};
-
-	network::MessageID MsgId()const { return msg_id; }
-	
-	network::MessageID msg_id;
-};
-
-struct MsgC2S10 : public MsgBaseEx
-{
-	MsgC2S10() :MsgBaseEx(10)
+	MsgC2S10() :network::MsgBaseEx(10)
 	{
 	}
 

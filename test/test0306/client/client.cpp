@@ -6,6 +6,7 @@
 #include "../../../common/test_msg_define.h"
 #include "../../../common/network_define.h"
 #include "../../../common/network_center.h"
+#include "../../../common/message_center.h"
 #include "../src/player_manager.h"
 
 void SendData(int sock_fd)
@@ -37,7 +38,9 @@ void Send10Msg(int sock_fd)
 		return;
 	}
 
-	network::SerializationMsgToMemory(&msg,session.get());
+	g_message_center->SerializationMsgToMemory(&msg, session.get());
+
+	//network::SerializationMsgToMemory(&msg,session.get());
 }
 
 void MoreSendData(int sock_fd)
@@ -62,6 +65,7 @@ int main()
 {
 
 	{
+		network::MessageCenter msg_center(network::EnumAppProto::ENUM_MSGPACK);
 		network::NetWorkCenter net;
 		PlayerManager mgr;
 

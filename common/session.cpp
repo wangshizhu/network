@@ -1,5 +1,6 @@
 #include "session.h"
 #include "network_center.h"
+#include "message_center.h"
 #include "interface.h"
 #include "log.h"
 
@@ -72,7 +73,7 @@ namespace network
 				return;
 			}
 
-			g_message_mgr->HandleMsg(this,reader_->GetMsgId(), reader_->GetMsgBodyAddr(), reader_->GetMsgLength());
+			MessageCenter::GetInstancePtr()->HandleMsg(this,reader_->GetMsgId(), reader_->GetMsgBodyAddr(), reader_->GetMsgLength());
 
 			reader_->ProcessMsgDone();
 		}

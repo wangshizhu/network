@@ -148,6 +148,7 @@
     <ClCompile Include="..\..\..\common\event_processor.cpp" />
     <ClCompile Include="..\..\..\common\interface.cpp" />
     <ClCompile Include="..\..\..\common\log.cpp" />
+    <ClCompile Include="..\..\..\common\message_center.cpp" />
     <ClCompile Include="..\..\..\common\network_center.cpp" />
     <ClCompile Include="..\..\..\common\packet_reader.cpp" />
     <ClCompile Include="..\..\..\common\packet_sender.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="..\..\..\common\event_processor.h" />
     <ClInclude Include="..\..\..\common\interface.h" />
     <ClInclude Include="..\..\..\common\log.h" />
+    <ClInclude Include="..\..\..\common\message_center.h" />
     <ClInclude Include="..\..\..\common\message_manager.h" />
     <ClInclude Include="..\..\..\common\message_memory.h" />
     <ClInclude Include="..\..\..\common\network_center.h" />
