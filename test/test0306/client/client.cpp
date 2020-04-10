@@ -38,7 +38,7 @@ void Send10Msg(int sock_fd)
 		return;
 	}
 
-	g_message_center->SerializationMsgToMemory(&msg, session.get());
+	network::MessageCenter::GetInstancePtr()->SerializationMsgToMemory(&msg, session.get());
 
 	//network::SerializationMsgToMemory(&msg,session.get());
 }

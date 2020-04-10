@@ -8,6 +8,9 @@ namespace network
 	typedef uint16	MessageID;
 	typedef uint32	MessageLength;
 
+	const char proto_buff[] = "buff";
+	const char proto_msg_pack[] = "msg_pack";
+
 #pragma pack(push,1)
 	struct MsgHeader
 	{
@@ -495,7 +498,7 @@ namespace network
 
 	enum EnumAppProto
 	{
-		ENUM_BUFF = 0,
+		ENUM_BUFF = 1,
 		ENUM_MSGPACK,
 		ENUM_PROTOBUF,
 	};
