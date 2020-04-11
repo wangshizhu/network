@@ -24,9 +24,9 @@ namespace network
 		MessageLength msg_len;
 	};
 
-	struct MsgBase
+	struct BuffMsgBase
 	{
-		MsgBase(MessageID id, MessageLength l) : msg_id(id), msg_len(l)
+		BuffMsgBase(MessageID id, MessageLength l) : msg_id(id), msg_len(l)
 		{
 		}
 
@@ -39,13 +39,13 @@ namespace network
 	};
 #pragma pack(pop)
 
-	struct MsgBaseEx
+	struct MsgPackMsgBase
 	{
-		MsgBaseEx(MessageID id)
+		MsgPackMsgBase(MessageID id)
 		{
 			msg_id = id;
 		}
-		virtual ~MsgBaseEx() {}
+		virtual ~MsgPackMsgBase() {}
 		virtual void Write(msgpack::packer<msgpack::sbuffer>& pack)const {}
 		virtual void Read(msgpack::object& obj) {};
 

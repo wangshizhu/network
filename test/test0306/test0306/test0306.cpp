@@ -10,7 +10,7 @@
 int main()
 {
 	{
-		network::MessageCenter msg_center(network::EnumAppProto::ENUM_MSGPACK);
+		network::MessageCenter msg_center(network::EnumAppProto::ENUM_BUFF);
 		network::NetWorkCenter net;
 		PlayerManager mgr;
 

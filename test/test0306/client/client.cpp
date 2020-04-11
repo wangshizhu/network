@@ -12,9 +12,6 @@
 void SendData(int sock_fd)
 {
 	Msg2 msg;
-	msg.msg_id = /*htons(*/2/*)*/;
-	int l = sizeof(msg.id)+ MESSAGE_ID_SIZE + MESSAGE_LENGTH_SIZE;
-	msg.msg_len = l;
 	msg.id = 213;
 
 	auto session = g_network_center->GetSession(sock_fd);
@@ -23,7 +20,8 @@ void SendData(int sock_fd)
 		return;
 	}
 
-	session->WriteMsg((uint8*)&msg,sizeof(msg));
+
+	network::MessageCenter::GetInstancePtr()->SerializationMsgToMemory(&msg, session.get());
 }
 
 void Send10Msg(int sock_fd)
@@ -39,8 +37,6 @@ void Send10Msg(int sock_fd)
 	}
 
 	network::MessageCenter::GetInstancePtr()->SerializationMsgToMemory(&msg, session.get());
-
-	//network::SerializationMsgToMemory(&msg,session.get());
 }
 
 void MoreSendData(int sock_fd)
@@ -56,7 +52,7 @@ void MoreSendData(int sock_fd)
 		}
 		for (int j = 0; j < i; ++j)
 		{
-			Send10Msg(sock_fd);
+			SendData(sock_fd);
 		}
 	}
 }
@@ -65,7 +61,7 @@ int main()
 {
 
 	{
-		network::MessageCenter msg_center(network::EnumAppProto::ENUM_MSGPACK);
+		network::MessageCenter msg_center(network::EnumAppProto::ENUM_BUFF);
 		network::NetWorkCenter net;
 		PlayerManager mgr;
 

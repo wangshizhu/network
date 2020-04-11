@@ -9,15 +9,16 @@
 namespace network
 {
 	class Session;
-	struct MsgBase;
-	struct MsgBaseEx;
-	using HandlerBuffFunType = std::tr1::function<void(Session*, MsgBase*)>;
-	using HandlerMsgPackFunType = std::tr1::function<void(Session*, MsgBaseEx*)>;
+	struct BuffMsgBase;
+	struct MsgPackMsgBase;
+	using HandlerBuffFunType = std::tr1::function<void(Session*, BuffMsgBase*)>;
+	using HandlerMsgPackFunType = std::tr1::function<void(Session*, MsgPackMsgBase*)>;
 
 	template <std::size_t v>
 	struct SizeT2Type {
 		enum { value = v };
 	};
+
 
 	template<typename MsgBaseType, typename Fun>
 	class MessageHandler
@@ -46,6 +47,7 @@ namespace network
 		Fun f_;
 		MsgBaseType* p_;
 	};
+
 
 	template<typename MsgBaseType, typename Fun>
 	class MessageHandlerMgr : public Singleton<MessageHandlerMgr<MsgBaseType, Fun>>
@@ -95,13 +97,12 @@ namespace network
 		std::map<int, MessageHandler<MsgBaseType, Fun>*> msg_;
 	};
 
+
 	class MessageProtoBase
 	{
 	public:
-		MessageProtoBase(EnumAppProto proto) :handler_mgr_(nullptr),proto_(proto)
-		{
-		}
-		virtual ~MessageProtoBase() {}
+		MessageProtoBase(EnumAppProto proto);
+		virtual ~MessageProtoBase();
 
 		virtual void HandleMsg(Session* session, const MessageID msg_id, uint8 const*const msg, const MessageLength l) = 0;
 
@@ -114,14 +115,14 @@ namespace network
 		template<typename MsgSubType, typename F>
 		bool RegisterHandler(const MessageID msg_id, F&& f, SizeT2Type<BUFF_PROTO_SIZE>)
 		{
-			MessageHandlerMgr<MsgBase, HandlerBuffFunType>* p = (MessageHandlerMgr<MsgBase, HandlerBuffFunType>*)handler_mgr_;
+			MessageHandlerMgr<BuffMsgBase, HandlerBuffFunType>* p = (MessageHandlerMgr<BuffMsgBase, HandlerBuffFunType>*)handler_mgr_;
 			return p->RegisterHandler<MsgSubType, F>(msg_id, std::forward<F>(f));
 		}
 
 		template<typename MsgSubType, typename F>
 		bool RegisterHandler(const MessageID msg_id, F&& f, SizeT2Type<MSG_PACK_PROTO_SIZE>)
 		{
-			MessageHandlerMgr<MsgBaseEx, HandlerMsgPackFunType>* p = (MessageHandlerMgr<MsgBaseEx, HandlerMsgPackFunType>*)handler_mgr_;
+			MessageHandlerMgr<MsgPackMsgBase, HandlerMsgPackFunType>* p = (MessageHandlerMgr<MsgPackMsgBase, HandlerMsgPackFunType>*)handler_mgr_;
 			return p->RegisterHandler<MsgSubType, F>(msg_id, std::forward<F>(f));
 		}
 
@@ -156,120 +157,43 @@ namespace network
 		EnumAppProto proto_;
 	};
 
+
 	class MessageBuffProto : public MessageProtoBase
 	{
 	public:
-		MessageBuffProto(EnumAppProto proto) :MessageProtoBase(proto)
-		{
-			handler_mgr_ = (void*)(new MessageHandlerMgr<MsgBase, HandlerBuffFunType>());
-		}
+		MessageBuffProto(EnumAppProto proto);
+		~MessageBuffProto();
 
-		~MessageBuffProto()
-		{
-			MessageHandlerMgr<MsgBase, HandlerBuffFunType>* p = (MessageHandlerMgr<MsgBase, HandlerBuffFunType>*)handler_mgr_;
-			SAFE_RELEASE(p);
-		}
-
-		void HandleMsg(Session* session, const MessageID msg_id, uint8 const*const msg, const MessageLength l)
-		{
-			MessageHandlerMgr<MsgBase, HandlerBuffFunType>* p = (MessageHandlerMgr<MsgBase, HandlerBuffFunType>*)handler_mgr_;
-			p->HandleMsg(session, msg_id, msg, l);
-		}
-
-		void DeserializationMsg(void* base, uint8 const*const msg, const MessageLength l)
-		{
-			memcpy((uint8*)base, msg, l);
-		}
-
-		void HandleDone(void* base, const MessageLength l)
-		{
-			memset((uint8*)base, 0, l);
-		}
-
-		void SerializationMsgToMemory(void const*const msg, Session* session)
-		{
-			MsgBase const*const p = (MsgBase*)msg;
-			MsgHeader header(p->MsgId(), p->MsgLen());
-
-			session->WriteMsg((uint8*)&header, MESSAGE_HEAD_SIZE);
-			session->WriteMsg((uint8*)msg, header.msg_len);
-		}
+		void HandleMsg(Session* session, const MessageID msg_id, uint8 const*const msg, const MessageLength l) override;
+		void DeserializationMsg(void* base, uint8 const*const msg, const MessageLength l) override;
+		void HandleDone(void* base, const MessageLength l);
+		void SerializationMsgToMemory(void const*const msg, Session* session) override;
 	};
 
 	class MessageMsgPackProto : public MessageProtoBase
 	{
 	public:
-		MessageMsgPackProto(EnumAppProto proto) :MessageProtoBase(proto)
-		{
-			handler_mgr_ = (void*)(new MessageHandlerMgr<MsgBaseEx, HandlerMsgPackFunType>());
-		}
+		MessageMsgPackProto(EnumAppProto proto);
+		~MessageMsgPackProto();
 
-		~MessageMsgPackProto()
-		{
-			MessageHandlerMgr<MsgBaseEx, HandlerMsgPackFunType>* p = (MessageHandlerMgr<MsgBaseEx, HandlerMsgPackFunType>*)handler_mgr_;
-			SAFE_RELEASE(p);
-		}
-
-		void HandleMsg(Session* session, const MessageID msg_id, uint8 const*const msg, const MessageLength l)
-		{
-			MessageHandlerMgr<MsgBaseEx, HandlerMsgPackFunType>* p = (MessageHandlerMgr<MsgBaseEx, HandlerMsgPackFunType>*)handler_mgr_;
-			p->HandleMsg(session,msg_id,msg,l);
-		}
-
-		void DeserializationMsg(void* base, uint8 const*const msg, const MessageLength l)
-		{
-			MsgBaseEx* p = (MsgBaseEx*)base;
-			msgpack::unpacked  unpack;
-			msgpack::unpack(&unpack, (char*)msg, l);
-			msgpack::object obj = unpack.get();
-			p->Read(obj);
-		}
-
-		void HandleDone(void* base, const MessageLength l)
-		{
-			MsgBaseEx* p = (MsgBaseEx*)base;
-			// TODO: msg pack 协议处理完消息后的清理操作
-		}
-
-		void SerializationMsgToMemory(void const*const msg, Session* session)
-		{
-			MsgBaseEx const*const p = (MsgBaseEx*)msg;
-
-			msgpack::sbuffer buffer;
-			msgpack::packer<msgpack::sbuffer> pac(&buffer);
-			p->Write(pac);
-
-			MsgHeader header(p->MsgId(), buffer.size());
-
-			session->WriteMsg((uint8*)&header, sizeof(header));
-			session->WriteMsg((uint8*)buffer.data(), header.msg_len);
-		}
+		void HandleMsg(Session* session, const MessageID msg_id, uint8 const*const msg, const MessageLength l) override;
+		void DeserializationMsg(void* base, uint8 const*const msg, const MessageLength l) override;
+		void HandleDone(void* base, const MessageLength l) override;
+		void SerializationMsgToMemory(void const*const msg, Session* session) override;
 	};
+
 
 	class MessageCenter : public Singleton<MessageCenter>
 	{
 	public:
 
-		MessageCenter(EnumAppProto proto) :Singleton<MessageCenter>(), msg_proto_(nullptr)
-		{
-			if (proto == EnumAppProto::ENUM_BUFF)
-			{
-				msg_proto_ = new MessageBuffProto(proto);
-			}
-			else if (proto == EnumAppProto::ENUM_MSGPACK)
-			{
-				msg_proto_ = new MessageMsgPackProto(proto);
-			}
-		}
+		MessageCenter(EnumAppProto proto);
+		~MessageCenter();
 
-		~MessageCenter() 
+		template<typename... Args>
+		void HandleMsg(Args&&... args)
 		{
-			SAFE_RELEASE(msg_proto_);
-		}
-
-		void HandleMsg(Session* session, const MessageID msg_id, uint8 const*const msg, const MessageLength l)
-		{
-			msg_proto_->HandleMsg(session, msg_id, msg, l);
+			msg_proto_->HandleMsg(std::forward<decltype(args)>(args)...);
 		}
 		
 		template<typename MsgBaseType>
@@ -295,15 +219,6 @@ namespace network
 		{
 			return msg_proto_->RegisterHandler<MsgSubType,F>(msg_id,std::forward<F>(f), proto);
 		}
-
-	private:
-		void DeserializationMsgByMsgPack(MsgBaseEx* base, uint8 const*const msg, const MessageLength l);
-		void DeserializationMsgByBuff(MsgBase* base, uint8 const*const msg, const MessageLength l);
-		void HandleDoneByMsgPack(MsgBaseEx* base, const MessageLength l);
-		void HandleDoneByBuff(MsgBase* base, const MessageLength l);
-		void SerializationMsgByMsgPack(MsgBaseEx const*const msg, Session* session);
-		void SerializationMsgByBuff(MsgBase const*const msg, Session* session);
-
 	private:
 		MessageProtoBase* msg_proto_;
 	};

@@ -6,29 +6,29 @@
 
 #pragma pack(push,1)
 
-struct Msg1 : public network::MsgBase
+struct Msg1 : public network::BuffMsgBase
 {
-	Msg1() :network::MsgBase(1, sizeof(Msg1)) {}
+	Msg1() :network::BuffMsgBase(1, sizeof(Msg1)) {}
 	char data[128];
 };
 
-struct Msg2 : public network::MsgBase
+struct Msg2 : public network::BuffMsgBase
 {
-	Msg2() :network::MsgBase(2, sizeof(Msg2)), id(0){}
+	Msg2() :network::BuffMsgBase(2, sizeof(Msg2)), id(0){}
 	int id;
 };
 
-struct MsgS2C0407 : public network::MsgBase
+struct MsgS2C0407 : public network::BuffMsgBase
 {
-	MsgS2C0407() :network::MsgBase(3, sizeof(MsgS2C0407)), id(0) {}
+	MsgS2C0407() :network::BuffMsgBase(3, sizeof(MsgS2C0407)), id(0) {}
 	int id;
 };
 
 #pragma pack(pop)
 
-struct MsgC2S10 : public network::MsgBaseEx
+struct MsgC2S10 : public network::MsgPackMsgBase
 {
-	MsgC2S10() :network::MsgBaseEx(10)
+	MsgC2S10() :network::MsgPackMsgBase(10)
 	{
 	}
 
