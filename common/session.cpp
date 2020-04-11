@@ -72,7 +72,6 @@ namespace network
 			{
 				return;
 			}
-
 			MessageCenter::GetInstancePtr()->HandleMsg(this,reader_->GetMsgId(), reader_->GetMsgBodyAddr(), reader_->GetMsgLength());
 
 			reader_->ProcessMsgDone();

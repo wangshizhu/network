@@ -8,8 +8,11 @@ namespace network
 	typedef uint16	MessageID;
 	typedef uint32	MessageLength;
 
-	const char proto_buff[] = "buff";
-	const char proto_msg_pack[] = "msg_pack";
+	const char buff_proto[] = "buff";
+	const char msg_pack_proto[] = "msg_pack";
+
+#define BUFF_PROTO_SIZE sizeof(buff_proto)
+#define MSG_PACK_PROTO_SIZE sizeof(msg_pack_proto)
 
 #pragma pack(push,1)
 	struct MsgHeader

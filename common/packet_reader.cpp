@@ -61,8 +61,9 @@ namespace network
 			memcpy((uint8*)&cur_msg_len_, &data_[read_pos_+ MESSAGE_ID_SIZE], MESSAGE_LENGTH_SIZE);
 		}
 
+		recv_len = recv_len - MESSAGE_LENGTH_SIZE;
 		// 消息体还没有接收完整，继续接收
-		if ((write_pos_ - MESSAGE_HEAD_SIZE) < GetMsgLength())
+		if (recv_len < GetMsgLength())
 		{
 			return EnumReason::ENUM_WAITING_RECV;
 		}

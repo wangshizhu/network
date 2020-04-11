@@ -34,9 +34,14 @@ namespace network
 			return cur_msg_len_;
 		}
 
-		uint8 const*const GetReadPos()
+		uint32 GetReadPos()
 		{
-			return (uint8*)&data_[read_pos_];
+			return read_pos_;
+		}
+
+		uint32 GetWritePos()
+		{
+			return write_pos_;
 		}
 
 		uint8 const*const GetMsgBodyAddr()
