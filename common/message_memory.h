@@ -59,7 +59,7 @@ namespace network
 				data_.resize(after_len);
 			}
 
-			if (after_len > data_.size())
+			if ((std::size_t)after_len > data_.size())
 			{
 				data_.resize(after_len);
 			}

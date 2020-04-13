@@ -14,8 +14,6 @@ namespace network
 	class TcpPacketOutputHandler;
 	using SharedTcpPacketInputType = std::shared_ptr<TcpPacketInputHandler>;
 	using SharedTcpPacketOutputType = std::shared_ptr<TcpPacketOutputHandler>;
-	using UniqPacketReaderType = std::unique_ptr<PacketReader>;
-	using UniqPacketSenderType = std::unique_ptr<PacketSender>;
 
 	class Session : public std::enable_shared_from_this<Session>
 	{

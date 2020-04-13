@@ -101,6 +101,8 @@ namespace network
 	using WeakOutputHandlerType = std::weak_ptr<OutputHandler>;
 	using InputMapType = std::map<int, WeakInputHandlerType>;
 	using OutputMapType = std::map<int, WeakOutputHandlerType>;
+	using SharedListenedInputType = std::shared_ptr<ListenInputHandler>;
+
 }
 
 #endif // !INTERFACE_H_

@@ -19,6 +19,7 @@ namespace network
 	private:
 		WeakSockType sock_;
 	};
+	using UniqPacketSenderType = std::unique_ptr<PacketSender>;
 }
 
 #endif

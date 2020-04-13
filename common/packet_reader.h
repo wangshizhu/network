@@ -21,6 +21,7 @@ namespace network
 	private:
 		WeakSockType sock_;
 	};
+	using UniqPacketReaderType = std::unique_ptr<PacketReader>;
 }
 
 #endif
