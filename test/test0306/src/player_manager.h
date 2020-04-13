@@ -6,10 +6,6 @@
 
 #include <iostream>
 
-using SharedSessionType = std::shared_ptr<network::Session>;
-//using MsgPackMsgHandlerType = std::tr1::function<void(network::Session*, network::MsgPackMsgBase*)>;
-//using BuffMsgHandlerType = std::tr1::function<void(network::Session*, network::BuffMsgBase*)>;
-
 class PlayerManager
 {
 public:

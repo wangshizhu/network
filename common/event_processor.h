@@ -9,10 +9,6 @@
 namespace network
 {
 	class EventPoller;
-	class InputHandler;
-	class OutputHandler;
-	using SharedInputHandlerType = std::shared_ptr<InputHandler>;
-	using SharedOutputHandlerType = std::shared_ptr<OutputHandler>;
 
 	class EventProcessor : public Singleton<EventProcessor>
 	{

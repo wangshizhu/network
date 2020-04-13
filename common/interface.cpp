@@ -1,5 +1,6 @@
 #include "interface.h"
 #include "network_define.h"
+#include "network_center.h"
 
 namespace network
 {

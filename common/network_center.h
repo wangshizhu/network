@@ -13,11 +13,9 @@ namespace network
 {
 	class EventProcessor;
 	class ListenInputHandler;
-	class Session;
 
 	using SharedEventProcessorType = std::shared_ptr<EventProcessor>;
 	using SharedListenedInputType = std::shared_ptr<ListenInputHandler>;
-	using SharedSessionType = std::shared_ptr<Session>;
 
 	class NetWorkCenter : public Singleton<NetWorkCenter>
 	{

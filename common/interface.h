@@ -1,12 +1,12 @@
 #ifndef INTERFACE_H_
 #define INTERFACE_H_
 
-#include "network_center.h"
 #include "log.h"
 #include "session.h"
 
 namespace network
 {
+	class Session;
 	using SharedSessionType = std::shared_ptr<Session>;
 	using WeakSessionType = std::weak_ptr<Session>;
 
@@ -94,6 +94,13 @@ namespace network
 		WeakSockType accepted_sock_;
 		WeakSessionType session_;
 	};
+
+	using SharedInputHandlerType = std::shared_ptr<InputHandler>;
+	using SharedOutputHandlerType = std::shared_ptr<OutputHandler>;
+	using WeakInputHandlerType = std::weak_ptr<InputHandler>;
+	using WeakOutputHandlerType = std::weak_ptr<OutputHandler>;
+	using InputMapType = std::map<int, WeakInputHandlerType>;
+	using OutputMapType = std::map<int, WeakOutputHandlerType>;
 }
 
 #endif // !INTERFACE_H_
