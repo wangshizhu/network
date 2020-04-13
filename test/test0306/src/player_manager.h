@@ -7,8 +7,8 @@
 #include <iostream>
 
 using SharedSessionType = std::shared_ptr<network::Session>;
-using MsgPackMsgHandlerType = std::tr1::function<void(network::Session*, network::MsgPackMsgBase*)>;
-using BuffMsgHandlerType = std::tr1::function<void(network::Session*, network::BuffMsgBase*)>;
+//using MsgPackMsgHandlerType = std::tr1::function<void(network::Session*, network::MsgPackMsgBase*)>;
+//using BuffMsgHandlerType = std::tr1::function<void(network::Session*, network::BuffMsgBase*)>;
 
 class PlayerManager
 {
@@ -22,8 +22,5 @@ public:
 	void MsgC2S10Handler(network::Session* session, network::MsgPackMsgBase* msg);
 
 };
-
-#define SEND_MSG(session,msg) msg.msg_len = sizeof(msg); \
-session->WriteMsg((uint8*)&msg, msg.msg_len);\
 
 #endif

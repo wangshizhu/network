@@ -12,7 +12,6 @@ namespace network
 {
 	class TcpPacketInputHandler;
 	class TcpPacketOutputHandler;
-	using SharedSockType = std::shared_ptr<SocketWrapper>;
 	using SharedTcpPacketInputType = std::shared_ptr<TcpPacketInputHandler>;
 	using SharedTcpPacketOutputType = std::shared_ptr<TcpPacketOutputHandler>;
 	using UniqPacketReaderType = std::unique_ptr<PacketReader>;

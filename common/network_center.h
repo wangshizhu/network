@@ -16,7 +16,6 @@ namespace network
 	class Session;
 
 	using SharedEventProcessorType = std::shared_ptr<EventProcessor>;
-	using SharedSockType = std::shared_ptr<SocketWrapper>;
 	using SharedListenedInputType = std::shared_ptr<ListenInputHandler>;
 	using SharedSessionType = std::shared_ptr<Session>;
 

@@ -6,6 +6,7 @@
 
 namespace network
 {
+
 	class SocketWrapper
 	{
 	public:
@@ -40,6 +41,9 @@ namespace network
 	private:
 		GENERALSOCKET socket_;
 	};
+
+	using SharedSockType = std::shared_ptr<SocketWrapper>;
+	using WeakSockType = std::weak_ptr<SocketWrapper>;
 }
 
 #endif // !SOCKET_FILE_DISCRIPTOR_H_

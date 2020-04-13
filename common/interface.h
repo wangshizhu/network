@@ -7,8 +7,6 @@
 
 namespace network
 {
-	using WeakSockType = std::weak_ptr<SocketWrapper>;
-	using SharedSockType = std::shared_ptr<SocketWrapper>;
 	using SharedSessionType = std::shared_ptr<Session>;
 	using WeakSessionType = std::weak_ptr<Session>;
 

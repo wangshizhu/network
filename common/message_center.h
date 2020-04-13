@@ -11,8 +11,8 @@ namespace network
 	class Session;
 	struct BuffMsgBase;
 	struct MsgPackMsgBase;
-	using HandlerBuffFunType = std::tr1::function<void(Session*, BuffMsgBase*)>;
-	using HandlerMsgPackFunType = std::tr1::function<void(Session*, MsgPackMsgBase*)>;
+	using HandlerBuffFunType = std::tr1::function<void(network::Session*, network::BuffMsgBase*)>;
+	using HandlerMsgPackFunType = std::tr1::function<void(network::Session*, network::MsgPackMsgBase*)>;
 
 	template <std::size_t v>
 	struct SizeT2Type {
@@ -195,23 +195,23 @@ namespace network
 		{
 			msg_proto_->HandleMsg(std::forward<decltype(args)>(args)...);
 		}
-		
-		template<typename MsgBaseType>
-		void DeserializationMsg(MsgBaseType* base, uint8 const*const msg, const MessageLength l)
+
+		template<typename... Args>
+		void DeserializationMsg(Args&&... args)
 		{
-			msg_proto_->DeserializationMsg<MsgBaseType>(base, msg, l);
+			msg_proto_->DeserializationMsg(std::forward<decltype(args)>(args)...);
 		}
 
-		template<typename MsgBaseType>
-		void HandleDone(MsgBaseType* base, const MessageLength l)
+		template<typename... Args>
+		void HandleDone(Args&&... args)
 		{
-			msg_proto_->HandleDone<MsgBaseType>(base, l);
+			msg_proto_->HandleDone(std::forward<decltype(args)>(args)...);
 		}
 
-		template<typename MsgBaseType>
-		void SerializationMsgToMemory(MsgBaseType const*const msg, Session* session)
+		template<typename... Args>
+		void SerializationMsgToMemory(Args&&... args)
 		{
-			msg_proto_->SerializationMsgToMemory(msg, session);
+			msg_proto_->SerializationMsgToMemory(std::forward<decltype(args)>(args)...);
 		}
 
 		template<typename MsgSubType, typename F,typename ProtoType>
