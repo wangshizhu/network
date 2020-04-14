@@ -12,6 +12,7 @@ endif(CMAKE_COMPILER_IS_GNUCC)
 file(GLOB_RECURSE CURRENT_HEADERS  *.h *.hpp ../../../common/*.h ../../../common/*.cpp ../../../lib/*.h ../../../lib/*.cpp ../src/*.h ../src/*.cpp)
 source_group("Header" FILES ${CURRENT_HEADERS}) 
 
+include_directories(../../../include/msgpack)
 aux_source_directory(. DIR_SRCS)
 add_executable(test0306 ${DIR_SRCS} ${CURRENT_HEADERS})
 
