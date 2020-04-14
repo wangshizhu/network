@@ -9,10 +9,6 @@
 namespace network
 {
 	class Session;
-	struct BuffMsgBase;
-	struct MsgPackMsgBase;
-	using HandlerBuffFunType = std::tr1::function<void(network::Session*, network::BuffMsgBase*)>;
-	using HandlerMsgPackFunType = std::tr1::function<void(network::Session*, network::MsgPackMsgBase*)>;
 
 	template <std::size_t v>
 	struct SizeT2Type {
@@ -96,7 +92,6 @@ namespace network
 	private:
 		std::map<int, MessageHandler<MsgBaseType, Fun>*> msg_;
 	};*/
-
 
 	class MessageProtoBase
 	{
