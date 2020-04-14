@@ -6,7 +6,6 @@
 #include "interface.h"
 #include "packet_reader.h"
 #include "packet_sender.h"
-#include "message_manager.h"
 
 namespace network
 {

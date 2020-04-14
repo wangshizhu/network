@@ -1,5 +1,6 @@
 #include "player_manager.h"
 #include "../../../common/log.h"
+#include "../../../common/message_manager.h"
 #include "../../../common/message_center.h"
 #include "../../../common/network_define.h"
 

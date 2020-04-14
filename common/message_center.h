@@ -99,15 +99,6 @@ namespace network
 
 		virtual void HandleMsg(Session* session, const MessageID msg_id, uint8 const*const msg, const MessageLength l) = 0;
 
-		/*template<typename MsgSubType, typename F,typename ProtoType,std::size_t N>
-		bool RegisterHandler(const MessageID msg_id, F&& f, ProtoType(&)[N]);
-
-		template<typename MsgSubType, typename F>
-		bool RegisterHandler(const MessageID msg_id, F&& f, SizeT2Type<BUFF_PROTO_SIZE>);
-
-		template<typename MsgSubType, typename F>
-		bool RegisterHandler(const MessageID msg_id, F&& f, SizeT2Type<MSG_PACK_PROTO_SIZE>);*/
-
 		template<typename MsgSubType, typename F, typename ProtoType, std::size_t N>
 		bool RegisterHandler(const MessageID msg_id, F&& f, ProtoType(&)[N])
 		{
@@ -188,7 +179,6 @@ namespace network
 	class MessageCenter : public Singleton<MessageCenter>
 	{
 	public:
-
 		MessageCenter(EnumAppProto proto);
 		~MessageCenter();
 
@@ -227,3 +217,5 @@ namespace network
 }
 
 #endif
+
+#define g_message_center network::MessageCenter::GetInstancePtr()
