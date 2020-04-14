@@ -9,14 +9,16 @@
 namespace network
 {
 	class Session;
+	struct BuffMsgBase;
+	struct MsgPackMsgBase;
+	using HandlerBuffFunType = std::tr1::function<void(network::Session*, network::BuffMsgBase*)>;
+	using HandlerMsgPackFunType = std::tr1::function<void(network::Session*, network::MsgPackMsgBase*)>;
 
 	template <std::size_t v>
 	struct SizeT2Type {
 		enum { value = v };
 	};
-
-
-	/*template<typename MsgBaseType, typename Fun>
+	template<typename MsgBaseType, typename Fun>
 	class MessageHandler
 	{
 	public:
@@ -32,11 +34,11 @@ namespace network
 
 		void HandleMsg(Session* session, uint8 const*const msg, const MessageLength l)
 		{
-			MessageCenter::GetInstancePtr()->DeserializationMsg(p_, msg, l);
+			//MessageCenter::GetInstancePtr()->DeserializationMsg(p_, msg, l);
 
 			f_(session, p_);
 
-			MessageCenter::GetInstancePtr()->HandleDone(p_, l);
+			//MessageCenter::GetInstancePtr()->HandleDone(p_, l);
 		}
 
 	private:
@@ -91,7 +93,7 @@ namespace network
 
 	private:
 		std::map<int, MessageHandler<MsgBaseType, Fun>*> msg_;
-	};*/
+	};
 
 	class MessageProtoBase
 	{
