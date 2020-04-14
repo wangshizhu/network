@@ -1,23 +1,24 @@
 #ifndef MESSAGE_MANAGER_H_
 #define MESSAGE_MANAGER_H_
 
-//#include "platform.h"
-//#include "singleton.h"
-//#include "network_define.h"
-//#include "log.h"
-//#include "session.h"
-//#include "message_center.h"
-//
-//namespace network
-//{
-	/*class Session;
+#include "platform.h"
+#include "singleton.h"
+#include "network_define.h"
+#include "log.h"
+#include "session.h"
+#include "message_center.h"
+
+namespace network
+{
+	class Session;
+	class MessageCenter;
 	struct BuffMsgBase;
 	struct MsgPackMsgBase;
 	using HandlerBuffFunType = std::tr1::function<void(network::Session*, network::BuffMsgBase*)>;
-	using HandlerMsgPackFunType = std::tr1::function<void(network::Session*, network::MsgPackMsgBase*)>;*/
+	using HandlerMsgPackFunType = std::tr1::function<void(network::Session*, network::MsgPackMsgBase*)>;
 
 
-	/*template<typename MsgBaseType, typename Fun>
+	template<typename MsgBaseType, typename Fun>
 	class MessageHandler
 	{
 	public:
@@ -43,10 +44,10 @@
 	private:
 		Fun f_;
 		MsgBaseType* p_;
-	};*/
+	};
 
 
-	/*template<typename MsgBaseType, typename Fun>
+	template<typename MsgBaseType, typename Fun>
 	class MessageHandlerMgr : public Singleton<MessageHandlerMgr<MsgBaseType, Fun>>
 	{
 	public:
@@ -95,7 +96,7 @@
 	};
 
 	template class MessageHandlerMgr<MsgPackMsgBase, HandlerMsgPackFunType>;
-	template class MessageHandlerMgr<BuffMsgBase, HandlerBuffFunType>;*/
-//}
+	template class MessageHandlerMgr<BuffMsgBase, HandlerBuffFunType>;
+}
 
 #endif

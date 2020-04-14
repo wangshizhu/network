@@ -5,7 +5,6 @@
 #include "network_define.h"
 #include "message_manager.h"
 #include "session.h"
-#include "singleton.h"
 
 namespace network
 {
@@ -21,7 +20,7 @@ namespace network
 		enum { value = v };
 	};
 
-	template<typename MsgBaseType, typename Fun>
+	/*template<typename MsgBaseType, typename Fun>
 	class MessageHandler
 	{
 	public:
@@ -96,7 +95,7 @@ namespace network
 
 	private:
 		std::map<int, MessageHandler<MsgBaseType, Fun>*> msg_;
-	};
+	};*/
 
 	class MessageProtoBase
 	{
