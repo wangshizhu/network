@@ -3,17 +3,11 @@
 
 #include "platform.h"
 #include "network_define.h"
-#include "message_manager.h"
 #include "session.h"
 
 namespace network
 {
 	class Session;
-	class MessageCenter;
-	struct BuffMsgBase;
-	struct MsgPackMsgBase;
-	using HandlerBuffFunType = std::tr1::function<void(network::Session*, network::BuffMsgBase*)>;
-	using HandlerMsgPackFunType = std::tr1::function<void(network::Session*, network::MsgPackMsgBase*)>;
 
 	template <std::size_t v>
 	struct SizeT2Type {
@@ -105,8 +99,17 @@ namespace network
 
 		virtual void HandleMsg(Session* session, const MessageID msg_id, uint8 const*const msg, const MessageLength l) = 0;
 
-		template<typename MsgSubType, typename F,typename ProtoType,std::size_t N>
-		bool RegisterHandler(const MessageID msg_id, F&& f,ProtoType (&)[N])
+		/*template<typename MsgSubType, typename F,typename ProtoType,std::size_t N>
+		bool RegisterHandler(const MessageID msg_id, F&& f, ProtoType(&)[N]);
+
+		template<typename MsgSubType, typename F>
+		bool RegisterHandler(const MessageID msg_id, F&& f, SizeT2Type<BUFF_PROTO_SIZE>);
+
+		template<typename MsgSubType, typename F>
+		bool RegisterHandler(const MessageID msg_id, F&& f, SizeT2Type<MSG_PACK_PROTO_SIZE>);*/
+
+		template<typename MsgSubType, typename F, typename ProtoType, std::size_t N>
+		bool RegisterHandler(const MessageID msg_id, F&& f, ProtoType(&)[N])
 		{
 			return RegisterHandler<MsgSubType, F>(msg_id, std::forward<F>(f), SizeT2Type<N>());
 		}

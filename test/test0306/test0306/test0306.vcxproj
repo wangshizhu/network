@@ -149,6 +149,7 @@
     <ClCompile Include="..\..\..\common\interface.cpp" />
     <ClCompile Include="..\..\..\common\log.cpp" />
     <ClCompile Include="..\..\..\common\message_center.cpp" />
+    <ClCompile Include="..\..\..\common\message_manager.cpp" />
     <ClCompile Include="..\..\..\common\network_center.cpp" />
     <ClCompile Include="..\..\..\common\packet_reader.cpp" />
     <ClCompile Include="..\..\..\common\packet_sender.cpp" />

@@ -1,4 +1,5 @@
 #include "message_center.h"
+#include "message_manager.h"
 
 namespace network
 {
@@ -8,6 +9,26 @@ namespace network
 	MessageProtoBase::~MessageProtoBase()
 	{
 	}
+
+	/*template<typename MsgSubType, typename F, typename ProtoType, std::size_t N>
+	bool MessageProtoBase::RegisterHandler(const MessageID msg_id, F&& f, ProtoType(&)[N])
+	{
+		return RegisterHandler<MsgSubType, F>(msg_id, std::forward<F>(f), SizeT2Type<N>());
+	}
+
+	template<typename MsgSubType, typename F>
+	bool MessageProtoBase::RegisterHandler(const MessageID msg_id, F&& f, SizeT2Type<BUFF_PROTO_SIZE>)
+	{
+		MessageHandlerMgr<BuffMsgBase, HandlerBuffFunType>* p = (MessageHandlerMgr<BuffMsgBase, HandlerBuffFunType>*)handler_mgr_;
+		return p->RegisterHandler<MsgSubType, F>(msg_id, std::forward<F>(f));
+	}
+
+	template<typename MsgSubType, typename F>
+	bool MessageProtoBase::RegisterHandler(const MessageID msg_id, F&& f, SizeT2Type<MSG_PACK_PROTO_SIZE>)
+	{
+		MessageHandlerMgr<MsgPackMsgBase, HandlerMsgPackFunType>* p = (MessageHandlerMgr<MsgPackMsgBase, HandlerMsgPackFunType>*)handler_mgr_;
+		return p->RegisterHandler<MsgSubType, F>(msg_id, std::forward<F>(f));
+	}*/
 
 	MessageBuffProto::MessageBuffProto(EnumAppProto proto) :MessageProtoBase(proto)
 	{

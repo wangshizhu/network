@@ -6,17 +6,18 @@
 #include "network_define.h"
 #include "log.h"
 #include "session.h"
-#include "message_center.h"
+
+
 
 namespace network
 {
-	class Session;
+	
 	class MessageCenter;
+	class Session;
 	struct BuffMsgBase;
 	struct MsgPackMsgBase;
-	using HandlerBuffFunType = std::tr1::function<void(network::Session*, network::BuffMsgBase*)>;
-	using HandlerMsgPackFunType = std::tr1::function<void(network::Session*, network::MsgPackMsgBase*)>;
-
+	using HandlerBuffFunType = std::tr1::function<void(Session*, BuffMsgBase*)>;
+	using HandlerMsgPackFunType = std::tr1::function<void(Session*, MsgPackMsgBase*)>;
 
 	template<typename MsgBaseType, typename Fun>
 	class MessageHandler
@@ -32,14 +33,16 @@ namespace network
 			SAFE_RELEASE(p_);
 		}
 
-		void HandleMsg(Session* session, uint8 const*const msg, const MessageLength l)
+		void HandleMsg(Session* session, uint8 const*const msg, const MessageLength l);
+
+		/*void HandleMsg(Session* session, uint8 const*const msg, const MessageLength l)
 		{
 			MessageCenter::GetInstancePtr()->DeserializationMsg(p_, msg, l);
 
 			f_(session, p_);
 
 			MessageCenter::GetInstancePtr()->HandleDone(p_, l);
-		}
+		}*/
 
 	private:
 		Fun f_;
@@ -94,9 +97,10 @@ namespace network
 	private:
 		std::map<int, MessageHandler<MsgBaseType, Fun>*> msg_;
 	};
-
-	template class MessageHandlerMgr<MsgPackMsgBase, HandlerMsgPackFunType>;
-	template class MessageHandlerMgr<BuffMsgBase, HandlerBuffFunType>;
+	/*template class MessageHandlerMgr<MsgPackMsgBase, HandlerMsgPackFunType>;
+	template class MessageHandlerMgr<BuffMsgBase, HandlerBuffFunType>;*/
 }
+
+#include "message_manager.cpp"
 
 #endif
