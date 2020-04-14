@@ -8,7 +8,6 @@
 #include "session.h"
 
 
-
 namespace network
 {
 	
@@ -23,26 +22,14 @@ namespace network
 	class MessageHandler
 	{
 	public:
-		MessageHandler() {}
+		MessageHandler();
 
 		template<typename F, typename MsgType>
-		MessageHandler(F&& fun, MsgType* msg) :f_(std::forward<F>(fun)), p_(msg) {}
+		MessageHandler(F&& fun, MsgType* msg);
 
-		~MessageHandler()
-		{
-			SAFE_RELEASE(p_);
-		}
+		~MessageHandler();
 
 		void HandleMsg(Session* session, uint8 const*const msg, const MessageLength l);
-
-		/*void HandleMsg(Session* session, uint8 const*const msg, const MessageLength l)
-		{
-			MessageCenter::GetInstancePtr()->DeserializationMsg(p_, msg, l);
-
-			f_(session, p_);
-
-			MessageCenter::GetInstancePtr()->HandleDone(p_, l);
-		}*/
 
 	private:
 		Fun f_;
@@ -97,8 +84,6 @@ namespace network
 	private:
 		std::map<int, MessageHandler<MsgBaseType, Fun>*> msg_;
 	};
-	/*template class MessageHandlerMgr<MsgPackMsgBase, HandlerMsgPackFunType>;
-	template class MessageHandlerMgr<BuffMsgBase, HandlerBuffFunType>;*/
 }
 
 #endif
