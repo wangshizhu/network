@@ -9,6 +9,7 @@
 namespace network
 {
 	class Session;
+	class MessageCenter;
 	struct BuffMsgBase;
 	struct MsgPackMsgBase;
 	using HandlerBuffFunType = std::tr1::function<void(network::Session*, network::BuffMsgBase*)>;
