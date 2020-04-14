@@ -33,6 +33,49 @@ namespace network
 		MessageCenter::GetInstancePtr()->HandleDone(p_, l);
 	}
 
+	template<typename MsgBaseType, typename Fun>
+	MessageHandlerMgr<MsgBaseType, Fun>::MessageHandlerMgr()
+	{
+		msg_.clear();
+	}
+
+	template<typename MsgBaseType, typename Fun>
+	MessageHandlerMgr<MsgBaseType, Fun>::~MessageHandlerMgr()
+	{
+		for (auto p : msg_)
+		{
+			SAFE_RELEASE(p.second);
+		}
+		msg_.clear();
+	}
+
+	template<typename MsgBaseType, typename Fun>
+	template<typename MsgSubType, typename F>
+	bool MessageHandlerMgr<MsgBaseType, Fun>::RegisterHandler(const MessageID msg_id, F&& f)
+	{
+		if (msg_.find(msg_id) != msg_.end())
+		{
+			return false;
+		}
+
+		MsgBaseType * p = new MsgSubType();
+		MessageHandler<MsgBaseType, F> * handler = new MessageHandler<MsgBaseType, F>(std::forward<F>(f), p);
+		msg_[msg_id] = handler;
+
+		return true;
+	}
+
+	template<typename MsgBaseType, typename Fun>
+	void MessageHandlerMgr<MsgBaseType, Fun>::HandleMsg(Session* session, const MessageID msg_id, uint8 const*const msg, const MessageLength l)
+	{
+		if (msg_.find(msg_id) == msg_.end())
+		{
+			ERROR_INFO("dont find the target msg,msg_id:{0}", msg_id);
+			return;
+		}
+		msg_[msg_id]->HandleMsg(session, msg, l);
+	}
+
 }
 
 #endif
