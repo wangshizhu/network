@@ -5,10 +5,12 @@
 #include "network_define.h"
 #include "message_manager.h"
 #include "session.h"
+#include "singleton.h"
 
 namespace network
 {
 	class Session;
+	class MessageCenter;
 	struct BuffMsgBase;
 	struct MsgPackMsgBase;
 	using HandlerBuffFunType = std::tr1::function<void(network::Session*, network::BuffMsgBase*)>;
