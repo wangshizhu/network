@@ -101,6 +101,4 @@ namespace network
 	template class MessageHandlerMgr<BuffMsgBase, HandlerBuffFunType>;*/
 }
 
-#include "message_manager.cpp"
-
 #endif

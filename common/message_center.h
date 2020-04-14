@@ -4,6 +4,7 @@
 #include "platform.h"
 #include "network_define.h"
 #include "session.h"
+#include "message_manager.h"
 
 namespace network
 {
@@ -216,6 +217,6 @@ namespace network
 	};
 }
 
-#endif
+#include "message_manager.cpp"
 
-#define g_message_center network::MessageCenter::GetInstancePtr()
+#endif

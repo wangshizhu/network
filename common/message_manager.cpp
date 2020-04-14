@@ -9,11 +9,11 @@ namespace network
 	template<typename MsgBaseType, typename Fun>
 	void MessageHandler<MsgBaseType, Fun>::HandleMsg(Session* session, uint8 const*const msg, const MessageLength l)
 	{
-		g_message_center->DeserializationMsg(p_, msg, l);
+		MessageCenter::GetInstancePtr()->DeserializationMsg(p_, msg, l);
 
 		f_(session, p_);
 
-		g_message_center->HandleDone(p_, l);
+		MessageCenter::GetInstancePtr()->HandleDone(p_, l);
 	}
 }
 
