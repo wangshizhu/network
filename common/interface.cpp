@@ -79,6 +79,7 @@ namespace network
 		}
 		if (len == 0)
 		{
+			CatchSockError();
 			OnGetError(sock->GetSocket());
 			return INVALID;
 		}
