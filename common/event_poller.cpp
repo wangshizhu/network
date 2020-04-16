@@ -306,7 +306,7 @@ void network::SelectPoller::HandleReadyFd(int& ready_num, fd_set& read_fds, fd_s
 #else
 	for (int fd = 0; fd <= fd_largest_ && ready_num > 0; ++fd)
 	{
-		if (FD_ISSET(fd, &fd_read_set_))
+		if (FD_ISSET(fd, &read_fds))
 		{
 			--ready_num;
 			this->ProcessRead(fd);
