@@ -20,5 +20,6 @@
 *.pdb
 *.chw
 *.db
+*.idea
 *.opendb
 *.VC.*

@@ -3,6 +3,7 @@
 
 #include "log.h"
 #include "session.h"
+#include "network_define.h"
 
 namespace network
 {
@@ -42,7 +43,7 @@ namespace network
 		virtual int HandleInput(int fd) = 0;
 
 	protected:
-		virtual void CatchSockError() = 0;
+		virtual EnumRecvState CatchSockError() = 0;
 
 	};
 
@@ -51,10 +52,10 @@ namespace network
 	public:
 		TcpPacketInputHandler(SharedSockType sock, SharedSessionType session);
 		virtual ~TcpPacketInputHandler();
-		virtual int HandleInput(int fd);
+		virtual int HandleInput(int fd) override;
 
 	protected:
-		void CatchSockError() override;
+		EnumRecvState CatchSockError() override;
 
 	private:
 		void OnGetError(int fd);
@@ -76,7 +77,7 @@ namespace network
 	public:
 		virtual ~PacketOutputHandler() {};
 		virtual void HandleOutput(int fd) = 0;
-		virtual void CatchSockError() = 0;
+		virtual EnumReason CatchSockError() = 0;
 	};
 
 	class TcpPacketOutputHandler : public PacketOutputHandler
@@ -84,8 +85,8 @@ namespace network
 	public:
 		TcpPacketOutputHandler(SharedSessionType session,SharedSockType sock);
 		virtual ~TcpPacketOutputHandler() {};
-		virtual void HandleOutput(int fd);
-		virtual void CatchSockError();
+		virtual void HandleOutput(int fd) override;
+		virtual EnumReason CatchSockError() override;
 
 	private:
 		void OnGetError(int fd);

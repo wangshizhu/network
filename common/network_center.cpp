@@ -173,6 +173,11 @@ namespace network
 		event_processor_->DeregisterWrite(fd);
 	}
 
+	bool NetWorkCenter::IsExistsSession(int fd) const
+	{
+		return session_.find(fd) != session_.end();
+	}
+
 	SharedSessionType NetWorkCenter::GetSession(int fd)const
 	{
 		auto it = session_.find(fd);
