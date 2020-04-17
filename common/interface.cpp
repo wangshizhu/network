@@ -27,7 +27,7 @@ namespace network
 			auto new_sock = sock->accept();
 			if (new_sock == nullptr) 
 			{
-				ERROR_INFO("accept invalid socket tick_num:{0}",tick_num);
+				DEBUG_INFO("accept invalid socket tick_num:{0}",tick_num);
 				break;
 			}
 			else
