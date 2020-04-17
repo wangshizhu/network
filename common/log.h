@@ -19,7 +19,7 @@ namespace mylog
 			const char* msg,Args&&... args) const
 		{
 			auto&& fmt_msg = fmt::format(msg, std::forward<decltype(args)>(args)...);
-			std::cout << "debug    file: " << file_name << " ,function: " << func_name << " ,line_num: " << line_num << " ,msg: " << fmt_msg.c_str() << std::endl;
+			std::cout << "log:debug, file: " << file_name << ", function: " << func_name << ", line_num: " << line_num << ", msg: " << fmt_msg.c_str() << std::endl;
 		}
 
 		template<class... Args>
@@ -28,7 +28,7 @@ namespace mylog
 			const char* msg, Args&&... args) const
 		{
 			auto&& fmt_msg = fmt::format(msg, std::forward<decltype(args)>(args)...);
-			std::cout << "error    file: " << file_name << " ,function: " << func_name << " ,line_num: " << line_num << " ,msg: " << fmt_msg.c_str() << std::endl;
+			std::cout << "log:error, file: " << file_name << ", function: " << func_name << ", line_num: " << line_num << ", msg: " << fmt_msg.c_str() << std::endl;
 		}
 
 		template<class... Args>
@@ -37,7 +37,7 @@ namespace mylog
 			const char* msg, Args&&... args) const
 		{
 			auto&& fmt_msg = fmt::format(msg, std::forward<decltype(args)>(args)...);
-			std::cout << "Log    file: " << file_name << " ,function: " << func_name << " ,line_num: " << line_num << " ,msg: " << fmt_msg.c_str() << std::endl;
+			std::cout << "log:info, file: " << file_name << ", function: " << func_name << ", line_num: " << line_num << ", msg: " << fmt_msg.c_str() << std::endl;
 		}
 
 		template<class... Args>
@@ -46,7 +46,7 @@ namespace mylog
 			const char* msg, Args&&... args) const
 		{
 			auto&& fmt_msg = fmt::format(msg, std::forward<decltype(args)>(args)...);
-			std::cout << "Fatal    file: " << file_name << " ,function: " << func_name << " ,line_num: " << line_num << " ,msg: " << fmt_msg.c_str() << std::endl;
+			std::cout << "log:fatal, file: " << file_name << ", function: " << func_name << ", line_num: " << line_num << ", msg: " << fmt_msg.c_str() << std::endl;
 		}
 
 	private:
