@@ -1,5 +1,4 @@
 #include "interface.h"
-#include "network_define.h"
 #include "network_center.h"
 
 namespace network
@@ -18,7 +17,7 @@ namespace network
 		auto sock = listened_sock_.lock();
 		if (sock == nullptr)
 		{
-			DEBUG_INFO("listened_sock_ is null");
+			DEBUG_INFO("listened_sock_ is null fd:{0}\n",fd);
 			return 0;
 		}
 
@@ -28,15 +27,21 @@ namespace network
 			auto new_sock = sock->accept();
 			if (new_sock == nullptr) 
 			{
+				DEBUG_INFO("accept invalid socket tick_num:{0}",tick_num);
 				break;
 			}
 			else
 			{
+				if (NetWorkCenter::GetInstancePtr()->IsExistsSession(new_sock->GetSocket()))
+				{
+					ERROR_INFO("session have register fd:{0}",new_sock->GetSocket());
+					continue;
+				}
 				SharedSessionType session = std::make_shared<Session>();
 				if (!session->Init(new_sock, (short)EnumIpProto::ENUM_TCP))
 				{
-					ERROR_INFO("session initial faild");
-					return 0;
+					ERROR_INFO("session initial faild fd:{0}",new_sock->GetSocket());
+					continue;
 				}
 
 				NetWorkCenter::GetInstancePtr()->RegisterSession(new_sock->GetSocket(),session);
@@ -73,8 +78,10 @@ namespace network
 		int len = session->RecvMsg(PACKET_MAX_SIZE_TCP);
 		if (len < 0)
 		{
-			CatchSockError();
-			OnGetError(sock->GetSocket());
+			if (CatchSockError() == EnumRecvState::ENUM_RECV_STATE_INTERRUPT)
+			{
+				OnGetError(sock->GetSocket());
+			}
 			return INVALID;
 		}
 		if (len == 0)
@@ -88,27 +95,39 @@ namespace network
 		return len;
 	}
 
-	void TcpPacketInputHandler::CatchSockError()
+	EnumRecvState TcpPacketInputHandler::CatchSockError()
 	{
 		auto sock = accepted_sock_.lock();
 		if (sock == nullptr)
 		{
-			return;
+			return EnumRecvState::ENUM_RECV_STATE_INTERRUPT;
 		}
 
 		int err_no = CatchLastError();
+		DEBUG_INFO("catch socket error fd:{0},err_number:{1}\n", sock->GetSocket(), err_no);
 
 #if GENERAL_PLATFORM == UNIX_FLAVOUR_LINUX
-		if (err_no == EAGAIN ||							// 已经无数据可读了
-			err_no == ECONNREFUSED ||					// 连接被服务器拒绝
-			err_no == EHOSTUNREACH)						// 目的地址不可到达
+		// 已经无数据可读了
+		if (err_no == EAGAIN)						
 		{
-			DEBUG_INFO("catch socket error fd:{0},err_number:{1}\n", sock->GetSocket(), err_no);
-			return;
+			return EnumRecvState::ENUM_RECV_STATE_BREAK;
+		}
+		// 连接被服务器拒绝 或者 目的地址不可到达
+		if (err_no == ECONNREFUSED || err_no == EHOSTUNREACH)
+		{
+			return EnumRecvState::ENUM_RECV_STATE_INTERRUPT;
 		}
 #else
-		DEBUG_INFO("catch socket error fd:{0},err_number:{1}\n", sock->GetSocket(), err_no);
+		if (err_no == WSAEWOULDBLOCK)
+		{
+			return EnumRecvState::ENUM_RECV_STATE_BREAK;
+		}
+		if (err_no == WSAECONNRESET || err_no == WSAECONNABORTED)
+		{
+			return EnumRecvState::ENUM_RECV_STATE_INTERRUPT;
+		}
 #endif
+		return EnumRecvState::ENUM_RECV_STATE_CONTINUE;
 	}
 
 	void TcpPacketInputHandler::OnGetError(int fd)
@@ -136,34 +155,53 @@ namespace network
 			return;
 		}
 
-		EnumReason reson = session->ProcessSendMsg();
-		if (reson == EnumReason::ENUM_SEND_FAILED)
+		EnumReason reason = session->ProcessSendMsg();
+		if (reason == EnumReason::ENUM_SEND_FAILED)
 		{
-			CatchSockError();
+			if (CatchSockError() != EnumReason::ENUM_SEND_CONTINUE)
+			{
+				OnGetError(sock->GetSocket());
+			}
+			return;
+		}
+		if (reason == EnumReason::ENUM_INVALID_VARIABLE)
+		{
 			OnGetError(sock->GetSocket());
 			return;
 		}
 	}
 
-	void TcpPacketOutputHandler::CatchSockError()
+	EnumReason TcpPacketOutputHandler::CatchSockError()
 	{
 		auto sock = accepted_sock_.lock();
 		if (sock == nullptr)
 		{
-			return;
+			return EnumReason::ENUM_INVALID_VARIABLE;
 		}
 
-		int err;
+		int err = CatchLastError();
+		DEBUG_INFO("catch socket error fd:{0},err_number:{1}\n", sock->GetSocket(), err);
 
 #if GENERAL_PLATFORM == PLATFORM_WIN32
-		err = WSAGetLastError();
-
-		DEBUG_INFO("catch socket error fd:{0},err_number:{1}\n", sock->GetSocket(), err);
-		
+		switch (err)
+		{
+		case WSAEWOULDBLOCK: return EnumReason::ENUM_SEND_CONTINUE;
+		case WSAEINTR: return EnumReason::ENUM_SEND_CONTINUE;
+		case WSAECONNREFUSED: return EnumReason::ENUM_NO_SUCH_PORT;
+		case WSAECONNRESET:	return EnumReason::ENUM_CLIENT_DISCONNECTED;
+		case WSAECONNABORTED: return EnumReason::ENUM_CLIENT_DISCONNECTED;
+		default: return EnumReason::ENUM_GENERAL_NETWORK;
+		}
 #else
-		err = errno;
-
-		DEBUG_INFO("catch socket error fd:{0},err_number:{1}\n", sock->GetSocket(), err);
+		switch (err)
+		{
+		case ECONNREFUSED:	return EnumReason::ENUM_NO_SUCH_PORT;
+		case EAGAIN:		return EnumReason::ENUM_SEND_CONTINUE;
+		case EPIPE:			return EnumReason::ENUM_CLIENT_DISCONNECTED;
+		case ECONNRESET:	return EnumReason::ENUM_CLIENT_DISCONNECTED;
+		case ENOBUFS:		return EnumReason::ENUM_TRANSMIT_QUEUE_FULL;
+		default:			return EnumReason::ENUM_GENERAL_NETWORK;
+		}
 #endif
 	}
 
