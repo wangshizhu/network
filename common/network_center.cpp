@@ -7,6 +7,7 @@ namespace network
 		listened_.clear();
 		listened_input_.clear();
 		session_.clear();
+		LOG_INFO("create NetWorkCenter obj success");
 	}
 
 	NetWorkCenter::~NetWorkCenter()
@@ -24,6 +25,9 @@ namespace network
 		}
 
 		event_processor_ = std::make_shared<EventProcessor>(poller);
+
+		LOG_INFO("NetWorkCenter obj init success,poller:{0}",poller);
+
 		return true;
 	}
 
@@ -49,7 +53,7 @@ namespace network
 		auto it = listened_.find(port);
 		if (it != listened_.end())
 		{
-			DEBUG_INFO("the port is listened yet");
+			ERROR_INFO("the port is listened yet,port:{0}",port);
 
 			return 0;
 		}
@@ -61,7 +65,7 @@ namespace network
 
 		if (!sock->IsGood())
 		{
-			DEBUG_INFO("the created socket isnt good");
+			ERROR_INFO("the created socket isnt good");
 			return 0;
 		}
 
@@ -73,25 +77,27 @@ namespace network
 
 		if (sock->bind(ip, port) < 0)
 		{
-			DEBUG_INFO("bind faild");
+			ERROR_INFO("bind faild");
 			return 0;
 		}
 
 		if (sock->listen() < 0)
 		{
-			DEBUG_INFO("listen faild");
+			ERROR_INFO("listen faild");
 			return 0;
 		}
 
 		SharedListenedInputType tmp = std::make_shared<ListenTcpInputHandler>(sock);
 		if (!event_processor_->RegisterRead(sock->GetSocket(), tmp))
 		{
-			DEBUG_INFO("regist faild");
+			ERROR_INFO("regist faild");
 			return 0;
 		}
 
 		listened_input_[sock->GetSocket()] = tmp;
 		listened_[port] = sock;
+
+		LOG_INFO("create server of tcp success,ip:{0},port:{1}",ip, port);
 
 		return sock->GetSocket();
 	}
@@ -111,7 +117,7 @@ namespace network
 
 		if (!sock->IsGood())
 		{
-			DEBUG_INFO("the created socket isnt good");
+			ERROR_INFO("the created socket isnt good");
 			return 0;
 		}
 
@@ -137,6 +143,8 @@ namespace network
 
 		RegisterSession(sock->GetSocket(), session);
 
+		LOG_INFO("create tcp connection client to server success,ip of server:{0},port:{1}", ip, port);
+
 		return sock->GetSocket();
 	}
 
@@ -149,7 +157,7 @@ namespace network
 	{
 		if (session_.find(sock) != session_.end())
 		{
-			ERROR_INFO("register session failed");
+			ERROR_INFO("register session failed,sock:{0}",sock);
 			return;
 		}
 

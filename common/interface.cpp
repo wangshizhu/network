@@ -40,7 +40,6 @@ namespace network
 				SharedSessionType session = std::make_shared<Session>();
 				if (!session->Init(new_sock, (short)EnumIpProto::ENUM_TCP))
 				{
-					ERROR_INFO("session initial faild fd:{0}",new_sock->GetSocket());
 					continue;
 				}
 

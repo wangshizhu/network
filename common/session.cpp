@@ -22,14 +22,14 @@ namespace network
 		auto processor = NetWorkCenter::GetInstancePtr()->GetEventProcessor();
 		if (processor == nullptr)
 		{
-			ERROR_INFO("Please create processor first");
+			ERROR_INFO("Please create processor first,sock:{0}", sock->GetSocket());
 			return false;
 		}
 		
 		SharedTcpPacketInputType handler = std::make_shared<TcpPacketInputHandler>(sock,shared_from_this());
 		if (!processor->RegisterRead(sock->GetSocket(), handler))
 		{
-			ERROR_INFO("regist the socket that it is accepted failed ");
+			ERROR_INFO("regist the socket that it is accepted failed,sock:{0}", sock->GetSocket());
 			return false;
 		}
 

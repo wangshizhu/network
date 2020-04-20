@@ -1,5 +1,6 @@
 #include "message_center.h"
 #include "message_manager.h"
+#include "log.h"
 
 namespace network
 {
@@ -95,6 +96,7 @@ namespace network
 
 	MessageCenter::MessageCenter(EnumAppProto proto) :Singleton<MessageCenter>(), msg_proto_(nullptr)
 	{
+		LOG_INFO("create MessageCenter obj success,proto of message: {0} ",proto);
 		if (proto == EnumAppProto::ENUM_BUFF)
 		{
 			msg_proto_ = new MessageBuffProto(proto);

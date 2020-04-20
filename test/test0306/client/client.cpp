@@ -8,6 +8,7 @@
 #include "../../../common/network_center.h"
 #include "../../../common/message_center.h"
 #include "../src/player_manager.h"
+#include "../../../common/log.h"
 
 void SendData(int sock_fd)
 {
@@ -61,11 +62,15 @@ int main()
 {
 
 	{
+		mylog::SimpleLog log(mylog::EnumLogLevel::E_DEB_LV);
 		network::MessageCenter msg_center(network::EnumAppProto::ENUM_BUFF);
 		network::NetWorkCenter net;
 		PlayerManager mgr;
 
-		g_network_center->Init((int)network::EnumPoller::SELECT_POLLER);
+		if (!g_network_center->Init((int)network::EnumPoller::SELECT_POLLER))
+		{
+			return 0;
+		}
 		int sock = g_network_center->CreateTcpConnectionClient2Server("127.0.0.1", 5700);
 		if (sock == 0)
 		{

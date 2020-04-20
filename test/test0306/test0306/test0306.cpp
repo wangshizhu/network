@@ -5,11 +5,13 @@
 #include "../../../common/network_center.h"
 #include "../../../common/message_center.h"
 #include "../../../common/network_define.h"
+#include "../../../common/log.h"
 #include "../src/player_manager.h"
 
 int main()
 {
 	{
+		mylog::SimpleLog log(mylog::EnumLogLevel::E_DEB_LV);
 		network::MessageCenter msg_center(network::EnumAppProto::ENUM_BUFF);
 		network::NetWorkCenter net;
 		PlayerManager mgr;
