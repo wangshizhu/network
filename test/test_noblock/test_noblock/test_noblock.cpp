@@ -10,7 +10,7 @@ int main()
 		network::MessageCenter msg_center(network::EnumAppProto::ENUM_BUFF);
 		network::NetWorkCenter net;
 
-		/*g_network_center->Init((int)network::EnumPoller::SELECT_POLLER);
+		g_network_center->Init((int)network::EnumPoller::SELECT_POLLER);
 		int sock = g_network_center->CreateTcpServer("127.0.0.1", 5700);
 		if (sock == 0)
 		{
@@ -20,7 +20,7 @@ int main()
 		while (true)
 		{
 			net.Run();
-		}*/
+		}
 	}
     return 0;
 }
