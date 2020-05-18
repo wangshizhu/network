@@ -3,7 +3,7 @@
 
 测试类的项目应创建在test目录下，即新建项目时，项目目录应该选择到test，下面以创建test_project项目为例，展示如何将网络库引入项目中：
 
-1. 打开VS(VS需至少支持到C++14)，选择<font color="#dd0000">新建项目</font>，空项目test_project，项目目录选择到net/network/test
+1. 打开VS(VS需至少支持到C++14)，选择`新建项目`，`空项目`test_project，`项目目录`选择到net/network/test
 
 2. 打开解决方案资源管理器页签，右击解决方案test_project，选择添加页签，选择现有项目，选择common.vcxproj
 
