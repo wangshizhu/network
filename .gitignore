@@ -1,5 +1,7 @@
 /build/*
 /bin/*
+/_objs/*
+/libs/*
 /test/test*/ipch
 /test/test*/_objs
 /test/test*/test*/Debug/*
