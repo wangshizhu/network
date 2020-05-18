@@ -3,17 +3,17 @@
 
 测试类的项目应创建在test目录下，即新建项目时，项目目录应该选择到test，下面以创建test_project项目为例，展示如何将网络库引入项目中：
 
-1. 打开VS(VS需至少支持到C++14)，选择```新建项目```，`空项目`test_project，`项目目录`选择到net/network/test
+1. 打开VS(VS需至少支持到C++14)，选择`新建项目`，`空项目`test_project，`项目目录`选择到net/network/test
 
-2. 打开解决方案资源管理器页签，右击解决方案test_project，选择添加页签，选择现有项目，选择common.vcxproj
+2. 打开`解决方案资源管理器`页签，右击`解决方案test_project`，选择`添加`页签，选择`现有项目`，选择common.vcxproj
 
-3. 在test_project项目上右击，选择配置属性，选择常规，字符集选择使用Unicode字符集
+3. 在`test_project`项目上右击，选择`属性`，选择`配置属性`，选择`常规`，`字符集`选择`使用Unicode字符集`
 
-4. 在test_project项目上右击，C/C++页签下选择常规，在附加包含目录添加此目录..\..\..\include\msgpack
+4. 在`test_project`项目上右击，`C/C++`页签下选择`常规`，在`附加包含目录`添加此目录`..\..\..\include\msgpack`
 
-5. 在test_project项目上右击，在链接器页签下选择常规，在附加库目录添加此目录../../../libs，在链接器页签下选择输入，
-在附加依赖项添加common_d.lib、ws2_32.lib
+5. 在`test_project`项目上右击，在`链接器`页签下选择常规，在`附加库目录`添加此目录`../../../libs`，在`链接器`页签下选择`输入`，
+在`附加依赖项`添加`common_d.lib、ws2_32.lib`
 
-6. 打开解决方案资源管理器页签，右击解决方案test_project，选择属性页签，通用属性下选择项目依赖项，勾选common
+6. 打开`解决方案资源管理器`页签，右击`解决方案test_project`，选择`属性`页签，`通用属性`下选择`项目依赖项`，勾选common
 
 7. 生成
