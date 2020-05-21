@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_noblock", "test_noblock\test_noblock.vcxproj", "{C9069CC5-0E3C-4A0B-9498-5CCA7A476AC0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0B6665A6-3862-432E-88CC-B0A70B808A77} = {0B6665A6-3862-432E-88CC-B0A70B808A77}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common", "..\..\common\common.vcxproj", "{0B6665A6-3862-432E-88CC-B0A70B808A77}"
 EndProject

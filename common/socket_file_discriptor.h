@@ -3,6 +3,7 @@
 
 #include "platform.h"
 #include "log.h"
+#include "address.h"
 
 namespace network
 {
@@ -40,6 +41,8 @@ namespace network
 
 	private:
 		GENERALSOCKET socket_;
+		Address addr_;
+
 	};
 
 	using SharedSockType = std::shared_ptr<SocketWrapper>;

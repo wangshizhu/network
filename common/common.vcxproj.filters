@@ -69,6 +69,9 @@
     <ClInclude Include="..\lib\format.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="address.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="event_poller.cpp">
@@ -105,6 +108,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\lib\format.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="address.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

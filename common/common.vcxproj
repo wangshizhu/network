@@ -120,6 +120,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\lib\format.h" />
+    <ClInclude Include="address.h" />
     <ClInclude Include="event_poller.h" />
     <ClInclude Include="event_processor.h" />
     <ClInclude Include="interface.h" />
@@ -140,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\lib\format.cpp" />
+    <ClCompile Include="address.cpp" />
     <ClCompile Include="event_poller.cpp" />
     <ClCompile Include="event_processor.cpp" />
     <ClCompile Include="interface.cpp" />
