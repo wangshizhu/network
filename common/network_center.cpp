@@ -58,7 +58,7 @@ namespace network
 			return 0;
 		}
 
-		SharedSockType sock = std::make_shared<SocketWrapper>();
+		SharedSockType sock = std::make_shared<SocketWrapper>(ip, port);
 
 		/* 创建字节流类型的IPV4 socket. */
 		sock->CreateSocket(SOCK_STREAM);
@@ -75,7 +75,7 @@ namespace network
 		// 禁用Nagle
 		sock->SetNoDelay();
 
-		if (sock->bind(ip, port) < 0)
+		if (sock->bind() < 0)
 		{
 			ERROR_INFO("bind faild");
 			return 0;
@@ -110,7 +110,7 @@ namespace network
 			return 0;
 		}
 
-		SharedSockType sock = std::make_shared<SocketWrapper>();
+		SharedSockType sock = std::make_shared<SocketWrapper>(ip, port);
 
 		/* 创建字节流类型的IPV4 socket. */
 		sock->CreateSocket(SOCK_STREAM);
@@ -124,7 +124,7 @@ namespace network
 		// 禁用Nagle
 		sock->SetNoDelay();
 
-		int ret = sock->Connect(ip, port);
+		int ret = sock->Connect();
 		if (ret < 0)
 		{
 			ERROR_INFO("connect failed err_no:{0}", CatchLastError());

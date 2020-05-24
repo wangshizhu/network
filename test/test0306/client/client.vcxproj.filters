@@ -54,6 +54,9 @@
     <ClCompile Include="..\..\..\common\message_center.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\common\address.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\common\platform.h">
@@ -111,6 +114,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\common\message_center.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\address.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

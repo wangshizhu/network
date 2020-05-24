@@ -12,6 +12,7 @@ namespace network
 	{
 	public:
 		SocketWrapper();
+		SocketWrapper(const char* ip, u_int16_t port);
 		~SocketWrapper();
 		SocketWrapper(const SocketWrapper&) = delete;
 		SocketWrapper& operator=(const SocketWrapper&) = delete;
@@ -19,7 +20,7 @@ namespace network
 		SocketWrapper& operator=(SocketWrapper&&) = delete;
 
 	public:
-		int bind(const char* ip, short port);
+		int bind();
 		int listen();
 		std::shared_ptr<SocketWrapper> accept();
 		int SetNonBlocking(bool nonblocking);
@@ -29,12 +30,13 @@ namespace network
 		int recv(void* gram_data, int gram_size);
 		void SetSocket(GENERALSOCKET sock);
 		int Send(const void * gram_data, int gram_size);
-		int Connect(const char* ip, short port);
+		int Connect();
 
 	public:
 		void CreateSocket(int type);
 		bool IsGood()const;
 		int GetSocket();
+		Address GetRemoteAddress() const;
 
 	private:
 		void InittdNetWork();

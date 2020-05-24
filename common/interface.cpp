@@ -43,6 +43,11 @@ namespace network
 					continue;
 				}
 
+				auto addr = new_sock->GetRemoteAddress();
+				char remote_ip[MAX_IP_LEN] = { 0 };
+				Address::Ip2String(addr.Ip(), remote_ip);
+				LOG_INFO("a connect accept,remote socket address,ip:{0},port:{1},2port:{2}", remote_ip, addr.Port(),ntohs(addr.Port()));
+
 				NetWorkCenter::GetInstancePtr()->RegisterSession(new_sock->GetSocket(),session);
 			}
 		}

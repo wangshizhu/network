@@ -248,6 +248,10 @@ inline const T & max(const T & a, const T & b)
 #endif
 
 
+// ip字符串的最大长度
+#define MAX_IP_LEN 256
+
+
 /** 获取进程ID */
 inline int32 getProcessPID()
 {
