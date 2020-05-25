@@ -93,7 +93,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;common_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../../libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -144,42 +145,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\common\address.cpp" />
-    <ClCompile Include="..\..\..\common\event_poller.cpp" />
-    <ClCompile Include="..\..\..\common\event_processor.cpp" />
-    <ClCompile Include="..\..\..\common\interface.cpp" />
-    <ClCompile Include="..\..\..\common\log.cpp" />
-    <ClCompile Include="..\..\..\common\message_center.cpp" />
-    <ClCompile Include="..\..\..\common\message_manager.cpp" />
-    <ClCompile Include="..\..\..\common\network_center.cpp" />
-    <ClCompile Include="..\..\..\common\packet_reader.cpp" />
-    <ClCompile Include="..\..\..\common\packet_sender.cpp" />
-    <ClCompile Include="..\..\..\common\session.cpp" />
-    <ClCompile Include="..\..\..\common\socket_file_discriptor.cpp" />
-    <ClCompile Include="..\..\..\lib\format.cpp" />
     <ClCompile Include="..\src\player_manager.cpp" />
     <ClCompile Include="test0306.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\common\address.h" />
-    <ClInclude Include="..\..\..\common\event_poller.h" />
-    <ClInclude Include="..\..\..\common\event_processor.h" />
-    <ClInclude Include="..\..\..\common\interface.h" />
-    <ClInclude Include="..\..\..\common\log.h" />
-    <ClInclude Include="..\..\..\common\message_center.h" />
-    <ClInclude Include="..\..\..\common\message_manager.h" />
-    <ClInclude Include="..\..\..\common\message_memory.h" />
-    <ClInclude Include="..\..\..\common\network_center.h" />
-    <ClInclude Include="..\..\..\common\network_define.h" />
-    <ClInclude Include="..\..\..\common\packet_reader.h" />
-    <ClInclude Include="..\..\..\common\packet_sender.h" />
-    <ClInclude Include="..\..\..\common\platform.h" />
-    <ClInclude Include="..\..\..\common\session.h" />
-    <ClInclude Include="..\..\..\common\singleton.h" />
-    <ClInclude Include="..\..\..\common\socket_file_discriptor.h" />
-    <ClInclude Include="..\..\..\common\string_util.h" />
-    <ClInclude Include="..\..\..\common\test_msg_define.h" />
-    <ClInclude Include="..\..\..\lib\format.h" />
     <ClInclude Include="..\src\player_manager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
