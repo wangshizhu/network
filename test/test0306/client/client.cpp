@@ -7,6 +7,7 @@
 #include "../../../common/network_define.h"
 #include "../../../common/network_center.h"
 #include "../../../common/message_center.h"
+#include "../../../common/command_line.h"
 #include "../src/player_manager.h"
 #include "../../../common/log.h"
 
@@ -58,20 +59,26 @@ void MoreSendData(int sock_fd)
 	}
 }
 
-int main()
+int main(int argc, char **argv)
 {
 
 	{
+		network::CommandLineParse cmd_line;
+		cmd_line.Parse(argc, argv);
+
 		mylog::SimpleLog log(mylog::EnumLogLevel::E_DEB_LV);
+
 		network::MessageCenter msg_center(network::EnumAppProto::ENUM_BUFF);
+
 		network::NetWorkCenter net;
+
 		PlayerManager mgr;
 
 		if (!g_network_center->Init((int)network::EnumPoller::SELECT_POLLER))
 		{
 			return 0;
 		}
-		int sock = g_network_center->CreateTcpConnectionClient2Server("127.0.0.1", 5700);
+		int sock = g_network_center->CreateTcpConnectionClient2Server(g_CmdLine->Ip(), g_CmdLine->Port());
 		if (sock == 0)
 		{
 			return 0;

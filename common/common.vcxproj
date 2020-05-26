@@ -119,6 +119,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\lib\cmdline.h" />
     <ClInclude Include="..\lib\format.h" />
     <ClInclude Include="address.h" />
     <ClInclude Include="command_line.h" />

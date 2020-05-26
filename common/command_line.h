@@ -3,6 +3,7 @@
 
 #include "platform.h"
 #include "singleton.h"
+#include "../lib/cmdline.h"
 
 namespace network
 {
@@ -10,7 +11,6 @@ namespace network
 	{
 	public:
 		CommandLineParse();
-		~CommandLineParse();
 
 	public:
 		void Parse(int argc, char **argv);
@@ -18,9 +18,10 @@ namespace network
 		const u_int16_t Port();
 
 	private:
-		char* ip_;
-		u_int16_t port_;
+		cmdline::parser parser_;
 	};
 }
+
+#define g_CmdLine network::CommandLineParse::GetInstancePtr()
 
 #endif // !COMMAND_LINE_H_
