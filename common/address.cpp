@@ -37,7 +37,7 @@ namespace network
 		u_int32_t	trial;
 
 #if GENERAL_PLATFORM != PLATFORM_WIN32
-		if (inet_aton(std::string, (struct in_addr*)&trial) != 0)
+		if (inet_aton(ip,(struct in_addr*)&trial) != 0)
 #else
 		if ((trial = inet_addr(ip)) != INADDR_NONE)
 #endif
