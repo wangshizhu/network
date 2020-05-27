@@ -121,10 +121,16 @@ namespace network
 			return 0;
 		}
 
+		if (sock->bind() < 0)
+		{
+			ERROR_INFO("bind faild");
+			return 0;
+		}
+
 		// ½ûÓÃNagle
 		sock->SetNoDelay();
 
-		int ret = sock->Connect();
+		int ret = sock->Connect("182.92.89.99",5700);
 		if (ret < 0)
 		{
 			ERROR_INFO("connect failed err_no:{0}", CatchLastError());

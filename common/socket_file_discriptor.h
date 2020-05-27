@@ -27,10 +27,12 @@ namespace network
 		int SetNoDelay(bool nodelay = true);
 		int SetLinger(uint16 onoff, uint16 linger);
 		int close();
+		int ShutDown(int howto);
 		int recv(void* gram_data, int gram_size);
 		void SetSocket(GENERALSOCKET sock);
 		int Send(const void * gram_data, int gram_size);
 		int Connect();
+		int Connect(const char* ip, short port);
 
 	public:
 		void CreateSocket(int type);

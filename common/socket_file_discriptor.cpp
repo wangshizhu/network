@@ -180,6 +180,11 @@ int network::SocketWrapper::close()
 	return ret;
 }
 
+int network::SocketWrapper::ShutDown(int howto)
+{
+	return ::shutdown(socket_,howto);
+}
+
 int network::SocketWrapper::recv(void* gram_data, int gram_size)
 {
 	return ::recv(socket_, (char*)gram_data, gram_size, 0);
@@ -203,6 +208,18 @@ int network::SocketWrapper::Connect()
 	server_sock_addr.sin_family = AF_INET;
 	server_sock_addr.sin_port = addr_.Port();
 	server_sock_addr.sin_addr.s_addr = addr_.Ip();
+
+	return ::connect(socket_, (struct sockaddr*)&server_sock_addr, sizeof(server_sock_addr));
+}
+
+int network::SocketWrapper::Connect(const char* ip, short port)
+{
+	struct sockaddr_in server_sock_addr;
+	memset(&server_sock_addr, 0, sizeof(server_sock_addr));
+
+	server_sock_addr.sin_family = AF_INET;
+	server_sock_addr.sin_port = htons(port);
+	IPToN(AF_INET, ip, &server_sock_addr.sin_addr);
 
 	return ::connect(socket_, (struct sockaddr*)&server_sock_addr, sizeof(server_sock_addr));
 }

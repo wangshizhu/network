@@ -10,6 +10,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_noblock", "test_nobloc
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common", "..\..\common\common.vcxproj", "{0B6665A6-3862-432E-88CC-B0A70B808A77}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "client", "client\client.vcxproj", "{3EEFCCED-1D50-4423-BD44-F6514819F029}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0B6665A6-3862-432E-88CC-B0A70B808A77} = {0B6665A6-3862-432E-88CC-B0A70B808A77}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -34,6 +39,14 @@ Global
 		{0B6665A6-3862-432E-88CC-B0A70B808A77}.Release|x64.Build.0 = Release|x64
 		{0B6665A6-3862-432E-88CC-B0A70B808A77}.Release|x86.ActiveCfg = Release|Win32
 		{0B6665A6-3862-432E-88CC-B0A70B808A77}.Release|x86.Build.0 = Release|Win32
+		{3EEFCCED-1D50-4423-BD44-F6514819F029}.Debug|x64.ActiveCfg = Debug|x64
+		{3EEFCCED-1D50-4423-BD44-F6514819F029}.Debug|x64.Build.0 = Debug|x64
+		{3EEFCCED-1D50-4423-BD44-F6514819F029}.Debug|x86.ActiveCfg = Debug|Win32
+		{3EEFCCED-1D50-4423-BD44-F6514819F029}.Debug|x86.Build.0 = Debug|Win32
+		{3EEFCCED-1D50-4423-BD44-F6514819F029}.Release|x64.ActiveCfg = Release|x64
+		{3EEFCCED-1D50-4423-BD44-F6514819F029}.Release|x64.Build.0 = Release|x64
+		{3EEFCCED-1D50-4423-BD44-F6514819F029}.Release|x86.ActiveCfg = Release|Win32
+		{3EEFCCED-1D50-4423-BD44-F6514819F029}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
