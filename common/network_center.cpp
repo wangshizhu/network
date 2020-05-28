@@ -121,6 +121,9 @@ namespace network
 			return 0;
 		}
 
+		int on = 1;
+		setsockopt(sock->GetSocket(), SOL_SOCKET, SO_REUSEADDR, (char*)&on, sizeof(on));
+
 		if (sock->bind() < 0)
 		{
 			ERROR_INFO("bind faild");
