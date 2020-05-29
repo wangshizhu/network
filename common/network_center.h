@@ -26,6 +26,10 @@ namespace network
 		void Run();
 		int CreateTcpServer(const char* ip, short port);
 		int CreateTcpConnectionClient2Server(const char* ip, short port);
+		
+		// 创建TCP连接，连接之前使用bind函数
+		int CreateTcpConnC2SWithBind(const char* ip, short port,const char* dest_ip,short dest_port);
+
 		SharedEventProcessorType GetEventProcessor();
 		void RegisterSession(int sock, SharedSessionType session);
 		void DeregisterSession(int fd);

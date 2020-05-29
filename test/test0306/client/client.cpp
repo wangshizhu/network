@@ -78,7 +78,7 @@ int main(int argc, char **argv)
 		{
 			return 0;
 		}
-		int sock = g_network_center->CreateTcpConnectionClient2Server(g_CmdLine->Ip(), g_CmdLine->Port());
+		int sock = g_network_center->CreateTcpConnC2SWithBind(g_CmdLine->Ip(), g_CmdLine->Port(),g_CmdLine->DestIp(),g_CmdLine->DestPort());
 		if (sock == 0)
 		{
 			return 0;

@@ -11,6 +11,8 @@ namespace network
 	{
 		parser_.add<std::string>("host", 'h', "host name", false, "0.0.0.0");
 		parser_.add<u_int16_t>("port", 'p', "port number", false, 5700, cmdline::range(1, 65535));
+		parser_.add<std::string>("dest_host", '\0', "dest host name", false, "192.168.62.79");
+		parser_.add<u_int16_t>("dest_port", '\0', "dest port number", false, 5700, cmdline::range(1, 65535));
 		parser_.add("help", '?', "show usage");
 
 		parser_.parse_check(argc, argv);
@@ -24,5 +26,15 @@ namespace network
 	const u_int16_t CommandLineParse::Port()
 	{
 		return parser_.get<u_int16_t>("port");
+	}
+
+	const char* CommandLineParse::DestIp()
+	{
+		return parser_.get<std::string>("dest_host").c_str();
+	}
+
+	const u_int16_t CommandLineParse::DestPort()
+	{
+		return parser_.get<u_int16_t>("dest_port");
 	}
 }

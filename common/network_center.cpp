@@ -121,16 +121,10 @@ namespace network
 			return 0;
 		}
 
-		if (sock->bind() < 0)
-		{
-			ERROR_INFO("bind faild");
-			return 0;
-		}
-
 		// 禁用Nagle
 		sock->SetNoDelay();
 
-		int ret = sock->Connect("182.92.89.99",5700);
+		int ret = sock->Connect();
 		if (ret < 0)
 		{
 			ERROR_INFO("connect failed err_no:{0}", CatchLastError());
@@ -150,6 +144,58 @@ namespace network
 		RegisterSession(sock->GetSocket(), session);
 
 		LOG_INFO("create tcp connection client to server success,ip of server:{0},port:{1}", ip, port);
+
+		return sock->GetSocket();
+	}
+
+	int NetWorkCenter::CreateTcpConnC2SWithBind(const char* ip, short port, const char* dest_ip, short dest_port)
+	{
+		if (event_processor_ == nullptr)
+		{
+			ERROR_INFO("Please create processor first");
+			return 0;
+		}
+
+		SharedSockType sock = std::make_shared<SocketWrapper>(ip, port);
+
+		/* 创建字节流类型的IPV4 socket. */
+		sock->CreateSocket(SOCK_STREAM);
+
+		if (!sock->IsGood())
+		{
+			ERROR_INFO("the created socket isnt good");
+			return 0;
+		}
+
+		if (sock->bind() < 0)
+		{
+			ERROR_INFO("bind faild");
+			return 0;
+		}
+
+		// 禁用Nagle
+		sock->SetNoDelay();
+
+		int ret = sock->Connect(dest_ip, dest_port);
+		if (ret < 0)
+		{
+			ERROR_INFO("connect failed err_no:{0}", CatchLastError());
+			return 0;
+		}
+
+		// 设置非阻塞
+		sock->SetNonBlocking(true);
+
+		SharedSessionType session = std::make_shared<Session>();
+		if (!session->Init(sock, (short)EnumIpProto::ENUM_TCP))
+		{
+			ERROR_INFO("session initial faild");
+			return 0;
+		}
+
+		RegisterSession(sock->GetSocket(), session);
+
+		LOG_INFO("create tcp connection client to server success,ip of server:{0},port:{1}", dest_ip, dest_port);
 
 		return sock->GetSocket();
 	}

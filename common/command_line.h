@@ -17,6 +17,9 @@ namespace network
 		const char* Ip();
 		const u_int16_t Port();
 
+		const char* DestIp();
+		const u_int16_t DestPort();
+
 	private:
 		cmdline::parser parser_;
 	};
