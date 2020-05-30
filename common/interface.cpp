@@ -27,7 +27,6 @@ namespace network
 		{
 			if (g_CmdLine->NoAccept())
 			{
-				DEBUG_INFO("no accept");
 				break;
 			}
 
