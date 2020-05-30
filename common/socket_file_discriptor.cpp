@@ -80,6 +80,8 @@ int network::SocketWrapper::listen()
 		backlog = LISTENQ;
 	}
 
+	LOG_INFO("listen,backlog:{0}", backlog);
+
 	return ::listen(socket_, backlog);
 }
 
