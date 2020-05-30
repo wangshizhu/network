@@ -20,6 +20,8 @@ namespace network
 		const char* DestIp();
 		const u_int16_t DestPort();
 
+		int ListenBacklog()const;
+
 	private:
 		cmdline::parser parser_;
 	};

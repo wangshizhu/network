@@ -1,5 +1,6 @@
 #include "socket_file_discriptor.h"
 #include "../lib/format.h"
+#include "command_line.h"
 
 static bool g_network_initted = false;
 
@@ -73,7 +74,13 @@ int network::SocketWrapper::bind()
 
 int network::SocketWrapper::listen()
 {
-	return ::listen(socket_, LISTENQ);
+	int backlog = g_CmdLine->ListenBacklog();
+	if (backlog <= 0 || backlog > LISTENQ)
+	{
+		backlog = LISTENQ;
+	}
+
+	return ::listen(socket_, backlog);
 }
 
 std::shared_ptr<network::SocketWrapper> network::SocketWrapper::accept()
