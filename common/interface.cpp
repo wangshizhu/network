@@ -1,5 +1,6 @@
 #include "interface.h"
 #include "network_center.h"
+#include "command_line.h"
 
 namespace network
 {
@@ -24,6 +25,12 @@ namespace network
 		int tick_num = 0;
 		while (tick_num++ < 256)
 		{
+			if (g_CmdLine->NoAccept())
+			{
+				DEBUG_INFO("no accept");
+				break;
+			}
+
 			auto new_sock = sock->accept();
 			if (new_sock == nullptr) 
 			{
