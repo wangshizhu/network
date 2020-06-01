@@ -114,7 +114,7 @@ namespace network
 		}
 
 		int err_no = CatchLastError();
-		DEBUG_INFO("catch socket error fd:{0},err_number:{1}\n", sock->GetSocket(), err_no);
+		DEBUG_INFO("TcpPacketInputHandler catch socket error fd:{0},err_number:{1}\n", sock->GetSocket(), err_no);
 
 #if GENERAL_PLATFORM == UNIX_FLAVOUR_LINUX
 		// 已经无数据可读了
@@ -190,7 +190,7 @@ namespace network
 		}
 
 		int err = CatchLastError();
-		DEBUG_INFO("catch socket error fd:{0},err_number:{1}\n", sock->GetSocket(), err);
+		DEBUG_INFO("TcpPacketOutputHandler catch socket error fd:{0},err_number:{1}\n", sock->GetSocket(), err);
 
 #if GENERAL_PLATFORM == PLATFORM_WIN32
 		switch (err)
