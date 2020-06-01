@@ -142,6 +142,8 @@ namespace network
 
 	void TcpPacketInputHandler::OnGetError(int fd)
 	{
+		DEBUG_INFO("TcpPacketInputHandler get socket error fd:{0}\n", fd);
+
 		NetWorkCenter::GetInstancePtr()->DeregisterSession(fd);
 		NetWorkCenter::GetInstancePtr()->DeregisterFd(fd);
 	}
@@ -217,6 +219,7 @@ namespace network
 
 	void TcpPacketOutputHandler::OnGetError(int fd)
 	{
+		DEBUG_INFO("TcpPacketOutputHandler get socket error fd:{0}\n", fd);
 		NetWorkCenter::GetInstancePtr()->DeregisterSession(fd);
 		NetWorkCenter::GetInstancePtr()->DeregisterFd(fd);
 	}
