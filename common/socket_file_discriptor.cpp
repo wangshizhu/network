@@ -60,16 +60,16 @@ void network::SocketWrapper::InittdNetWork()
 int network::SocketWrapper::bind()
 {
 	// 绑定到port和ip
-	struct sockaddr_in server_sock_addr;
+	struct sockaddr_in sock_addr;
 
 	// IPV4
-	server_sock_addr.sin_family = AF_INET;
+	sock_addr.sin_family = AF_INET;
 	// 指定端口
-	server_sock_addr.sin_port = addr_.Port();
+	sock_addr.sin_port = addr_.Port();
 
-	server_sock_addr.sin_addr.s_addr = addr_.Ip();
+	sock_addr.sin_addr.s_addr = addr_.Ip();
 
-	return ::bind(socket_, (struct sockaddr *) &server_sock_addr, sizeof(server_sock_addr));
+	return ::bind(socket_, (struct sockaddr *) &sock_addr, sizeof(sock_addr));
 }
 
 int network::SocketWrapper::listen()
