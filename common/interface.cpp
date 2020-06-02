@@ -117,7 +117,7 @@ namespace network
 			return EnumRecvState::ENUM_RECV_STATE_BREAK;
 		}
 		// 连接被服务器拒绝 或者 目的地址不可到达
-		if (err_no == ECONNREFUSED || err_no == EHOSTUNREACH)
+		if (err_no == ECONNREFUSED || err_no == EHOSTUNREACH || err_no == ECONNRESET)
 		{
 			return EnumRecvState::ENUM_RECV_STATE_INTERRUPT;
 		}
