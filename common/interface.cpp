@@ -30,6 +30,8 @@ namespace network
 				break;
 			}
 
+			GeneralSleep(g_CmdLine->AcceptSleepTime());
+
 			auto new_sock = sock->accept();
 			if (new_sock == nullptr) 
 			{

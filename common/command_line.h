@@ -23,6 +23,8 @@ namespace network
 		int ListenBacklog()const;
 		bool NoAccept()const;
 
+		int AcceptSleepTime()const;
+
 	private:
 		cmdline::parser parser_;
 	};
