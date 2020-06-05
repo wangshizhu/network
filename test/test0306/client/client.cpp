@@ -45,16 +45,30 @@ void MoreSendData(int sock_fd)
 {
 	while (true)
 	{
-		int i = 0;
-		std::cout << "enter send num:";
-		std::cin >> i;
+		
+		char input[128] = { 0 };
+		std::cout << "enter command:";
+		std::cin >> input;
 		if (std::cin.fail())
 		{
 			return;
 		}
-		for (int j = 0; j < i; ++j)
+		if (strncmp(input,"shutdown",8) == 0)
 		{
-			SendData(sock_fd);
+			std::cout << "shutdown" << std::endl;
+		}
+		else if (strncmp(input, "close", 5) == 0)
+		{
+			std::cout << "close" << std::endl;
+		}
+		else
+		{
+			int i = 0;
+			i = atoi(input);
+			for (int j = 0; j < i; ++j)
+			{
+				SendData(sock_fd);
+			}
 		}
 	}
 }
