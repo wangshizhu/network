@@ -70,7 +70,7 @@ void MoreSendData(int sock_fd)
 				continue;
 			}
 
-			sock->close();
+			sock->ShutDown(1);
 
 		}
 		else if (strncmp(input, "close", 5) == 0)
@@ -90,7 +90,7 @@ void MoreSendData(int sock_fd)
 				continue;
 			}
 
-			sock->ShutDown(1);
+			sock->close();
 		}
 		else
 		{
