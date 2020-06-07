@@ -23,6 +23,10 @@ namespace network
 
 		int agr_send_num = g_CmdLine->SendByteNum();
 		int send_num = write_pos_ - read_pos_;
+		if (agr_send_num > send_num)
+		{
+			agr_send_num = send_num;
+		}
 
 		int sent = sock->Send((uint8*)&data_[read_pos_], agr_send_num > 0 ? agr_send_num : send_num);
 		if (sent < 0)
