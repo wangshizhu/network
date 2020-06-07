@@ -34,6 +34,8 @@ namespace network
 			return false;
 		}
 
+		DEBUG_INFO("Session init,sock:{0}",sock->GetSocket());
+
 		reader_ = std::make_unique<PacketReader>(sock);
 		sock_ = sock;
 		proto_ = proto;
