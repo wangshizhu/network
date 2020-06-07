@@ -1,4 +1,5 @@
 #include "packet_sender.h"
+#include "command_line.h"
 
 namespace network
 {
@@ -20,7 +21,10 @@ namespace network
 			return EnumReason::ENUM_INVALID_VARIABLE;
 		}
 
-		int sent = sock->Send((uint8*)&data_[read_pos_],write_pos_ - read_pos_);
+		int agr_send_num = g_CmdLine->SendByteNum();
+		int send_num = write_pos_ - read_pos_;
+
+		int sent = sock->Send((uint8*)&data_[read_pos_], agr_send_num > 0 ? agr_send_num : send_num);
 		if (sent < 0)
 		{
 			return EnumReason::ENUM_SEND_FAILED;

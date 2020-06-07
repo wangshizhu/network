@@ -68,6 +68,8 @@ namespace network
 
 	void Session::ProcessRecvMsg()
 	{
+		GeneralSleep(g_CmdLine->HandleSleepTime());
+
 		while (true)
 		{
 			EnumReason reason = reader_->ProcessMsg();
@@ -75,8 +77,6 @@ namespace network
 			{
 				return;
 			}
-
-			GeneralSleep(g_CmdLine->HandleSleepTime());
 
 			MessageCenter::GetInstancePtr()->HandleMsg(this,reader_->GetMsgId(), reader_->GetMsgBodyAddr(), reader_->GetMsgLength());
 

@@ -55,9 +55,8 @@ void MoreSendData(int sock_fd)
 		}
 		if (strncmp(input,"shutdown",8) == 0)
 		{
-			std::cout << "shutdown command:"<< input << std::endl;
-
 			int sock_fd = atoi(&input[8]);
+			std::cout << "shutdown command:"<< input <<" socket fd:"<<sock_fd<< std::endl;
 
 			auto session = g_network_center->GetSession(sock_fd);
 			if (session == nullptr)
@@ -75,9 +74,9 @@ void MoreSendData(int sock_fd)
 		}
 		else if (strncmp(input, "close", 5) == 0)
 		{
-			std::cout << "close command:"<<input << std::endl;
-
 			int sock_fd = atoi(&input[5]);
+
+			std::cout << "close command:"<<input << " socket fd:" << sock_fd << std::endl;
 
 			auto session = g_network_center->GetSession(sock_fd);
 			if (session == nullptr)

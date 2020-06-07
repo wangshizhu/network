@@ -98,7 +98,10 @@ namespace network
 		}
 		if (len == 0)
 		{
-			OnGetError(sock->GetSocket());
+			if (!g_CmdLine->SkipEOF())
+			{
+				OnGetError(sock->GetSocket());
+			}
 			return INVALID;
 		}
 

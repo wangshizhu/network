@@ -25,9 +25,13 @@ namespace network
 
 		bool NoAccept()const;
 
+		bool SkipEOF()const;
+
 		int AcceptSleepTime()const;
 
 		int HandleSleepTime()const;
+
+		int SendByteNum()const;
 
 	private:
 		cmdline::parser parser_;
