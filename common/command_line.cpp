@@ -17,6 +17,7 @@ namespace network
 		parser_.add("help", '?', "show usage");
 		parser_.add("no_accept", '\0', "no invoke accept()");
 		parser_.add<int>("accept_sleep", '\0', "sleep time before accept(),unit:ms", false, 0);
+		parser_.add<int>("handle_sleep", '\0', "sleep time when recv a message on proto of user side,unit:ms", false, 0);
 
 		parser_.parse_check(argc, argv);
 	}
@@ -54,5 +55,10 @@ namespace network
 	int CommandLineParse::AcceptSleepTime()const
 	{
 		return parser_.get<int>("accept_sleep");
+	}
+
+	int CommandLineParse::HandleSleepTime() const 
+	{
+		return parser_.get<int>("handle_sleep");
 	}
 }

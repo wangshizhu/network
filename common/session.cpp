@@ -3,6 +3,7 @@
 #include "message_center.h"
 #include "interface.h"
 #include "log.h"
+#include "command_line.h"
 
 namespace network
 {
@@ -72,6 +73,9 @@ namespace network
 			{
 				return;
 			}
+
+			GeneralSleep(g_CmdLine->HandleSleepTime());
+
 			MessageCenter::GetInstancePtr()->HandleMsg(this,reader_->GetMsgId(), reader_->GetMsgBodyAddr(), reader_->GetMsgLength());
 
 			reader_->ProcessMsgDone();
@@ -99,6 +103,11 @@ namespace network
 		}
 
 		return sender_->ProcessMsg();
+	}
+
+	SharedSockType Session::GetSock()
+	{
+		return sock_;
 	}
 
 	bool Session::TryToCreateOutput()

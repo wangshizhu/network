@@ -28,6 +28,7 @@ namespace network
 		void ProcessRecvMsg();
 		void WriteMsg(uint8 const*const msg, MessageLength len);
 		EnumReason ProcessSendMsg();
+		SharedSockType GetSock();
 
 	private:
 		bool TryToCreateOutput();

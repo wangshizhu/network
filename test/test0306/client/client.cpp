@@ -55,11 +55,42 @@ void MoreSendData(int sock_fd)
 		}
 		if (strncmp(input,"shutdown",8) == 0)
 		{
-			std::cout << "shutdown" << std::endl;
+			std::cout << "shutdown command:"<< input << std::endl;
+
+			int sock_fd = atoi(&input[8]);
+
+			auto session = g_network_center->GetSession(sock_fd);
+			if (session == nullptr)
+			{
+				continue;
+			}
+			auto sock = session->GetSock();
+			if (sock == nullptr)
+			{
+				continue;
+			}
+
+			sock->close();
+
 		}
 		else if (strncmp(input, "close", 5) == 0)
 		{
-			std::cout << "close" << std::endl;
+			std::cout << "close command:"<<input << std::endl;
+
+			int sock_fd = atoi(&input[5]);
+
+			auto session = g_network_center->GetSession(sock_fd);
+			if (session == nullptr)
+			{
+				continue;
+			}
+			auto sock = session->GetSock();
+			if (sock == nullptr)
+			{
+				continue;
+			}
+
+			sock->ShutDown(1);
 		}
 		else
 		{

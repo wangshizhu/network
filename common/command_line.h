@@ -14,6 +14,7 @@ namespace network
 
 	public:
 		void Parse(int argc, char **argv);
+
 		const char* Ip();
 		const u_int16_t Port();
 
@@ -21,9 +22,12 @@ namespace network
 		const u_int16_t DestPort();
 
 		int ListenBacklog()const;
+
 		bool NoAccept()const;
 
 		int AcceptSleepTime()const;
+
+		int HandleSleepTime()const;
 
 	private:
 		cmdline::parser parser_;
