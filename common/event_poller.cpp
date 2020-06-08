@@ -288,6 +288,16 @@ int network::SelectPoller::ProcessEvent()
 
 void network::SelectPoller::HandleReadyFd(int& ready_num, fd_set& read_fds, fd_set& write_fds)
 {
+	static int tick_num = 0;
+	DEBUG_INFO("last valid event num:{0}",tick_num);
+	if (tick_num >= 1000000)
+	{
+		tick_num = 0;
+	}
+	++tick_num;
+
+	DEBUG_INFO("this valid event num:{0}", tick_num);
+
 #if GENERAL_PLATFORM == PLATFORM_WIN32
 	for (unsigned i = 0; i < read_fds.fd_count; ++i)
 	{
