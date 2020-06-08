@@ -288,26 +288,10 @@ int network::SelectPoller::ProcessEvent()
 
 void network::SelectPoller::HandleReadyFd(int& ready_num, fd_set& read_fds, fd_set& write_fds)
 {
-	static int tick_num = 0;
-	bool b = false;
 
 #if GENERAL_PLATFORM == PLATFORM_WIN32
 	for (unsigned i = 0; i < read_fds.fd_count; ++i)
 	{
-		if (!b)
-		{
-			DEBUG_INFO("last valid event num:{0}", tick_num);
-			if (tick_num >= 1000000)
-			{
-				tick_num = 0;
-			}
-
-			++tick_num;
-
-			DEBUG_INFO("this valid event num:{0}", tick_num);
-			b = true;
-		}
-
 		int fd = read_fds.fd_array[i];
 		--ready_num;
 		this->ProcessRead(fd);
@@ -315,20 +299,6 @@ void network::SelectPoller::HandleReadyFd(int& ready_num, fd_set& read_fds, fd_s
 
 	for (unsigned i = 0; i < write_fds.fd_count; ++i)
 	{
-		if (!b)
-		{
-			DEBUG_INFO("last valid event num:{0}", tick_num);
-			if (tick_num >= 1000000)
-			{
-				tick_num = 0;
-			}
-
-			++tick_num;
-
-			DEBUG_INFO("this valid event num:{0}", tick_num);
-			b = true;
-		}
-
 		int fd = write_fds.fd_array[i];
 		--ready_num;
 		this->ProcessWrite(fd);
@@ -339,39 +309,12 @@ void network::SelectPoller::HandleReadyFd(int& ready_num, fd_set& read_fds, fd_s
 	{
 		if (FD_ISSET(fd, &read_fds))
 		{
-			if (!b)
-			{
-				DEBUG_INFO("last valid event num:{0}", tick_num);
-				if (tick_num >= 1000000)
-				{
-					tick_num = 0;
-				}
-
-				++tick_num;
-
-				DEBUG_INFO("this valid event num:{0}", tick_num);
-				b = true;
-			}
-
 			--ready_num;
 			this->ProcessRead(fd);
 		}
 
 		if (FD_ISSET(fd, &write_fds))
 		{
-			if (!b)
-			{
-				DEBUG_INFO("last valid event num:{0}", tick_num);
-				if (tick_num >= 1000000)
-				{
-					tick_num = 0;
-				}
-
-				++tick_num;
-
-				DEBUG_INFO("this valid event num:{0}", tick_num);
-				b = true;
-}
 			--ready_num;
 			this->ProcessWrite(fd);
 		}
