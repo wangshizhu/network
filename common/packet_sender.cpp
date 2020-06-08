@@ -39,6 +39,7 @@ namespace network
 		}
 
 		read_pos_ += sent;
+		DEBUG_INFO("send data fd:{0},sent len:{1}\n", sock->GetSocket(),sent);
 
 		return EnumReason::ENUM_SUCCESS;
 	}

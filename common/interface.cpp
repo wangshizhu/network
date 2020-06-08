@@ -187,7 +187,6 @@ namespace network
 			OnGetError(sock->GetSocket());
 			return;
 		}
-		DEBUG_INFO("send data fd:{0}\n", sock->GetSocket());
 	}
 
 	EnumReason TcpPacketOutputHandler::CatchSockError()
