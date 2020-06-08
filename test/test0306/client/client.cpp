@@ -11,6 +11,12 @@
 #include "../src/player_manager.h"
 #include "../../../common/log.h"
 
+static void sig_pipe(int signo) 
+{ 
+	std::cout << "find a sig:" << signo << std::endl;
+	exit(0);
+}
+
 void SendData(int sock_fd)
 {
 	Msg2 msg;
@@ -107,6 +113,9 @@ int main(int argc, char **argv)
 {
 
 	{
+#if GENERAL_PLATFORM == UNIX_FLAVOUR_LINUX
+		signal(SIGPIPE, sig_pipe);
+#endif
 		network::CommandLineParse cmd_line;
 		cmd_line.Parse(argc, argv);
 
