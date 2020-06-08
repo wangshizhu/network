@@ -28,7 +28,7 @@ void PlayerManager::Msg2Handler(network::Session* session, network::BuffMsgBase*
 	MsgS2C0407 resp;
 	resp.id = 512;
 
-	network::MessageCenter::GetInstancePtr()->SerializationMsgToMemory(&resp, session);
+	//network::MessageCenter::GetInstancePtr()->SerializationMsgToMemory(&resp, session);
 }
 
 void PlayerManager::MsgS2C0407Handler(network::Session* session, network::BuffMsgBase* msg)
