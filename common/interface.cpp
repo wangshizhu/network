@@ -98,7 +98,6 @@ namespace network
 		}
 		if (len == 0)
 		{
-			DEBUG_INFO("EOF fd:{0}\n", sock->GetSocket());
 			if (!g_CmdLine->SkipEOF())
 			{
 				OnGetError(sock->GetSocket());
