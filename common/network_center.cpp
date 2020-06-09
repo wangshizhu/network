@@ -185,6 +185,7 @@ namespace network
 
 		// ÉèÖÃ·Ç×èÈû
 		sock->SetNonBlocking(true);
+		sock->SetLinger(1,0);
 
 		SharedSessionType session = std::make_shared<Session>();
 		if (!session->Init(sock, (short)EnumIpProto::ENUM_TCP))
