@@ -128,7 +128,7 @@ namespace network
 			return EnumRecvState::ENUM_RECV_STATE_BREAK;
 		}
 		// 连接被服务器拒绝 或者 目的地址不可到达
-		if (err_no == ECONNREFUSED || err_no == EHOSTUNREACH || err_no == ECONNRESET)
+		if (err_no == ECONNREFUSED || err_no == EHOSTUNREACH)
 		{
 			return EnumRecvState::ENUM_RECV_STATE_INTERRUPT;
 		}
@@ -215,7 +215,6 @@ namespace network
 		case ECONNREFUSED:	return EnumReason::ENUM_NO_SUCH_PORT;
 		case EAGAIN:		return EnumReason::ENUM_SEND_CONTINUE;
 		case EPIPE:			return EnumReason::ENUM_CLIENT_DISCONNECTED;
-		case ECONNRESET:	return EnumReason::ENUM_CLIENT_DISCONNECTED;
 		case ENOBUFS:		return EnumReason::ENUM_TRANSMIT_QUEUE_FULL;
 		default:			return EnumReason::ENUM_GENERAL_NETWORK;
 		}
