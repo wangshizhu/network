@@ -33,6 +33,10 @@ namespace network
 
 		int SendByteNum()const;
 
+		bool IgnoreRST()const;
+
+		int Linger()const;
+
 	private:
 		cmdline::parser parser_;
 	};

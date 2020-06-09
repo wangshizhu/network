@@ -1,4 +1,5 @@
 #include "network_center.h"
+#include "command_line.h"
 
 namespace network
 {
@@ -185,7 +186,12 @@ namespace network
 
 		// ÉèÖÃ·Ç×èÈû
 		sock->SetNonBlocking(true);
-		sock->SetLinger(1,0);
+
+		int linger_val = g_CmdLine->Linger();
+		if (linger_val >= 0)
+		{
+			sock->SetLinger(1, linger_val);
+		}
 
 		SharedSessionType session = std::make_shared<Session>();
 		if (!session->Init(sock, (short)EnumIpProto::ENUM_TCP))

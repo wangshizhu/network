@@ -128,7 +128,7 @@ namespace network
 			return EnumRecvState::ENUM_RECV_STATE_BREAK;
 		}
 		// 连接被服务器拒绝 或者 目的地址不可到达
-		if (err_no == ECONNREFUSED || err_no == EHOSTUNREACH)
+		if (err_no == ECONNREFUSED || err_no == EHOSTUNREACH || (err_no == ECONNRESET && !g_CmdLine->IgnoreRST()))
 		{
 			return EnumRecvState::ENUM_RECV_STATE_INTERRUPT;
 		}
@@ -137,7 +137,7 @@ namespace network
 		{
 			return EnumRecvState::ENUM_RECV_STATE_BREAK;
 		}
-		if (err_no == WSAECONNRESET || err_no == WSAECONNABORTED)
+		if ((err_no == WSAECONNRESET && !g_CmdLine->IgnoreRST()) || err_no == WSAECONNABORTED)
 		{
 			return EnumRecvState::ENUM_RECV_STATE_INTERRUPT;
 		}
@@ -205,7 +205,7 @@ namespace network
 		case WSAEWOULDBLOCK: return EnumReason::ENUM_SEND_CONTINUE;
 		case WSAEINTR: return EnumReason::ENUM_SEND_CONTINUE;
 		case WSAECONNREFUSED: return EnumReason::ENUM_NO_SUCH_PORT;
-		case WSAECONNRESET:	return EnumReason::ENUM_CLIENT_DISCONNECTED;
+		case WSAECONNRESET:	return g_CmdLine->IgnoreRST() ? EnumReason::ENUM_GENERAL_NETWORK:EnumReason::ENUM_CLIENT_DISCONNECTED;
 		case WSAECONNABORTED: return EnumReason::ENUM_CLIENT_DISCONNECTED;
 		default: return EnumReason::ENUM_GENERAL_NETWORK;
 		}
@@ -215,6 +215,7 @@ namespace network
 		case ECONNREFUSED:	return EnumReason::ENUM_NO_SUCH_PORT;
 		case EAGAIN:		return EnumReason::ENUM_SEND_CONTINUE;
 		case EPIPE:			return EnumReason::ENUM_CLIENT_DISCONNECTED;
+		case ECONNRESET:	return g_CmdLine->IgnoreRST() ? EnumReason::ENUM_GENERAL_NETWORK : EnumReason::ENUM_CLIENT_DISCONNECTED;
 		case ENOBUFS:		return EnumReason::ENUM_TRANSMIT_QUEUE_FULL;
 		default:			return EnumReason::ENUM_GENERAL_NETWORK;
 		}
