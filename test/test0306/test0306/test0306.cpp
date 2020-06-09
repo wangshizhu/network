@@ -11,7 +11,7 @@
 
 static void sig_pipe(int signo)
 {
-	std::cout << "find a sig:" << signo << std::endl;
+	std::cout << "catch a sig:" << signo << std::endl;
 	exit(0);
 }
 

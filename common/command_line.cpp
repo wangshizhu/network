@@ -20,8 +20,8 @@ namespace network
 		parser_.add("ignore_RST",'\0', "Ignore RST err no,using it can test write data when recv a RST");
 		parser_.add<int>("accept_sleep", '\0', "sleep time before accept(),unit:ms", false, 0);
 		parser_.add<int>("handle_sleep", '\0', "sleep time when recv a message on proto of user side,unit:ms", false, 0);
-		parser_.add<int>("send_byte_num", '\0', "send byte num from the memory per tick,0 is all,\n\t\t\t\t >0 is num", false, 0);
-		parser_.add<int>("linger", '\0', "this arg is the second arg of linger,\n\t\t\t\t <0 dont set linger,>0 set linger, and the first arg is 1,the second arg is that you give", false, -1);
+		parser_.add<int>("send_byte_num", '\0', "send byte num from the memory per tick,0 is all,\n\t\t\t >0 is num", false, 0);
+		parser_.add<int>("linger", '\0', "this arg is the second arg of linger,\n\t\t\t <0 dont set linger,>0 set linger, and the first arg is 1,\n\t\t\tthe second arg is that you give", false, -1);
 
 		parser_.parse_check(argc, argv);
 	}
