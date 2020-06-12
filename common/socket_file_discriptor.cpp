@@ -131,6 +131,12 @@ int network::SocketWrapper::SetNoDelay(bool nodelay)
 	return setsockopt(socket_, IPPROTO_TCP, TCP_NODELAY, (char*)&arg, sizeof(int));
 }
 
+int network::SocketWrapper::SetReuseAddr(bool onoff)
+{
+	int on = onoff ? 1 : 0;
+	return setsockopt(socket_, SOL_SOCKET, SO_REUSEADDR, (char*)&on, sizeof(on));
+}
+
 int network::SocketWrapper::SetLinger(uint16 onoff, uint16 linger)
 {
 	struct linger l = { 0 };

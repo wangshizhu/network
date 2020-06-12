@@ -25,6 +25,8 @@ namespace network
 
 		bool NoAccept()const;
 
+		bool ReuseAddr()const;
+
 		bool SkipEOF()const;
 
 		int AcceptSleepTime()const;

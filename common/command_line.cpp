@@ -15,6 +15,7 @@ namespace network
 		parser_.add<u_int16_t>("dest_port", '\0', "dest port number", false, 5700, cmdline::range(1, 65535));
 		parser_.add<int>("listen_backlog", '\0', "listen backlog", false, 0);
 		parser_.add("help", '?', "show usage");
+		parser_.add("reuse_addr", '\0', "open reuse addr");
 		parser_.add("no_accept", '\0', "no invoke accept()");
 		parser_.add("skip_EOF", '\0', "no handle EOF message");
 		parser_.add("ignore_RST",'\0', "Ignore RST err no,using it can test write data when recv a RST");
@@ -54,6 +55,11 @@ namespace network
 	bool CommandLineParse::NoAccept()const
 	{
 		return parser_.exist("no_accept");
+	}
+
+	bool CommandLineParse::ReuseAddr()const
+	{
+		return parser_.exist("reuse_addr");
 	}
 
 	bool CommandLineParse::SkipEOF()const

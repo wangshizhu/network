@@ -73,6 +73,8 @@ namespace network
 		// ÉèÖÃ·Ç×èÈû
 		sock->SetNonBlocking(true);
 
+		sock->SetReuseAddr(g_CmdLine->ReuseAddr());
+
 		// ½ûÓÃNagle
 		sock->SetNoDelay();
 

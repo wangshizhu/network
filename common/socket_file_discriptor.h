@@ -25,6 +25,7 @@ namespace network
 		std::shared_ptr<SocketWrapper> accept();
 		int SetNonBlocking(bool nonblocking);
 		int SetNoDelay(bool nodelay = true);
+		int SetReuseAddr(bool onoff);
 		int SetLinger(uint16 onoff, uint16 linger);
 		int close();
 		int ShutDown(int howto);
