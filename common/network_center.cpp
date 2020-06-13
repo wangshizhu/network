@@ -172,13 +172,13 @@ namespace network
 			return 0;
 		}
 
+		sock->SetReuseAddr(g_CmdLine->ReuseAddr());
+
 		if (sock->bind() < 0)
 		{
-			ERROR_INFO("bind faild");
+			ERROR_INFO("bind faild errno:{0}", CatchLastError());
 			return 0;
 		}
-
-		sock->SetReuseAddr(g_CmdLine->ReuseAddr());
 
 		// ½ûÓÃNagle
 		sock->SetNoDelay();
