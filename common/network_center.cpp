@@ -124,6 +124,8 @@ namespace network
 			return 0;
 		}
 
+		sock->SetReuseAddr(g_CmdLine->ReuseAddr());
+
 		// ½ûÓÃNagle
 		sock->SetNoDelay();
 
@@ -175,6 +177,8 @@ namespace network
 			ERROR_INFO("bind faild");
 			return 0;
 		}
+
+		sock->SetReuseAddr(g_CmdLine->ReuseAddr());
 
 		// ½ûÓÃNagle
 		sock->SetNoDelay();
