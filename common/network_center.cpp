@@ -75,6 +75,8 @@ namespace network
 		// ½ûÓÃNagle
 		sock->SetNoDelay();
 
+		sock->SetReuseAddr(true);
+
 		if (sock->Bind() < 0)
 		{
 			ERROR_INFO("bind faild");

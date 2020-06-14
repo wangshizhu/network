@@ -130,6 +130,12 @@ int network::SocketWrapper::SetLinger(uint16 onoff, uint16 linger)
 	return setsockopt(socket_, SOL_SOCKET, SO_LINGER, (const char *)&l, sizeof(l));
 }
 
+int network::SocketWrapper::SetReuseAddr(bool onoff)
+{
+	int on = onoff ? 1 : 0;
+	return setsockopt(socket_, SOL_SOCKET, SO_REUSEADDR, (char*)&on, sizeof(on));
+}
+
 int network::SocketWrapper::GetSocket()
 {
 	return socket_;

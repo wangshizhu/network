@@ -26,6 +26,7 @@ namespace network
 		int SetNonBlocking(bool nonblocking);
 		int SetNoDelay(bool nodelay = true);
 		int SetLinger(uint16 onoff, uint16 linger);
+		int SetReuseAddr(bool onoff);
 		int Close();
 		int Recv(void* gram_data, int gram_size);
 		void SetSocket(GENERALSOCKET sock);
