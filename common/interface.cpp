@@ -24,7 +24,7 @@ namespace network
 		int tick_num = 0;
 		while (tick_num++ < 256)
 		{
-			auto new_sock = sock->accept();
+			auto new_sock = sock->Accept();
 			if (new_sock == nullptr) 
 			{
 				DEBUG_INFO("accept invalid socket tick_num:{0}",tick_num);

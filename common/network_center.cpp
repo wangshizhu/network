@@ -75,13 +75,13 @@ namespace network
 		// ½ûÓÃNagle
 		sock->SetNoDelay();
 
-		if (sock->bind() < 0)
+		if (sock->Bind() < 0)
 		{
 			ERROR_INFO("bind faild");
 			return 0;
 		}
 
-		if (sock->listen() < 0)
+		if (sock->Listen() < 0)
 		{
 			ERROR_INFO("listen faild");
 			return 0;

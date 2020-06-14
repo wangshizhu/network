@@ -16,7 +16,7 @@ namespace network
 		}
 
 		uint8* data = new uint8[max_recv_size];
-		int len = sock->recv(data, max_recv_size);
+		int len = sock->Recv(data, max_recv_size);
 		if (len <= 0)
 		{
 			SAFE_RELEASE_ARRAY(data);
