@@ -11,7 +11,7 @@
 
 static void sig_pipe(int signo)
 {
-	std::cout << "catch a sig:" << signo << std::endl;
+	LOG_INFO("catch a sig:{0}", signo);
 }
 
 int main(int argc, char **argv)
