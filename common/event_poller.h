@@ -4,7 +4,7 @@
 #include "network_center.h"
 #include "interface.h"
 
-#define POLL_INIT_SIZE 3000
+#define POLL_INIT_SIZE 1000
 
 namespace network
 {

@@ -429,7 +429,7 @@ int network::PollPoller::ProcessEvent()
 				continue;
 			}
 
-			if (event_set_[i].revents & (POLLRDNORM))
+			if (event_set_[i].revents & (POLLIN))
 			{
 				this->ProcessRead(sock_fd);
 			}
