@@ -24,6 +24,7 @@
 #define _SCL_SECURE_NO_WARNINGS
 #else
 // linux include
+#include <poll.h>
 #include <errno.h>
 #include <float.h>
 #include <pthread.h>	
