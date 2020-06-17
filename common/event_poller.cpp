@@ -390,7 +390,7 @@ bool network::PollPoller::RegisterWrite(int fd, SharedOutputHandlerType handler)
 	}
 
 	event_set_[index].fd = fd;
-	event_set_[index].events |= POLLWRNORM;
+	event_set_[index].events |= POLLOUT;
 
 	EventPoller::RegisterWrite(fd, handler);
 
@@ -408,7 +408,7 @@ bool network::PollPoller::DeregisterWrite(int fd)
 	}
 
 	event_set_[index].fd = fd;
-	event_set_[index].events ^= POLLWRNORM;
+	event_set_[index].events ^= POLLOUT;
 
 	return true;
 }
@@ -433,7 +433,7 @@ int network::PollPoller::ProcessEvent()
 			{
 				this->ProcessRead(sock_fd);
 			}
-			if (event_set_[i].revents & (POLLWRNORM))
+			if (event_set_[i].revents & (POLLOUT))
 			{
 				this->ProcessWrite(sock_fd);
 			}
