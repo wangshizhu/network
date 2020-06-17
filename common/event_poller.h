@@ -76,6 +76,7 @@ namespace network
 		virtual int ProcessEvent() override;
 
 	private:
+		bool HandleFdEvent(struct pollfd& fd_event);
 		const int GetIndexInBinaryFind(int dest_fd);
 
 	private:

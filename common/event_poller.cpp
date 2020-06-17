@@ -421,27 +421,39 @@ int network::PollPoller::ProcessEvent()
 
 	if (num > 0)
 	{
-		for (int i = 0;i < POLL_INIT_SIZE;i++)
+		std::size_t i = 0;
+		std::size_t j = POLL_INIT_SIZE - 1;
+
+		while (true)
 		{
-			int sock_fd = event_set_[i].fd;
-			if (sock_fd < 0)
-			{
-				continue;
-			}
-
-			if (event_set_[i].revents & (POLLIN))
-			{
-				this->ProcessRead(sock_fd);
-			}
-			if (event_set_[i].revents & (POLLOUT))
-			{
-				this->ProcessWrite(sock_fd);
-			}
-
-			if (--num <= 0)
+			if (j < i)
 			{
 				break;
 			}
+
+			if (HandleFdEvent(event_set_[i]))
+			{
+				if (--num <= 0)
+				{
+					break;
+				}
+			}
+
+			if (i == j)
+			{
+				break;
+			}
+
+			if (HandleFdEvent(event_set_[j]))
+			{
+				if (--num <= 0)
+				{
+					break;
+				}
+			}
+
+			++i;
+			--j;
 		}
 	}
 	else if (num == -1)
@@ -451,6 +463,23 @@ int network::PollPoller::ProcessEvent()
 	}
 
 	return 0;
+}
+
+bool network::PollPoller::HandleFdEvent(struct pollfd& fd_event)
+{
+	bool have = false;
+	if (fd_event.revents & (POLLIN))
+	{
+		this->ProcessRead(sock_fd);
+		have = true;
+	}
+	if (fd_event.revents & (POLLOUT))
+	{
+		this->ProcessWrite(sock_fd);
+		have = true;
+	}
+
+	return have;
 }
 
 const int network::PollPoller::GetIndexInBinaryFind(int dest_fd)
