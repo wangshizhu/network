@@ -140,6 +140,7 @@
     <ClInclude Include="socket_file_discriptor.h" />
     <ClInclude Include="string_util.h" />
     <ClInclude Include="test_msg_define.h" />
+    <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\lib\format.cpp" />

@@ -320,3 +320,162 @@ void network::SelectPoller::HandleReadyFd(int& ready_num, fd_set& read_fds, fd_s
 	}
 #endif
 }
+
+#if GENERAL_PLATFORM == UNIX_FLAVOUR_LINUX
+network::PollPoller::PollPoller()
+{
+	for (int i = 0;i<POLL_INIT_SIZE;i++)
+	{
+		event_set_[i].fd = -1;
+	}
+}
+
+network::PollPoller::~PollPoller()
+{
+
+}
+
+bool network::PollPoller::RegisterRead(int fd, SharedInputHandlerType handler)
+{
+	int index = GetIndexInBinaryFind(fd);
+	if (index == -1)
+	{
+		int empty_fd = -1;
+		index = GetIndexInBinaryFind(empty_fd);
+	}
+
+	if (index == -1)
+	{
+		return false;
+	}
+
+	event_set_[index].fd = fd;
+	event_set_[index].events |= POLLRDNORM;
+
+	EventPoller::RegisterRead(fd, handler);
+
+	return true;
+}
+
+bool network::PollPoller::DeregisterRead(int fd)
+{
+	EventPoller::DeregisterRead(fd);
+
+	int index = GetIndexInBinaryFind(fd);
+	if (index == -1)
+	{
+		return false;
+	}
+
+	event_set_[index].fd = fd;
+	event_set_[index].events ^= POLLRDNORM;
+
+	return true;
+}
+
+bool network::PollPoller::RegisterWrite(int fd, SharedOutputHandlerType handler)
+{
+	int index = GetIndexInBinaryFind(fd);
+	if (index == -1)
+	{
+		int empty_fd = -1;
+		index = GetIndexInBinaryFind(empty_fd);
+	}
+
+	if (index == -1)
+	{
+		return false;
+	}
+
+	event_set_[index].fd = fd;
+	event_set_[index].events |= POLLWRNORM;
+
+	EventPoller::RegisterWrite(fd, handler);
+
+	return true;
+}
+
+bool network::PollPoller::DeregisterWrite(int fd)
+{
+	EventPoller::DeregisterWrite(fd);
+
+	int index = GetIndexInBinaryFind(fd);
+	if (index == -1)
+	{
+		return false;
+	}
+
+	event_set_[index].fd = fd;
+	event_set_[index].events ^= POLLWRNORM;
+
+	return true;
+}
+
+int network::PollPoller::ProcessEvent()
+{
+	int poll_timeout = 100;
+	
+	int num = ::poll(event_set_,POLL_INIT_SIZE, poll_timeout);
+
+	if (num > 0)
+	{
+		for (int i = 0;i < POLL_INIT_SIZE;i++)
+		{
+			int sock_fd = event_set_[i].fd;
+			if (sock_fd < 0)
+			{
+				continue;
+			}
+
+			if (event_set_[i].revents & (POLLRDNORM))
+			{
+				this->ProcessRead(sock_fd);
+			}
+			if (event_set_[i].revents & (POLLWRNORM))
+			{
+				this->ProcessWrite(sock_fd);
+			}
+
+			if (--num <= 0)
+			{
+				break;
+			}
+		}
+	}
+
+	return 0;
+}
+
+const int network::PollPoller::GetIndexInBinaryFind(int dest_fd)
+{
+	std::size_t i = 0;
+	std::size_t j = POLL_INIT_SIZE - 1;
+
+	while (true)
+	{
+		if (j < i)
+		{
+			return -1;
+		}
+		if (event_set_[i].fd == dest_fd)
+		{
+			return i;
+		}
+		if (i == j)
+		{
+			return -1;
+		}
+		if (event_set_[j].fd == dest_fd)
+		{
+			return j;
+		}
+
+		++i;
+		--j;
+	}
+
+	return -1;
+}
+
+#endif
+

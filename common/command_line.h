@@ -17,6 +17,8 @@ namespace network
 		const char* Ip();
 		const u_int16_t Port();
 
+		const int IOModel();
+
 	private:
 		cmdline::parser parser_;
 	};
