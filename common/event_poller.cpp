@@ -470,12 +470,12 @@ bool network::PollPoller::HandleFdEvent(struct pollfd& fd_event)
 	bool have = false;
 	if (fd_event.revents & (POLLIN))
 	{
-		this->ProcessRead(sock_fd);
+		this->ProcessRead(fd_event.fd);
 		have = true;
 	}
 	if (fd_event.revents & (POLLOUT))
 	{
-		this->ProcessWrite(sock_fd);
+		this->ProcessWrite(fd_event.fd);
 		have = true;
 	}
 
