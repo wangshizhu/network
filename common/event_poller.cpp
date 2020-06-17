@@ -327,6 +327,8 @@ network::PollPoller::PollPoller()
 	for (int i = 0;i<POLL_INIT_SIZE;i++)
 	{
 		event_set_[i].fd = -1;
+		event_set_[i].events = 0;
+		event_set_[i].revents = 0;
 	}
 }
 
