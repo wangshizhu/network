@@ -350,7 +350,7 @@ bool network::PollPoller::RegisterRead(int fd, SharedInputHandlerType handler)
 	}
 
 	event_set_[index].fd = fd;
-	event_set_[index].events |= POLLRDNORM;
+	event_set_[index].events |= POLLIN;
 
 	EventPoller::RegisterRead(fd, handler);
 
@@ -368,7 +368,7 @@ bool network::PollPoller::DeregisterRead(int fd)
 	}
 
 	event_set_[index].fd = fd;
-	event_set_[index].events ^= POLLRDNORM;
+	event_set_[index].events ^= POLLIN;
 
 	return true;
 }
@@ -441,6 +441,11 @@ int network::PollPoller::ProcessEvent()
 				break;
 			}
 		}
+	}
+	else if (num == -1)
+	{
+		int err_no = CatchLastError();
+		ERROR_INFO("poll return value:{0}", err_no);
 	}
 
 	return 0;
