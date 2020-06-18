@@ -477,7 +477,7 @@ bool network::PollPoller::HandleFdEvent(struct pollfd& fd_event)
 	{
 		have = true;
 
-		this->ProcessError(fd_event.fd)
+		this->ProcessError(fd_event.fd);
 
 		return have;
 	}
