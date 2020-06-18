@@ -5,6 +5,7 @@
 #include "interface.h"
 
 #define POLL_INIT_SIZE 1000
+#define EPOLL_EVENT_SIZE 10
 
 namespace network
 {
@@ -27,6 +28,8 @@ namespace network
 		bool ProcessRead(int fd);
 		bool ProcessWrite(int fd);
 		bool ProcessError(int fd);
+
+		bool IsRegistered(int fd, bool is_read)const;
 
 	private:
 		InputMapType in_map;
@@ -81,6 +84,26 @@ namespace network
 
 	private:
 		struct pollfd event_set_[POLL_INIT_SIZE];
+	};
+
+	class EpollPoller : public EventPoller
+	{
+	public:
+		EpollPoller();
+		~EpollPoller();
+
+	public:
+		virtual bool RegisterRead(int fd, SharedInputHandlerType handler) override;
+		virtual bool DeregisterRead(int fd);
+		virtual bool RegisterWrite(int fd, SharedOutputHandlerType handler) override;
+		virtual bool DeregisterWrite(int fd) override;
+		virtual int ProcessEvent() override;
+
+	private:
+		bool RegisterEvent(int fd, bool is_read, bool is_register);
+
+	private:
+		int epoll_fd_;
 	};
 
 #endif

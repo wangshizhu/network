@@ -118,6 +118,11 @@ bool network::EventPoller::ProcessError(int fd)
 	return true;
 }
 
+bool network::EventPoller::IsRegistered(int fd, bool is_read)const
+{
+	return is_read ? (in_map.find(fd) != in_map.end()) : (out_map.find(fd) != out_map.end());
+}
+
 network::SelectPoller::SelectPoller():EventPoller(),fd_read_set_(),
 fd_write_set_(),fd_largest_(-1),fd_write_count_(0)
 {
@@ -468,6 +473,15 @@ int network::PollPoller::ProcessEvent()
 bool network::PollPoller::HandleFdEvent(struct pollfd& fd_event)
 {
 	bool have = false;
+	if (fd_event.revents  & (POLLERR | POLLHUP))
+	{
+		have = true;
+
+		this->ProcessError(fd_event.fd)
+
+		return have;
+	}
+
 	if (fd_event.revents & (POLLIN))
 	{
 		this->ProcessRead(fd_event.fd);
@@ -511,6 +525,130 @@ const int network::PollPoller::GetIndexInBinaryFind(int dest_fd)
 	}
 
 	return -1;
+}
+
+network::EpollPoller::EpollPoller():epoll_fd_(epoll_create(1))
+{
+	if (epoll_fd_ == -1)
+	{
+		ERROR_INFO("epoll create failed,err no:{0}", CatchLastError());
+	}
+}
+
+network::EpollPoller::~EpollPoller()
+{
+	if (epoll_fd_ != -1)
+	{
+		close(epoll_fd_);
+	}
+}
+
+bool network::EpollPoller::RegisterRead(int fd, SharedInputHandlerType handler)
+{
+	if (!RegisterEvent(fd,true,true))
+	{
+		return false;
+	}
+
+	EventPoller::RegisterRead(fd, handler);
+
+	return true;
+}
+
+bool network::EpollPoller::DeregisterRead(int fd)
+{
+	if (!RegisterEvent(fd, true, false))
+	{
+		return false;
+	}
+
+	EventPoller::DeregisterRead(fd);
+
+	return true;
+}
+
+bool network::EpollPoller::RegisterWrite(int fd, SharedOutputHandlerType handler)
+{
+	if (!RegisterEvent(fd, false, true))
+	{
+		return false;
+	}
+
+	EventPoller::RegisterWrite(fd, handler);
+
+	return true;
+}
+
+bool network::EpollPoller::DeregisterWrite(int fd)
+{
+	if (!RegisterEvent(fd, false, false))
+	{
+		return false;
+	}
+
+	EventPoller::DeregisterWrite(fd);
+
+	return true;
+}
+
+int network::EpollPoller::ProcessEvent()
+{
+	struct epoll_event events[EPOLL_EVENT_SIZE];
+
+	int num = epoll_wait(epoll_fd_, events, EPOLL_EVENT_SIZE, 100);
+
+	for (int i = 0; i < num; ++i)
+	{
+		if (events[i].events & (EPOLLERR | EPOLLHUP))
+		{
+			this->ProcessError(events[i].data.fd);
+		}
+		else
+		{
+			if (events[i].events & EPOLLIN)
+			{
+				this->ProcessRead(events[i].data.fd);
+			}
+
+			if (events[i].events & EPOLLOUT)
+			{
+				this->ProcessWrite(events[i].data.fd);
+			}
+		}
+	}
+
+	return num;
+}
+
+bool network::EpollPoller::RegisterEvent(int fd, bool is_read, bool is_register)
+{
+	struct epoll_event ev;
+	memset(&ev, 0, sizeof(ev));
+	ev.data.fd = fd;
+
+	int op;
+
+	if (this->IsRegistered(fd, !is_read))
+	{
+		op = EPOLL_CTL_MOD;
+
+		ev.events = is_register ? EPOLLIN | EPOLLOUT : is_read ? EPOLLOUT : EPOLLIN;
+	}
+	else
+	{
+		op = is_register ? EPOLL_CTL_ADD : EPOLL_CTL_DEL;
+
+		ev.events = is_read ? EPOLLIN : EPOLLOUT;
+	}
+
+	if (epoll_ctl(epoll_fd_, op, fd, &ev) < 0)
+	{
+		ERROR_INFO("register event failed,fd:{0},read or write:{1},register or deregister:{2}",fd,(int)is_read,(int)is_register);
+
+		return false;
+	}
+
+	return true;
 }
 
 #endif
