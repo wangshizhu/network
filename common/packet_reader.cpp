@@ -32,7 +32,7 @@ namespace network
 
 	EnumReason PacketReader::ProcessMsg()
 	{
-		if (read_pos_ >= write_pos_)
+		if (IsProcessCompleted())
 		{
 			return EnumReason::ENUM_NO_MSG_WAITING_PROCESS;
 		}

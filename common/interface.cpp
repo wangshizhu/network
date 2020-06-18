@@ -173,6 +173,10 @@ namespace network
 			OnGetError(sock->GetSocket());
 			return;
 		}
+		if (reason == ENUM_NO_MSG_WAITING_PROCESS)
+		{
+			NetWorkCenter::GetInstancePtr()->DeregisterWriteEvent(sock->GetSocket());
+		}
 	}
 
 	EnumReason TcpPacketOutputHandler::CatchSockError()

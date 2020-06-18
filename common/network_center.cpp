@@ -180,6 +180,11 @@ namespace network
 	void NetWorkCenter::DeregisterFd(int fd)
 	{
 		event_processor_->DeregisterRead(fd);
+		DeregisterWriteEvent(fd);
+	}
+
+	void NetWorkCenter::DeregisterWriteEvent(int fd)
+	{
 		event_processor_->DeregisterWrite(fd);
 	}
 

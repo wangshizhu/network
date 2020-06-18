@@ -67,24 +67,19 @@ int network::EventPoller::MaxFd()const
 
 bool network::EventPoller::ProcessRead(int fd)
 {
-	InputHandler* p = nullptr;
+	InputMapType::iterator it = in_map.find(fd);
+	if (it == in_map.end())
 	{
-		InputMapType::iterator it = in_map.find(fd);
-		if (it == in_map.end())
-		{
-			return false;
-		}
-
-		SharedInputHandlerType tmp = it->second.lock();
-		if (tmp == nullptr)
-		{
-			return false;
-		}
-		p = tmp.get();
+		return false;
 	}
-	
 
-	p->HandleInput(fd);
+	auto tmp = it->second.lock();
+	if (tmp == nullptr)
+	{
+		return false;
+	}
+
+	tmp->HandleInput(fd);
 
 	return true;
 }
@@ -191,6 +186,11 @@ bool network::SelectPoller::DeregisterRead(int fd)
 
 bool network::SelectPoller::RegisterWrite(int fd, SharedOutputHandlerType handler)
 {
+	if (IsRegistered(fd,false))
+	{
+		return false;
+	}
+
 #if GENERAL_PLATFORM != PLATFORM_WIN32
 	if ((fd < 0) || (FD_SETSIZE <= fd))
 	{
@@ -382,6 +382,11 @@ bool network::PollPoller::DeregisterRead(int fd)
 
 bool network::PollPoller::RegisterWrite(int fd, SharedOutputHandlerType handler)
 {
+	if (IsRegistered(fd, false))
+	{
+		return false;
+	}
+
 	int index = GetIndexInBinaryFind(fd);
 	if (index == -1)
 	{
@@ -569,6 +574,11 @@ bool network::EpollPoller::DeregisterRead(int fd)
 
 bool network::EpollPoller::RegisterWrite(int fd, SharedOutputHandlerType handler)
 {
+	if (IsRegistered(fd, false))
+	{
+		return false;
+	}
+
 	if (!RegisterEvent(fd, false, true))
 	{
 		return false;
