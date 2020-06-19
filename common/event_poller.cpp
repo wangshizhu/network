@@ -18,7 +18,13 @@ bool network::EventPoller::RegisterRead(int fd, SharedInputHandlerType handler)
 
 bool network::EventPoller::DeregisterRead(int fd)
 {
+	if (!IsRegistered(fd, false))
+	{
+		return false;
+	}
+
 	in_map.erase(fd);
+
 	return true;
 }
 
@@ -30,6 +36,11 @@ bool network::EventPoller::RegisterWrite(int fd, SharedOutputHandlerType handler
 
 bool network::EventPoller::DeregisterWrite(int fd)
 {
+	if (!IsRegistered(fd,false))
+	{
+		return false;
+	}
+	
 	out_map.erase(fd);
 	return true;
 }
@@ -160,7 +171,10 @@ bool network::SelectPoller::RegisterRead(int fd, SharedInputHandlerType handler)
 
 bool network::SelectPoller::DeregisterRead(int fd)
 {
-	EventPoller::DeregisterRead(fd);
+	if (!EventPoller::DeregisterRead(fd))
+	{
+		return false;
+	}
 
 #if GENERAL_PLATFORM != PLATFORM_WIN32
 	if ((fd < 0) || (FD_SETSIZE <= fd))
@@ -224,7 +238,10 @@ bool network::SelectPoller::RegisterWrite(int fd, SharedOutputHandlerType handle
 
 bool network::SelectPoller::DeregisterWrite(int fd)
 {
-	EventPoller::DeregisterWrite(fd);
+	if (!EventPoller::DeregisterWrite(fd))
+	{
+		return false;
+	}
 
 #if GENERAL_PLATFORM != PLATFORM_WIN32
 	if ((fd < 0) || (FD_SETSIZE <= fd))
@@ -366,7 +383,10 @@ bool network::PollPoller::RegisterRead(int fd, SharedInputHandlerType handler)
 
 bool network::PollPoller::DeregisterRead(int fd)
 {
-	EventPoller::DeregisterRead(fd);
+	if (!EventPoller::DeregisterRead(fd))
+	{
+		return false;
+	}
 
 	int index = GetIndexInBinaryFind(fd);
 	if (index == -1)
@@ -409,7 +429,10 @@ bool network::PollPoller::RegisterWrite(int fd, SharedOutputHandlerType handler)
 
 bool network::PollPoller::DeregisterWrite(int fd)
 {
-	EventPoller::DeregisterWrite(fd);
+	if (!EventPoller::DeregisterWrite(fd))
+	{
+		return false;
+	}
 
 	int index = GetIndexInBinaryFind(fd);
 	if (index == -1)
@@ -562,12 +585,15 @@ bool network::EpollPoller::RegisterRead(int fd, SharedInputHandlerType handler)
 
 bool network::EpollPoller::DeregisterRead(int fd)
 {
-	if (!RegisterEvent(fd, true, false))
+	if (!EventPoller::DeregisterRead(fd))
 	{
 		return false;
 	}
 
-	EventPoller::DeregisterRead(fd);
+	if (!RegisterEvent(fd, true, false))
+	{
+		return false;
+	}
 
 	return true;
 }
@@ -591,12 +617,15 @@ bool network::EpollPoller::RegisterWrite(int fd, SharedOutputHandlerType handler
 
 bool network::EpollPoller::DeregisterWrite(int fd)
 {
-	if (!RegisterEvent(fd, false, false))
+	if (!EventPoller::DeregisterWrite(fd))
 	{
 		return false;
 	}
 
-	EventPoller::DeregisterWrite(fd);
+	if (!RegisterEvent(fd, false, false))
+	{
+		return false;
+	}
 
 	return true;
 }
