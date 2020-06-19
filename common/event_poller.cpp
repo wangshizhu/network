@@ -18,7 +18,7 @@ bool network::EventPoller::RegisterRead(int fd, SharedInputHandlerType handler)
 
 bool network::EventPoller::DeregisterRead(int fd)
 {
-	if (!IsRegistered(fd, false))
+	if (!IsRegistered(fd, true))
 	{
 		return false;
 	}
