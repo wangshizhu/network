@@ -7,7 +7,7 @@
 
 namespace network
 {
-	Session::Session():sock_(nullptr),proto_(INVALID),input_(nullptr), reader_(nullptr),
+	Session::Session():sock_(nullptr),proto_(INVALID),input_(nullptr), output_(nullptr), reader_(nullptr),
 		sender_(nullptr)
 	{
 		
@@ -91,6 +91,15 @@ namespace network
 			return;
 		}
 
+		auto processor = NetWorkCenter::GetInstancePtr()->GetEventProcessor();
+		if (processor == nullptr)
+		{
+			ERROR_INFO("Please create processor first");
+			return;
+		}
+
+		processor->RegisterWrite(sock_->GetSocket(), output_);
+
 		TryToCreateSender();
 
 		sender_->WriteData(msg, len);
@@ -119,21 +128,7 @@ namespace network
 			return true;
 		}
 
-		auto processor = NetWorkCenter::GetInstancePtr()->GetEventProcessor();
-		if (processor == nullptr)
-		{
-			ERROR_INFO("Please create processor first");
-			return false;
-		}
-
-		SharedTcpPacketOutputType output = std::make_shared<TcpPacketOutputHandler>(shared_from_this(), sock_);
-		if (!processor->RegisterWrite(sock_->GetSocket(), output))
-		{
-			ERROR_INFO("register write failed,socket:{0}", sock_->GetSocket());
-			return false;
-		}
-
-		output_ = output;
+		output_ = std::make_shared<TcpPacketOutputHandler>(shared_from_this(), sock_);
 
 		return true;
 	}

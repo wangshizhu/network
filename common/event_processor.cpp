@@ -13,13 +13,19 @@ namespace network
 		}
 		else if (poller == (int)EnumPoller::POLL_POLLER)
 		{
+#if GENERAL_PLATFORM == UNIX_FLAVOUR_LINUX
+			poller_ = std::make_unique<PollPoller>();
+#endif
 		}
 		else if (poller == (int)EnumPoller::EPOLL_POLLER)
 		{
+#if GENERAL_PLATFORM == UNIX_FLAVOUR_LINUX
+			poller_ = std::make_unique<EpollPoller>();
+#endif
 		}
 		else
 		{
-
+			ERROR_INFO("unknow I/O model,arg:{0}",poller);
 		}
 	}
 

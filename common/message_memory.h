@@ -44,6 +44,11 @@ namespace network
 			return write_pos_;
 		}
 
+		bool IsProcessCompleted()const
+		{
+			return read_pos_ >= write_pos_;
+		}
+
 		uint8 const*const GetMsgBodyAddr()
 		{
 			return (uint8*)&data_[read_pos_ + MESSAGE_HEAD_SIZE];

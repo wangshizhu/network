@@ -95,7 +95,7 @@ void MoreSendData(int sock_fd)
 				continue;
 			}
 
-			sock->close();
+			sock->Close();
 		}
 		else
 		{

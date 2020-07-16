@@ -16,7 +16,7 @@ namespace network
 		}
 
 		uint8* data = new uint8[max_recv_size];
-		int len = sock->recv(data, max_recv_size);
+		int len = sock->Recv(data, max_recv_size);
 		if (len <= 0)
 		{
 			SAFE_RELEASE_ARRAY(data);
@@ -32,7 +32,7 @@ namespace network
 
 	EnumReason PacketReader::ProcessMsg()
 	{
-		if (read_pos_ >= write_pos_)
+		if (IsProcessCompleted())
 		{
 			return EnumReason::ENUM_NO_MSG_WAITING_PROCESS;
 		}

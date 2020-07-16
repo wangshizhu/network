@@ -26,7 +26,7 @@ network::SocketWrapper::SocketWrapper(const char* ip, u_int16_t port):
 network::SocketWrapper::~SocketWrapper()
 {
 	DEBUG_INFO("SocketWrapper have released fd:{0}\n", socket_);
-	close();
+	Close();
 }
 
 void network::SocketWrapper::CreateSocket(int type)
@@ -57,7 +57,7 @@ void network::SocketWrapper::InittdNetWork()
 #endif
 }
 
-int network::SocketWrapper::bind()
+int network::SocketWrapper::Bind()
 {
 	// °ó¶¨µ½portºÍip
 	struct sockaddr_in sock_addr;
@@ -72,7 +72,7 @@ int network::SocketWrapper::bind()
 	return ::bind(socket_, (struct sockaddr *) &sock_addr, sizeof(sock_addr));
 }
 
-int network::SocketWrapper::listen()
+int network::SocketWrapper::Listen()
 {
 	int backlog = g_CmdLine->ListenBacklog();
 	if (backlog <= 0 || backlog > LISTENQ)
@@ -85,7 +85,7 @@ int network::SocketWrapper::listen()
 	return ::listen(socket_, backlog);
 }
 
-std::shared_ptr<network::SocketWrapper> network::SocketWrapper::accept()
+std::shared_ptr<network::SocketWrapper> network::SocketWrapper::Accept()
 {
 	struct sockaddr_in client_sock_addr;
 	memset(&client_sock_addr, 0, sizeof(client_sock_addr));
@@ -171,7 +171,7 @@ network::Address network::SocketWrapper::GetRemoteAddress() const
 	return addr;
 }
 
-int network::SocketWrapper::close()
+int network::SocketWrapper::Close()
 {
 	if (!IsGood())
 	{
@@ -200,7 +200,7 @@ int network::SocketWrapper::ShutDown(int howto)
 	return ::shutdown(socket_,howto);
 }
 
-int network::SocketWrapper::recv(void* gram_data, int gram_size)
+int network::SocketWrapper::Recv(void* gram_data, int gram_size)
 {
 	return ::recv(socket_, (char*)gram_data, gram_size, 0);
 }

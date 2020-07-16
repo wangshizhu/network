@@ -20,16 +20,16 @@ namespace network
 		SocketWrapper& operator=(SocketWrapper&&) = delete;
 
 	public:
-		int bind();
-		int listen();
-		std::shared_ptr<SocketWrapper> accept();
+		int Bind();
+		int Listen();
+		std::shared_ptr<SocketWrapper> Accept();
 		int SetNonBlocking(bool nonblocking);
 		int SetNoDelay(bool nodelay = true);
 		int SetReuseAddr(bool onoff);
 		int SetLinger(uint16 onoff, uint16 linger);
-		int close();
+		int Close();
 		int ShutDown(int howto);
-		int recv(void* gram_data, int gram_size);
+		int Recv(void* gram_data, int gram_size);
 		void SetSocket(GENERALSOCKET sock);
 		int Send(const void * gram_data, int gram_size);
 		int Connect();

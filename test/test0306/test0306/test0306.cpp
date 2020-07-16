@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 
 		PlayerManager mgr;
 
-		g_network_center->Init((int)network::EnumPoller::SELECT_POLLER);
+		g_network_center->Init(g_CmdLine->IOModel());
 		int sock = g_network_center->CreateTcpServer(g_CmdLine->Ip(), g_CmdLine->Port());
 		if (sock == 0)
 		{

@@ -78,13 +78,15 @@ namespace network
 		// ½ûÓÃNagle
 		sock->SetNoDelay();
 
-		if (sock->bind() < 0)
+		sock->SetReuseAddr(true);
+
+		if (sock->Bind() < 0)
 		{
 			ERROR_INFO("bind faild errno:{0}", CatchLastError());
 			return 0;
 		}
 
-		if (sock->listen() < 0)
+		if (sock->Listen() < 0)
 		{
 			ERROR_INFO("listen faild");
 			return 0;
@@ -174,7 +176,7 @@ namespace network
 
 		sock->SetReuseAddr(g_CmdLine->ReuseAddr());
 
-		if (sock->bind() < 0)
+		if (sock->Bind() < 0)
 		{
 			ERROR_INFO("bind faild errno:{0}", CatchLastError());
 			return 0;
@@ -243,6 +245,11 @@ namespace network
 	void NetWorkCenter::DeregisterFd(int fd)
 	{
 		event_processor_->DeregisterRead(fd);
+		DeregisterWriteEvent(fd);
+	}
+
+	void NetWorkCenter::DeregisterWriteEvent(int fd)
+	{
 		event_processor_->DeregisterWrite(fd);
 	}
 

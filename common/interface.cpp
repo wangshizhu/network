@@ -32,7 +32,7 @@ namespace network
 
 			GeneralSleep(g_CmdLine->AcceptSleepTime());
 
-			auto new_sock = sock->accept();
+			auto new_sock = sock->Accept();
 			if (new_sock == nullptr) 
 			{
 				DEBUG_INFO("accept invalid socket tick_num:{0}",tick_num);
@@ -185,6 +185,10 @@ namespace network
 		{
 			OnGetError(sock->GetSocket());
 			return;
+		}
+		if (reason == ENUM_NO_MSG_WAITING_PROCESS)
+		{
+			NetWorkCenter::GetInstancePtr()->DeregisterWriteEvent(sock->GetSocket());
 		}
 	}
 

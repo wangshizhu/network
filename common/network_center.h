@@ -34,6 +34,7 @@ namespace network
 		void RegisterSession(int sock, SharedSessionType session);
 		void DeregisterSession(int fd);
 		void DeregisterFd(int fd);
+		void DeregisterWriteEvent(int fd);
 		bool IsExistsSession(int fd) const;
 		SharedSessionType GetSession(int fd)const;
 
